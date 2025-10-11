@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <main className={orbitron.className}>
             <section
-                className="flex flex-row items-center justify-center relative bg-center bg-cover bg-no-repeat min-h-[764px]"
+                className="flex flex-row items-center justify-center relative bg-center bg-cover bg-no-repeat h-screen"
                 style={{ backgroundImage: "url('/radiant_dire.jpg')" }}
             >
                 <motion.div
@@ -22,7 +22,7 @@ export default function Home() {
                 </motion.div>
             </section>
             <section
-                className="flex flex-row justify-center mt-10 bg-center relative bg-cover bg-no-repeat min-h-[764px]"
+                className="flex flex-row justify-center mt-10 bg-center relative bg-cover bg-no-repeat h-screen"
                 style={{ backgroundImage: "url('/stadium.jpg')" }}
             >
                 <motion.div

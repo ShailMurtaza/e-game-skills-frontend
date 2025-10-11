@@ -22,22 +22,24 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <nav
-                    className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
+                    className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md sticky top-0 w-full z-10`}
                 >
                     <ul className="flex flex-row gap-5">
                         <li>
                             <Link href="/">E Game Skills</Link>
                         </li>
                         <li>
-                            <Link href="/">About Us</Link>
+                            <Link href="/about_us">About Us</Link>
                         </li>
                         <li>
-                            <Link href="/">Contact Us</Link>
+                            <Link href="/contact_us">Contact Us</Link>
                         </li>
                     </ul>
                     <ul className="flex flex-row gap-5 ml-auto">
                         <li>
-                            <button>Sign In</button>
+                            <button>
+                                <Link href="/auth">Sign In</Link>
+                            </button>
                         </li>
                         <li>
                             <button>Sign Up</button>
