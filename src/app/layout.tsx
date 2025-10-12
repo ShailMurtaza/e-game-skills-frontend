@@ -22,7 +22,7 @@ export default function RootLayout({
         <html lang="en">
             <body>
                 <nav
-                    className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md sticky top-0 w-full z-10`}
+                    className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
                 >
                     <ul className="flex flex-row gap-5">
                         <li>
@@ -37,12 +37,14 @@ export default function RootLayout({
                     </ul>
                     <ul className="flex flex-row gap-5 ml-auto">
                         <li>
-                            <button>
-                                <Link href="/auth">Sign In</Link>
-                            </button>
+                            <Link href="/auth?action=signin">
+                                <button>Sign In</button>
+                            </Link>
                         </li>
                         <li>
-                            <button>Sign Up</button>
+                            <Link href="/auth?action=signup">
+                                <button>Sign Up</button>
+                            </Link>
                         </li>
                     </ul>
                 </nav>
