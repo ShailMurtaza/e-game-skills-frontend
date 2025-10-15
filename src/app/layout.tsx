@@ -29,10 +29,10 @@ export default function RootLayout({
                             <Link href="/">E Game Skills</Link>
                         </li>
                         <li>
-                            <Link href="/about_us">About Us</Link>
+                            <Link href="/aboutus">About Us</Link>
                         </li>
                         <li>
-                            <Link href="/contact_us">Contact Us</Link>
+                            <Link href="/contactus">Contact Us</Link>
                         </li>
                     </ul>
                     <ul className="flex flex-row gap-5 ml-auto">
