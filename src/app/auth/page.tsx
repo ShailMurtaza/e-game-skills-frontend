@@ -1,5 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 function InputAuth({
     name,
@@ -25,6 +26,30 @@ function InputAuth({
     );
 }
 
+function SelectButton({
+    label,
+    selected,
+    onClick,
+}: {
+    label: string;
+    selected: boolean;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            className={`w-full px-4 py-3 rounded-lg text-white font-semibold transition border-1 border-solid border-indigo-600 ${
+                selected
+                    ? "bg-indigo-600 text-white"
+                    : "bg-transparent text-gray-700 border-gray-300 hover:bg-indigo-500"
+            }`}
+        >
+            {label}
+        </button>
+    );
+}
+
 function SubmitBtn({ text }: { text: string }) {
     return (
         <button
@@ -41,6 +66,8 @@ export default function Auth() {
     const searchParams = useSearchParams();
     const action = searchParams.get("action");
 
+    const [accountType, setAccountType] = useState("Player");
+
     var translation = "";
     if (action === "recover") {
         translation = "translate-x-0";
@@ -53,7 +80,7 @@ export default function Auth() {
         <main className="min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">
                 <div
-                    className={`flex flex-row relative h-[520px] md:h-[420px] w-[300%] transition-transform duration-700 ease-in-out ${translation}`}
+                    className={`flex flex-row relative h-[620px] md:h-[520px] w-[300%] transition-transform duration-700 ease-in-out ${translation}`}
                 >
                     <section className="flex flex-row gap-10 justify-center p-8 w-1/3">
                         <form className="flex flex-col justify-between w-1/2">
@@ -150,6 +177,18 @@ export default function Auth() {
                                 type="password"
                                 label="Password"
                             />
+                            <div className="w-full flex flex-row gap-2">
+                                <SelectButton
+                                    label="Player"
+                                    selected={accountType === "Player"}
+                                    onClick={() => setAccountType("Player")}
+                                />
+                                <SelectButton
+                                    label="Team"
+                                    selected={accountType === "Team"}
+                                    onClick={() => setAccountType("Team")}
+                                />
+                            </div>
 
                             <SubmitBtn text="Create account" />
                         </form>
