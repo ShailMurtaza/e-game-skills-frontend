@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Orbitron } from "next/font/google";
+import FAQ from "@/components/FAQ";
 
 const orbitron = Orbitron({ subsets: ["latin"], weight: ["500", "700"] });
 
@@ -34,6 +35,9 @@ export default function Home() {
                 >
                     Pursue Your Dream To Become An eSports Champoin
                 </motion.div>
+            </section>
+            <section className="mt-10">
+                <FAQ />
             </section>
         </main>
     );
