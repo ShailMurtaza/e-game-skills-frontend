@@ -84,7 +84,7 @@ export default function FAQ() {
                                     : "max-h-0 opacity-0 p-0"
                             }`}
                         >
-                            <p
+                            <div
                                 className="text-gray-200"
                                 dangerouslySetInnerHTML={{ __html: faq.answer }}
                             />

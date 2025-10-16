@@ -5,7 +5,7 @@ export default function Aboutus() {
             <section className="px-96 py-20">
                 <div className="py-5">
                     <h2 className="text-2xl font-bold mb-1">Who We Are</h2>
-                    <p>
+                    <div>
                         We are a team of passionate gamers and computer science
                         students driven by the idea of bridging the gap between
                         talented players and e-sports organizations. Having
@@ -14,22 +14,22 @@ export default function Aboutus() {
                         for skilled players to get noticed — and for teams to
                         find the right talent that fits their playstyle and
                         strategy.
-                    </p>
+                    </div>
                 </div>
                 <div className="py-5">
                     <h2 className="text-2xl font-bold mb-1">Our Vision</h2>
-                    <p>
+                    <div>
                         Our vision is to redefine e-sports recruitment by
                         creating a platform where skill and merit truly shine.
                         We aim to build a global network of gamers, from
                         aspiring amateurs to professional players, providing
                         them with opportunities to showcase their abilities and
                         connect with teams that value their expertise.
-                    </p>
+                    </div>
                 </div>
                 <div className="py-5">
                     <h2 className="text-2xl font-bold mb-1">What We Do</h2>
-                    <p>
+                    <div>
                         Our platform, E Game Skills, serves as a structured
                         recruitment system for competitive gaming.
                         <br />
@@ -47,11 +47,11 @@ export default function Aboutus() {
                         By focusing on data-driven matching and transparent
                         player profiles, we remove bias and emphasize what
                         really matters — skill, dedication, and teamwork.
-                    </p>
+                    </div>
                 </div>
                 <div className="py-5">
                     <h2 className="text-2xl font-bold mb-1">Our Motivation</h2>
-                    <p>
+                    <div>
                         As gamers ourselves, we’ve seen both sides of the
                         challenge:
                         <ul className="list-disc mx-10">
@@ -65,18 +65,18 @@ export default function Aboutus() {
                         programming, cybersecurity, and software engineering
                         with our passion for e-sports to develop a practical,
                         scalable solution.
-                    </p>
+                    </div>
                 </div>
                 <div className="py-5">
                     <h2 className="text-2xl font-bold mb-1">
                         Join Us in Shaping the Future of E-Sports
                     </h2>
-                    <p>
+                    <div>
                         E Game Skills is more than just a platform — it’s a
                         community built by gamers, for gamers. Together, we can
                         make competitive gaming more inclusive, transparent, and
                         rewarding for everyone involved.
-                    </p>
+                    </div>
                 </div>
             </section>
         </main>
