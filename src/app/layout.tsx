@@ -20,13 +20,23 @@ export default function RootLayout({
     const year = new Date().getFullYear();
     return (
         <html lang="en">
+            <head>
+                <link
+                    rel="icon"
+                    href="/icon.svg"
+                    type="image/svg"
+                    sizes="any"
+                />
+            </head>
             <body>
                 <nav
                     className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
                 >
-                    <ul className="flex flex-row gap-5">
+                    <ul className="flex flex-row items-center gap-5">
                         <li>
-                            <Link href="/">E Game Skills</Link>
+                            <Link href="/">
+                                <img src="/icon.svg" width="70px" />
+                            </Link>
                         </li>
                         <li>
                             <Link href="/aboutus">About Us</Link>
@@ -35,7 +45,7 @@ export default function RootLayout({
                             <Link href="/contactus">Contact Us</Link>
                         </li>
                     </ul>
-                    <ul className="flex flex-row gap-5 ml-auto">
+                    <ul className="flex flex-row items-center gap-5 ml-auto">
                         <li>
                             <Link href="/auth?action=signin">
                                 <button>Sign In</button>
