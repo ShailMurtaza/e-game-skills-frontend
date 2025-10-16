@@ -15,8 +15,7 @@ export default function Home() {
                 <motion.div
                     className="text-5xl font-bold absolute bottom-1/12 z-0"
                     initial={{ opacity: 0, y: 150 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                     Let's dive into the world of eSports
