@@ -38,7 +38,7 @@ function SubmitBtn({ text }: { text: string }) {
 
 export default function Auth() {
     return (
-        <main className="min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
+        <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="w-full max-w-fit bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-x-hidden">
                 <section className="flex flex-row gap-10 justify-center p-8 min-h-[520px]">
                     <form className="flex flex-col justify-between">
