@@ -56,6 +56,11 @@ export default function RootLayout({
                                 <button>Sign Up</button>
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/announcements">
+                                <button>Announcements</button>
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
                 <div>{children}</div>
