@@ -1,52 +1,62 @@
 "use client";
+import { PrimaryBtn, Input, Attributes } from "@/components/Dashboard";
+import { AttributesType } from "@/lib/Attributes";
+
+import { Line } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
 import { useState } from "react";
 
-function PrimaryBtn({ text }: { text: string }) {
-    return (
-        <button className="p-3 font-semibold rounded-md cursor-pointer bg-emerald-700 text-white shadow hover:bg-emerald-500 transition">
-            {text}
-        </button>
-    );
-}
-
-function Input({
-    name,
-    type,
-    value,
-    placeholder,
-    onChange,
-}: {
-    name: string;
-    type: string;
-    value: string;
-    placeholder: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-    return (
-        <input
-            name={name}
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange}
-            required
-            className="block w-full rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3"
-        />
-    );
-}
-
 export default function UserDashboard() {
-    const [attributes, setAttributes] = useState<{ [key: string]: string }[]>([
-        { Rank: "Iron" },
-        { Role: "Carry" },
+    const [Information, setInformation] = useState<AttributesType>([
+        { Rank: "gold" },
     ]);
-    const [links, setLinks] = useState<{ [key: string]: string }[]>([
+    const [Links, setLinks] = useState<AttributesType>([
         {
             Tracker:
                 "https://tracker.gg/valorant/profile/riot/ShailXHunter%230000",
         },
         { Facebook: "https://facebook.com/user/01234" },
     ]);
+    const [Wins, setWins] = useState<AttributesType>([]);
+    const [Loss, setLoss] = useState<AttributesType>([]);
+
+    ChartJS.register(
+        CategoryScale,
+        LinearScale,
+        PointElement,
+        LineElement,
+        Title,
+        Tooltip,
+        Legend,
+    );
+    const options = {};
+    const lineChartData = {
+        labels: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ],
+        datasets: [
+            {
+                label: "Steps",
+                data: [3000, 5000, 4500, 6000, 8000, 7000, 9000],
+                borderColor: "rgb(75, 192, 192)",
+            },
+        ],
+    };
     return (
         <main className="pt-[150px] mx-10">
             <div className="border-1 border-white rounded-2xl bg-neutral-950">
@@ -67,15 +77,13 @@ export default function UserDashboard() {
                         player and teammate and am always open to scrims or new
                         team opportunities.
                     </div>
-                    <button className="p-3 font-semibold rounded-md cursor-pointer bg-green-700 hover:bg-green-500 text-white shadow trasition w-fit">
-                        Save
-                    </button>
+                    <PrimaryBtn text="Edit" />
                 </section>
                 <section className="flex flex-row">
                     <div className="w-1/4 p-5 border-r-1 border-white">
                         <h4 className="mb-5">Your Games</h4>
                         <div className="flex flex-col gap-5">
-                            <PrimaryBtn text="Dota 2" />
+                            <PrimaryBtn text="Dota 2" active={true} />
                             <PrimaryBtn text="Valorant" />
                             <PrimaryBtn text="Counter Strike" />
                             <PrimaryBtn text="PUBG" />
@@ -85,159 +93,38 @@ export default function UserDashboard() {
                     </div>
                     <div className="w-3/4 p-5">
                         <h3 className="mb-5">Dota 2</h3>
-                        <div className="mb-5">
-                            <h4 className="mb-3">Information</h4>
-                            <div className="flex flex-col gap-5">
-                                {attributes.map((attr, i) => {
-                                    const attribute = Object.keys(attr)[0];
-                                    const value = Object.values(attr)[0];
-                                    return (
-                                        <div
-                                            key={i}
-                                            className="flex flex-row gap-10 items-center"
-                                        >
-                                            <Input
-                                                name={`attr_${i}`}
-                                                value={attribute}
-                                                type="text"
-                                                placeholder="Enter name of attribute e.g., Rank"
-                                                onChange={(
-                                                    e: React.ChangeEvent<HTMLInputElement>,
-                                                ) => {
-                                                    var newAttributes = [
-                                                        ...attributes,
-                                                    ];
-                                                    newAttributes[i] = {
-                                                        [e.target.value]: value,
-                                                    };
-                                                    setAttributes(
-                                                        newAttributes,
-                                                    );
-                                                }}
-                                            />
-                                            <Input
-                                                name={`value_${i}`}
-                                                value={value}
-                                                type="text"
-                                                placeholder="Enter value of attribute e.g., Silver"
-                                                onChange={(
-                                                    e: React.ChangeEvent<HTMLInputElement>,
-                                                ) => {
-                                                    var newAttributes = [
-                                                        ...attributes,
-                                                    ];
-                                                    newAttributes[i] = {
-                                                        [attribute]:
-                                                            e.target.value,
-                                                    };
-                                                    setAttributes(
-                                                        newAttributes,
-                                                    );
-                                                }}
-                                            />
-                                            <button
-                                                onClick={() => {
-                                                    var newAttributes = [
-                                                        ...attributes,
-                                                    ];
-                                                    newAttributes.splice(i, 1);
-                                                    setAttributes(
-                                                        newAttributes,
-                                                    );
-                                                }}
-                                                className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition"
-                                            >
-                                                X
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                                <button
-                                    onClick={() => {
-                                        setAttributes([
-                                            ...attributes,
-                                            { "": "" },
-                                        ]);
-                                    }}
-                                    className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-emerald-700 text-white shadow hover:bg-emerald-500 transition"
-                                >
-                                    Add
-                                </button>
-                            </div>
-                        </div>
-                        <div className="mb-5">
-                            <h4 className="mb-3">Links</h4>
-                            <div className="flex flex-col gap-5">
-                                <div className="flex flex-col gap-5">
-                                    {links.map((attr, i) => {
-                                        const attribute = Object.keys(attr)[0];
-                                        const value = Object.values(attr)[0];
-                                        return (
-                                            <div
-                                                key={i}
-                                                className="flex flex-row gap-10 items-center"
-                                            >
-                                                <Input
-                                                    name={`attr_${i}`}
-                                                    value={attribute}
-                                                    type="text"
-                                                    placeholder="Enter name of attribute e.g., Rank"
-                                                    onChange={(
-                                                        e: React.ChangeEvent<HTMLInputElement>,
-                                                    ) => {
-                                                        var newLinks = [
-                                                            ...links,
-                                                        ];
-                                                        newLinks[i] = {
-                                                            [e.target.value]:
-                                                                value,
-                                                        };
-                                                        setLinks(newLinks);
-                                                    }}
-                                                />
-                                                <Input
-                                                    name={`value_${i}`}
-                                                    value={value}
-                                                    type="text"
-                                                    placeholder="Enter value of attribute e.g., Silver"
-                                                    onChange={(
-                                                        e: React.ChangeEvent<HTMLInputElement>,
-                                                    ) => {
-                                                        var newLinks = [
-                                                            ...links,
-                                                        ];
-                                                        newLinks[i] = {
-                                                            [attribute]:
-                                                                e.target.value,
-                                                        };
-                                                        setLinks(newLinks);
-                                                    }}
-                                                />
-                                                <button
-                                                    onClick={() => {
-                                                        var newLinks = [
-                                                            ...links,
-                                                        ];
-                                                        newLinks.splice(i, 1);
-                                                        setLinks(newLinks);
-                                                    }}
-                                                    className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition"
-                                                >
-                                                    X
-                                                </button>
-                                            </div>
-                                        );
-                                    })}
-                                    <button
-                                        onClick={() => {
-                                            setLinks([...links, { "": "" }]);
-                                        }}
-                                        className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-emerald-700 text-white shadow hover:bg-emerald-500 transition"
-                                    >
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
+                        <Attributes
+                            title="Information"
+                            key_placeholder="Enter name of attribute e.g., Rank, Rold etc"
+                            value_placeholder="Enter value of attribute e.g., Iron 3, Bronze 1 etc"
+                            parentAttributes={Information}
+                            parentSetAttributes={setInformation}
+                        />
+                        <Attributes
+                            title="Links"
+                            key_placeholder="Enter name of link e.g., Tracker, Facebook etc"
+                            value_placeholder="Enter link e.g., https://tracker.gg/user/123"
+                            parentAttributes={Links}
+                            parentSetAttributes={setLinks}
+                        />
+                        <Attributes
+                            title="Wins"
+                            key_input_type="date"
+                            key_placeholder="Enter date"
+                            value_placeholder="Enter value"
+                            parentAttributes={Wins}
+                            parentSetAttributes={setWins}
+                        />
+                        <Attributes
+                            title="Loss"
+                            key_input_type="date"
+                            key_placeholder="Enter date"
+                            value_placeholder="Enter value"
+                            parentAttributes={Loss}
+                            parentSetAttributes={setLoss}
+                        />
+                        <div>
+                            <Line options={options} data={lineChartData} />
                         </div>
                     </div>
                 </section>
