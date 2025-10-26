@@ -1,11 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Input, PrimaryBtn } from "@/components/Dashboard";
+import Overlay from "@/components/Overlay";
+import Pagination from "@/components/Pagination";
+import { User } from "@/lib/User";
+
 export default function Users() {
     // Simple mock data generator
-    const ROLE = ["player", "team", "admin"];
+    const ROLE = ["player", "team", "admin"] as const;
     const generateUsers = (n = 20) => {
-        const users = [];
+        const users: User[] = [];
         for (let i = 1; i <= n; i++) {
             const role = ROLE[Math.floor(Math.random() * ROLE.length)];
             const banned = Math.random() < 0.08;
@@ -25,12 +30,25 @@ export default function Users() {
         return users;
     };
     const users = generateUsers();
-    const [searchEmail, setSearchEmail] = useState("");
-    const [searchUsername, setSearchUsername] = useState("");
-    const [searchRole, setSearchRole] = useState("");
-    const [searchBanned, setSearchBanned] = useState("");
+    const [searchEmail, setSearchEmail] = useState<string>("");
+    const [searchUsername, setSearchUsername] = useState<string>("");
+    const [searchRole, setSearchRole] = useState<string>("");
+    const [searchBanned, setSearchBanned] = useState<string>("");
+
+    const [showUserEditor, setShowUserEditor] = useState<User | null>(null);
     return (
         <main>
+            {/* User Details Editor */}
+            <AnimatePresence mode="wait">
+                {showUserEditor !== null ? (
+                    <UserDetailEditor
+                        user={showUserEditor}
+                        setShowUserEditor={setShowUserEditor}
+                    />
+                ) : (
+                    ""
+                )}
+            </AnimatePresence>
             <h4>Users</h4>
             <div className="mt-4">
                 {/* Searching Containaer */}
@@ -81,7 +99,7 @@ export default function Users() {
 
                 {/* Users List */}
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {users.map((u) => (
+                    {users.map((u, index) => (
                         <div
                             key={u.id}
                             className="p-3 bg-gray-850 rounded border border-gray-800"
@@ -106,7 +124,12 @@ export default function Users() {
                             </div>
 
                             <div className="mt-3 flex gap-2">
-                                <button className="flex-1 px-2 py-1 rounded bg-gray-800 text-sm">
+                                <button
+                                    className="flex-1 px-2 py-1 rounded bg-gray-800 text-sm"
+                                    onClick={() => {
+                                        setShowUserEditor(users[index]);
+                                    }}
+                                >
                                     Open
                                 </button>
                                 <button className="px-2 py-1 rounded bg-red-700 text-sm">
@@ -122,36 +145,114 @@ export default function Users() {
     );
 }
 
-function Pagination({
-    page,
-    setPage,
-    pages,
+function UserDetailEditor({
+    user,
+    setShowUserEditor,
 }: {
-    page: number;
-    pages: number;
-    setPage: () => void;
+    user: User;
+    setShowUserEditor: (data: User | null) => void;
 }) {
-    const prev = () => 1;
-    const next = () => 3;
+    const [form, setForm] = useState<User>({ ...user });
+
+    useEffect(() => setForm({ ...user }), [user]);
+
     return (
-        <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-gray-400">
-                Page {page} of {pages}
-            </div>
-            <div className="flex gap-2">
-                <button
-                    onClick={prev}
-                    className="px-3 py-1 rounded bg-gray-800 text-sm"
+        <>
+            <Overlay display="" />
+            <div className="fixed top-0 left-0 flex justify-center items-center w-full h-full z-30">
+                <motion.div
+                    initial={{ opacity: 0, y: -50, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -50, scale: 0.95 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
                 >
-                    Prev
-                </button>
-                <button
-                    onClick={next}
-                    className="px-3 py-1 rounded bg-gray-800 text-sm"
-                >
-                    Next
-                </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <label className="text-xs text-gray-400">
+                            Username
+                            <input
+                                value={form.username}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        username: e.target.value,
+                                    })
+                                }
+                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                            />
+                        </label>
+                        <label className="text-xs text-gray-400">
+                            Email
+                            <input
+                                value={form.email}
+                                onChange={(e) =>
+                                    setForm({ ...form, email: e.target.value })
+                                }
+                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                            />
+                        </label>
+                        <label className="text-xs text-gray-400">
+                            Role
+                            <select
+                                value={form.role}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        role: e.target.value,
+                                        isAdmin: e.target.value === "admin",
+                                    })
+                                }
+                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                            >
+                                <option value="player">Player</option>
+                                <option value="team">Team</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </label>
+                        <label className="text-xs text-gray-400">
+                            Banned
+                            <select
+                                value={String(form.banned)}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        banned: e.target.value === "true",
+                                    })
+                                }
+                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                            >
+                                <option value="false">Un-banned</option>
+                                <option value="true">Banned</option>
+                            </select>
+                        </label>
+                        <label className="text-xs text-gray-400 col-span-1 md:col-span-2">
+                            Notes
+                            <textarea
+                                value={form.notes}
+                                onChange={(e) =>
+                                    setForm({ ...form, notes: e.target.value })
+                                }
+                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                rows={3}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="mt-4 flex gap-2">
+                        <button className="px-3 py-2 rounded bg-green-700 text-sm">
+                            Save
+                        </button>
+                        <button
+                            onClick={() => {
+                                setShowUserEditor(null);
+                            }}
+                            className="px-3 py-2 rounded bg-gray-800 text-sm"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </motion.div>
             </div>
-        </div>
+        </>
     );
 }
