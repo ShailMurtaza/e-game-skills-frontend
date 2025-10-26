@@ -17,7 +17,7 @@ export default function RootLayout({
         <main className="admin-page pt-[150px] mx-10 min-h-screen flex flex-col p-6 bg-black">
             <header className="flex items-center justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
+                    <h3 className="">Admin Dashboard</h3>
                     <p className="text-sm text-gray-400">Summary</p>
                 </div>
                 <nav className="flex gap-2 bg-gray-900/40 p-2 rounded-md">
