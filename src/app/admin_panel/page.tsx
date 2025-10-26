@@ -46,7 +46,7 @@ export default function AdminPanel() {
         },
     };
     return (
-        <main className="">
+        <main>
             <h4>Summary</h4>
             <div className="flex justify-center">
                 <div className="w-xl">

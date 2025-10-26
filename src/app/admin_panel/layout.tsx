@@ -39,7 +39,7 @@ export default function RootLayout({
                 </nav>
             </header>
             <section className="grid grid-1 lg:grid-cols-4 gap-6">
-                <aside className="lg:col-span-1 bg-gray-900/40 p-4 rounded-lg border border-gray-800">
+                <aside className="h-fit lg:col-span-1 bg-gray-900/40 p-4 rounded-lg border border-gray-800">
                     <h4>Summary</h4>
                     <div className="grid grid-cols-2 gap-3">
                         <Stat title="Total" value={10} />

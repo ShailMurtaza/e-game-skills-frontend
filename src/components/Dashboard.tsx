@@ -22,13 +22,13 @@ export function PrimaryBtn({
 export function Input({
     name,
     type,
-    value,
+    value = "",
     placeholder,
     onChange,
 }: {
     name: string;
     type: string;
-    value: string;
+    value?: string;
     placeholder: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
