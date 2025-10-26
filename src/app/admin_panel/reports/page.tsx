@@ -28,7 +28,7 @@ export default function Reports() {
     );
     return (
         <main>
-            {/* User Details Editor */}
+            {/* Reports Viewer */}
             <AnimatePresence mode="wait">
                 {showReportViewer !== null ? (
                     <ReportViewer
