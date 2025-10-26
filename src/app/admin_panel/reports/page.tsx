@@ -69,7 +69,7 @@ export default function Reports() {
                                 View
                             </button>
                             <button className="px-2 py-1 rounded bg-red-800 text-sm">
-                                Actioned
+                                Resolved
                             </button>
                         </div>
                     </div>
