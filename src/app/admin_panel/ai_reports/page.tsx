@@ -40,7 +40,7 @@ export default function AIReports() {
                 )}
             </AnimatePresence>
             <h4>Reports by Users</h4>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="mt-5 grid grid-cols-1 gap-3">
                 {aiReports.map((a) => (
                     <div
                         key={a.id}
