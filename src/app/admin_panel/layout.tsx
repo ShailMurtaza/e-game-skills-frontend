@@ -1,3 +1,4 @@
+import AdminPanelNavbar from "@/components/AdminPanelNavbar";
 import { UsersDataProvider } from "@/components/UsersData";
 
 function Stat({ title, value }: { title: string; value: number }) {
@@ -20,23 +21,7 @@ export default function RootLayout({
                     <h3 className="">Admin Dashboard</h3>
                     <p className="text-sm text-gray-400">Summary</p>
                 </div>
-                <nav className="flex gap-2 bg-gray-900/40 p-2 rounded-md">
-                    <button className="px-3 py-2 rounded text-sm hover:bg-gray-800">
-                        Summary
-                    </button>
-                    <button className="px-3 py-2 rounded text-sm hover:bg-gray-800">
-                        Users
-                    </button>
-                    <button className="px-3 py-2 rounded text-sm hover:bg-gray-800">
-                        Games
-                    </button>
-                    <button className="px-3 py-2 rounded text-sm hover:bg-gray-800">
-                        Reports
-                    </button>
-                    <button className="px-3 py-2 rounded text-sm hover:bg-gray-800">
-                        AI Reports
-                    </button>
-                </nav>
+                <AdminPanelNavbar />
             </header>
             <section className="grid grid-1 lg:grid-cols-4 gap-6">
                 <aside className="h-fit lg:col-span-1 bg-gray-900/40 p-4 rounded-lg border border-gray-800">
