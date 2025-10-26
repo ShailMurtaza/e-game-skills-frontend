@@ -10,6 +10,12 @@ body {
   }
 }
 
+@layer components {
+  .admin-page .bg-primary {
+    @apply bg-gray-900;
+  }
+}
+
 @layer base {
   h1 {
     @apply text-5xl font-bold;
