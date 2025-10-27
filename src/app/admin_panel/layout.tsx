@@ -1,3 +1,6 @@
+"use client";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import AdminPanelNavbar from "@/components/AdminPanelNavbar";
 import { UsersDataProvider } from "@/components/UsersData";
 
@@ -14,12 +17,24 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const pathname = usePathname();
+    const [pageTitle, setPageTitle] = useState("");
+    useEffect(() => {
+        // extract the last segment and capitalize
+        const segment =
+            pathname
+                .replace("admin_panel", "")
+                .split("/")
+                .filter(Boolean)
+                .pop() || "Summary";
+        setPageTitle(segment.charAt(0).toUpperCase() + segment.slice(1));
+    }, [pathname]);
     return (
         <main className="admin-page pt-[150px] mx-10 min-h-screen flex flex-col p-6 bg-black">
             <header className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="">Admin Dashboard</h3>
-                    <p className="text-sm text-gray-400">Summary</p>
+                    <p className="text-sm text-gray-400">{pageTitle}</p>
                 </div>
                 <AdminPanelNavbar />
             </header>
