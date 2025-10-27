@@ -90,7 +90,7 @@ export default function Games() {
                             <div className="mt-2 p-2 bg-gray-800 rounded border border-gray-700 space-y-1">
                                 {game.attributes.map((attr, idx) => {
                                     const key = Object.keys(attr)[0];
-                                    const value = Object.keys(attr)[0];
+                                    const value = Object.values(attr)[0];
                                     return (
                                         <div
                                             key={idx}
