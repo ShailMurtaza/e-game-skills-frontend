@@ -2,6 +2,9 @@ import { Play, Orbitron, Russo_One } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
+import { UIProvider } from "@/context/UIContext";
+import Notification from "@/components/Notification";
+import Loading from "@/components/Loading";
 
 const play = Play({
     subsets: ["latin"],
@@ -63,7 +66,13 @@ export default function RootLayout({
                         </li>
                     </ul>
                 </nav>
-                <div>{children}</div>
+                <div>
+                    <UIProvider>
+                        <Notification />
+                        <Loading />
+                        {children}
+                    </UIProvider>
+                </div>
                 <footer className="mt-5 p-5 text-center">
                     &copy; {year} E Game Skills, all rights reserved.
                 </footer>
