@@ -5,6 +5,7 @@ import useSignup from "@/utils/handleSignUp";
 import useGenerateOtp from "@/utils/handleGenerateOtp";
 import useVerifyAccount from "@/utils/handleVerifyAccount";
 import useRecoverAccount from "@/utils/handleRecoverAccount";
+import useSignin from "@/utils/handleSignin";
 import { useUI } from "@/context/UIContext";
 import { InputAuth, SubmitBtn, SelectButton } from "@/components/Auth";
 
@@ -21,12 +22,12 @@ export default function Auth() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [code, setCode] = useState("");
     const [codeSent, setCodeSent] = useState(false);
-    const [error, setError] = useState("");
 
     const { handleSignup } = useSignup();
     const { handleGenerateOtp } = useGenerateOtp();
     const { handleVerifyAccount } = useVerifyAccount();
     const { handleRecoverAccount } = useRecoverAccount();
+    const { handleSignin } = useSignin();
 
     var translation = "";
     if (action === "recover") {
@@ -101,7 +102,7 @@ export default function Auth() {
                                         }}
                                     />
                                     <SubmitBtn
-                                        text="Submit"
+                                        text="Recover"
                                         onClick={async () => {
                                             if (password != confirmPassword) {
                                                 notify(
@@ -198,7 +199,17 @@ export default function Auth() {
                     </section>
                     {/* ---------- Login Section ---------- */}
                     <section className="flex flex-row gap-10 justify-center p-8">
-                        <form className="flex flex-col justify-between w-1/2">
+                        <form
+                            className="flex flex-col justify-between w-1/2"
+                            onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (await handleSignin(email, password)) {
+                                    setEmail("");
+                                    setPassword("");
+                                }
+                                return;
+                            }}
+                        >
                             <h3 className="text-2xl font-bold text-gray-100">
                                 Sign in to your account
                             </h3>
@@ -262,10 +273,9 @@ export default function Auth() {
                             onSubmit={async (e) => {
                                 e.preventDefault();
                                 if (password != confirmPassword) {
-                                    setError("Passwords do not match");
+                                    notify("Passwords do not match");
                                     return;
                                 }
-                                setError("");
                                 if (
                                     await handleSignup(
                                         name,
@@ -319,11 +329,6 @@ export default function Auth() {
                                     setConfirmPassword(e.target.value)
                                 }
                             />
-                            {error && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {error}
-                                </p>
-                            )}
                             <div className="w-full flex flex-row gap-2">
                                 <SelectButton
                                     label="Player"
