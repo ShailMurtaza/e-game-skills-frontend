@@ -1,19 +1,26 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSignup from "@/utils/handleSignUp";
 import useGenerateOtp from "@/utils/handleGenerateOtp";
 import useVerifyAccount from "@/utils/handleVerifyAccount";
 import useRecoverAccount from "@/utils/handleRecoverAccount";
 import useSignin from "@/utils/handleSignin";
 import { useUI } from "@/context/UIContext";
-import { InputAuth, SubmitBtn, SelectButton } from "@/components/Auth";
+import {
+    InputAuth,
+    SubmitBtn,
+    SelectButton,
+    LoginButton,
+} from "@/components/Auth";
 
 export default function Auth() {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const { setLoading, notify } = useUI();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const action = searchParams.get("action");
+    const action = searchParams.get("action") ?? "signin";
+    const error = searchParams.get("error");
 
     const [accountType, setAccountType] = useState<"player" | "team">("player");
     const [name, setName] = useState("");
@@ -29,16 +36,21 @@ export default function Auth() {
     const { handleRecoverAccount } = useRecoverAccount();
     const { handleSignin } = useSignin();
 
-    var translation = "";
-    if (action === "recover") {
-        translation = "translate-x-0";
-    } else if (action === "verify") {
-        translation = "-translate-x-1/4";
-    } else if (action === "signin") {
-        translation = "-translate-x-2/4";
-    } else if (action === "signup") {
-        translation = "-translate-x-3/4";
-    }
+    const translations: Record<string, string> = {
+        "": "-translate-x-2/4",
+        recover: "translate-x-0",
+        verify: "-translate-x-1/4",
+        signin: "-translate-x-2/4",
+        signup: "-translate-x-3/4",
+    };
+
+    const translation = translations[action ?? ""];
+
+    useEffect(() => {
+        if (error) {
+            notify(error, "error");
+        }
+    }, [error]);
     return (
         <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">
@@ -251,6 +263,23 @@ export default function Auth() {
                                 >
                                     Forgot?
                                 </button>
+                            </div>
+                            <div className="flex flex-row gap-2 justify-between">
+                                <LoginButton
+                                    provider="Google"
+                                    type="button"
+                                    onClick={() => {
+                                        window.location.href = `${API_URL}/auth/google/login`;
+                                    }}
+                                />
+                                <LoginButton
+                                    provider="Discord"
+                                    type="button"
+                                    onClick={() => {
+                                        setLoading(true);
+                                        window.location.href = `${API_URL}/auth/discord/login`;
+                                    }}
+                                />
                             </div>
 
                             <SubmitBtn text="Log in" />

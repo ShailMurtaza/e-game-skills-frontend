@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { FaEye, FaEyeSlash, FaGoogle, FaDiscord } from "react-icons/fa";
 
 export function InputAuth({
     name,
@@ -38,7 +38,7 @@ export function InputAuth({
                         className="absolute right-3 text-gray-400 hover:text-gray-200"
                         tabIndex={-1}
                     >
-                        {show ? <EyeOff size={18} /> : <Eye size={18} />}
+                        {show ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                     </button>
                 )}
             </div>
@@ -72,9 +72,11 @@ export function SelectButton({
 
 export function SubmitBtn({
     text,
+    type = "submit",
     onClick,
 }: {
     text: string;
+    type?: string;
     onClick?: () => void;
 }) {
     return (
@@ -84,6 +86,30 @@ export function SubmitBtn({
             className="w-full px-4 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-500 transition"
         >
             {text}
+        </button>
+    );
+}
+
+import { ButtonHTMLAttributes } from "react";
+
+interface LoginButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    provider: "Google" | "Discord";
+    onClick?: () => void;
+}
+
+export function LoginButton({ provider, onClick }: LoginButtonProps) {
+    const icons = {
+        Google: <FaGoogle className="w-10" />,
+        Discord: <FaDiscord className="w-10" />,
+    };
+
+    return (
+        <button
+            className="flex items-center justify-center gap-2 w-full px-3 py-2 font-medium border border-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors"
+            onClick={onClick}
+        >
+            {icons[provider]}
+            {provider}
         </button>
     );
 }
