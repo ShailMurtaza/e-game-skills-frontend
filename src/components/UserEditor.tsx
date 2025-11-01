@@ -57,12 +57,13 @@ export default function UserEditor({
                                 onChange={(e) =>
                                     setForm({
                                         ...form,
-                                        role: e.target.value,
+                                        role: e.target.value as User["role"],
                                         isAdmin: e.target.value === "admin",
                                     })
                                 }
                                 className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
                             >
+                                <option value="pending">Pending</option>
                                 <option value="player">Player</option>
                                 <option value="team">Team</option>
                                 <option value="admin">Admin</option>
