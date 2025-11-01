@@ -1,5 +1,6 @@
 "use client";
 import { useUI } from "@/context/UIContext";
+import { redirectIfAuthenticated } from "./checkLoggedIn";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,6 +12,7 @@ export default function useSignin() {
         try {
             const res = await fetch(`${API_URL}/auth/login`, {
                 method: "POST",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
@@ -18,12 +20,14 @@ export default function useSignin() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Signin Failed");
 
-            localStorage.setItem("JWT", data.accessToken);
             notify("Signin successful", "success");
-            return true;
+            redirectIfAuthenticated();
+            return { result: true, action: null };
         } catch (err: any) {
             notify(err.message, "error");
-            return false;
+            var action = null;
+            if (err.message.includes("Verify")) action = "verify";
+            return { result: false, action: action };
         } finally {
             setLoading(false);
         }

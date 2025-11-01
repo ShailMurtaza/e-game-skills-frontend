@@ -59,8 +59,8 @@ export default function UserDashboard() {
     };
     return (
         <main className="pt-[150px] mx-10">
-            <div className="border-1 border-white rounded-2xl bg-neutral-950">
-                <section className="flex flex-col gap-5 p-5 border-b-1 border-white rounded-t-2xl">
+            <div className="border border-white rounded-2xl bg-neutral-950">
+                <section className="flex flex-col gap-5 p-5 border-b border-white rounded-t-2xl">
                     <div className="flex flex-row items-center gap-10">
                         <img src="/profile.png" width="100px" />
                         <span>Username</span>
@@ -80,7 +80,7 @@ export default function UserDashboard() {
                     <PrimaryBtn text="Edit" />
                 </section>
                 <section className="flex flex-row">
-                    <div className="w-1/4 p-5 border-r-1 border-white">
+                    <div className="w-1/4 p-5 border-r border-white">
                         <h4 className="mb-5">Your Games</h4>
                         <div className="flex flex-col gap-5">
                             <PrimaryBtn text="Dota 2" active={true} />

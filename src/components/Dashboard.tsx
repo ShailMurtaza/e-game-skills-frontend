@@ -11,7 +11,7 @@ export function PrimaryBtn({
 }) {
     return (
         <button
-            className={`p-3 font-semibold rounded-md cursor-pointer border-1 border-emerald-700 text-white shadow hover:bg-emerald-700 transition ${active ? "bg-emerald-700" : "bg-transparent"}`}
+            className={`p-3 font-semibold rounded-md cursor-pointer border border-emerald-700 text-white shadow hover:bg-emerald-700 transition ${active ? "bg-emerald-700" : "bg-transparent"}`}
             onClick={onClick}
         >
             {text}

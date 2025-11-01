@@ -215,9 +215,15 @@ export default function Auth() {
                             className="flex flex-col justify-between w-1/2"
                             onSubmit={async (e) => {
                                 e.preventDefault();
-                                if (await handleSignin(email, password)) {
+                                const result = await handleSignin(
+                                    email,
+                                    password,
+                                );
+                                if (result.result) {
                                     setEmail("");
                                     setPassword("");
+                                } else if (!result.result && result.action) {
+                                    router.push(`?action=${result.action}`);
                                 }
                                 return;
                             }}
@@ -267,14 +273,12 @@ export default function Auth() {
                             <div className="flex flex-row gap-2 justify-between">
                                 <LoginButton
                                     provider="Google"
-                                    type="button"
                                     onClick={() => {
                                         window.location.href = `${API_URL}/auth/google/login`;
                                     }}
                                 />
                                 <LoginButton
                                     provider="Discord"
-                                    type="button"
                                     onClick={() => {
                                         setLoading(true);
                                         window.location.href = `${API_URL}/auth/discord/login`;

@@ -76,12 +76,12 @@ export function SubmitBtn({
     onClick,
 }: {
     text: string;
-    type?: string;
+    type?: "submit" | "button" | "reset" | undefined;
     onClick?: () => void;
 }) {
     return (
         <button
-            type="submit"
+            type={type}
             onClick={onClick}
             className="w-full px-4 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-500 transition"
         >
@@ -105,6 +105,7 @@ export function LoginButton({ provider, onClick }: LoginButtonProps) {
 
     return (
         <button
+            type="button"
             className="flex items-center justify-center gap-2 w-full px-3 py-2 font-medium border border-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors"
             onClick={onClick}
         >

@@ -8,7 +8,6 @@ export default function Auth() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const { setLoading, notify } = useUI();
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     const [accountType, setAccountType] = useState<"player" | "team">("player");
 

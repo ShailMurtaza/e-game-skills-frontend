@@ -1,4 +1,4 @@
-import { Play, Orbitron, Russo_One } from "next/font/google";
+import { Play } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
