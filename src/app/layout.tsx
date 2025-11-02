@@ -28,14 +28,14 @@ export default function RootLayout({
             </head>
             <body>
                 <AuthProvider>
-                    <Navbar />
-                    <div>
-                        <UIProvider>
+                    <UIProvider>
+                        <Navbar />
+                        <div>
                             <Notification />
                             <Loading />
                             {children}
-                        </UIProvider>
-                    </div>
+                        </div>
+                    </UIProvider>
                     <Footer />
                 </AuthProvider>
             </body>

@@ -2,18 +2,22 @@
 
 import { Play } from "next/font/google";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/authContext";
+import { useUI } from "@/context/UIContext";
 import { LoadingComponent } from "./Loading";
 import protectedRoutes from "@/lib/ProtectedRoutes";
-import { usePathname } from "next/navigation";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
 
 const play = Play({
     subsets: ["latin"],
     weight: ["400", "700"],
 });
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Navbar() {
+    const router = useRouter();
+    const { setLoading, notify } = useUI();
     const pathname = usePathname();
     const { isLoading, isAuthenticated, userRole } = useAuth();
     const isOnProtectedRoute = protectedRoutes.some((path) =>
@@ -95,7 +99,34 @@ export default function Navbar() {
                 ) : (
                     <li>
                         <Link href="#">
-                            <button onClick={() => {}}>Logout</button>
+                            <button
+                                onClick={async () => {
+                                    setLoading(true);
+                                    try {
+                                        const res = await fetch(
+                                            `${API_URL}/auth/logout`,
+                                            {
+                                                method: "GET",
+                                                credentials: "include",
+                                            },
+                                        );
+                                        if (!res.ok) {
+                                            throw new Error(
+                                                "Something went wrong",
+                                            );
+                                        } else {
+                                            notify("Logged Out", "success");
+                                        }
+                                    } catch (e) {
+                                        notify("Something went wrong", "error");
+                                        console.error(e);
+                                    } finally {
+                                        router.replace("/auth");
+                                    }
+                                }}
+                            >
+                                Logout
+                            </button>
                         </Link>
                     </li>
                 )}

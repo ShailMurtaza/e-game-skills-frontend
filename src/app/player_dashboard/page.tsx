@@ -2,6 +2,7 @@
 import { PrimaryBtn, Input, Attributes } from "@/components/Dashboard";
 import { AttributesType } from "@/lib/Attributes";
 import { useAuth } from "@/context/authContext";
+import { useUI } from "@/context/UIContext";
 
 import { Line } from "react-chartjs-2";
 import {
@@ -14,10 +15,15 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoadingComponent } from "@/components/Loading";
 
 export default function UserDashboard() {
+    const { setLoading } = useUI();
+    useEffect(() => {
+        // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
+        setLoading(false);
+    }, []);
     const [Information, setInformation] = useState<AttributesType>([
         { Rank: "gold" },
     ]);

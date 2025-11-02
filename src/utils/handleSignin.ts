@@ -47,8 +47,6 @@ export default function useSignin() {
             var action = null;
             if (err.message.includes("Verify")) action = "verify";
             return { result: false, action: action };
-        } finally {
-            setLoading(false);
         }
     }
 

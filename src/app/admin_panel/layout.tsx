@@ -5,6 +5,7 @@ import AdminPanelNavbar from "@/components/AdminPanelNavbar";
 import { UsersDataProvider } from "@/components/UsersData";
 import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "@/components/Loading";
+import { useUI } from "@/context/UIContext";
 
 function Stat({ title, value }: { title: string; value: number }) {
     return (
@@ -19,9 +20,12 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const { setLoading } = useUI();
     const pathname = usePathname();
     const [pageTitle, setPageTitle] = useState("");
     useEffect(() => {
+        // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
+        setLoading(false);
         // extract the last segment and capitalize
         const segment =
             pathname

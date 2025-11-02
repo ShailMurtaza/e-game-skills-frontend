@@ -37,8 +37,8 @@ export default function Messages() {
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
 
-            <div className="mx-5 flex flex-row border-1 border-white rounded-xl h-[calc(100vh-300px)]">
-                <section className="border-r-1 border-r-white w-1/4 overflow-y-auto">
+            <div className="mx-5 flex flex-row border border-white rounded-xl h-[calc(100vh-300px)]">
+                <section className="border-r border-r-white w-1/4 overflow-y-auto">
                     <Profile />
                     <Profile />
                     <Profile />

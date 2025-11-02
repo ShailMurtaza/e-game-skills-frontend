@@ -1,8 +1,15 @@
 "use client";
+import { useEffect } from "react";
 import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "@/components/Loading";
+import { useUI } from "@/context/UIContext";
 
 export default function TeamDashboard() {
+    const { setLoading } = useUI();
+    useEffect(() => {
+        // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
+        setLoading(false);
+    }, []);
     const { isLoading, isAuthenticated, userRole } = useAuth();
     if (isLoading || (!isLoading && !isAuthenticated) || userRole != "team") {
         return <LoadingComponent />;

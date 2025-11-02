@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SubmitBtn, SelectButton } from "@/components/Auth";
 import { useUI } from "@/context/UIContext";
 import { useAuth } from "@/context/authContext";
@@ -13,8 +13,13 @@ export default function Auth() {
     const router = useRouter();
 
     const [accountType, setAccountType] = useState<"player" | "team">("player");
-    const { isLoading, isAuthenticated, userRole } = useAuth();
 
+    useEffect(() => {
+        // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
+        setLoading(false);
+    }, []);
+
+    const { isLoading, isAuthenticated, userRole } = useAuth();
     if (
         isLoading ||
         (!isLoading && !isAuthenticated) ||

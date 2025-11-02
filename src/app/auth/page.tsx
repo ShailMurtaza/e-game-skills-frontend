@@ -49,6 +49,7 @@ export default function Auth() {
     const translation = translations[action ?? ""];
 
     useEffect(() => {
+        setLoading(false);
         if (error) {
             notify(error, "error");
         }
