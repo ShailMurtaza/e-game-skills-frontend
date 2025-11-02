@@ -6,6 +6,7 @@ import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "./Loading";
 import protectedRoutes from "@/lib/ProtectedRoutes";
 import { usePathname } from "next/navigation";
+import RoleProfilePaths from "@/lib/RoleProfilePaths";
 
 const play = Play({
     subsets: ["latin"],
@@ -69,6 +70,14 @@ export default function Navbar() {
                         <button>Announcements</button>
                     </Link>
                 </li>
+
+                {isAuthenticated && userRole && (
+                    <li>
+                        <Link href={RoleProfilePaths[userRole]}>
+                            <button>Profile</button>
+                        </Link>
+                    </li>
+                )}
 
                 {!isAuthenticated ? (
                     <>

@@ -5,6 +5,7 @@ import { SubmitBtn, SelectButton } from "@/components/Auth";
 import { useUI } from "@/context/UIContext";
 import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "@/components/Loading";
+import RoleProfilePaths from "@/lib/RoleProfilePaths";
 
 export default function Auth() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -45,6 +46,7 @@ export default function Auth() {
                         <SubmitBtn
                             text="Save"
                             onClick={async () => {
+                                setLoading(true);
                                 try {
                                     if (!accountType)
                                         throw new Error("Select Role");
@@ -62,13 +64,12 @@ export default function Auth() {
                                         );
 
                                     notify("Your Role Has been set", "success");
-                                    router.refresh();
+                                    router.push(RoleProfilePaths[accountType]);
                                     return true;
                                 } catch (err: any) {
                                     notify(err.message, "error");
-                                    return false;
-                                } finally {
                                     setLoading(false);
+                                    return false;
                                 }
                             }}
                         />

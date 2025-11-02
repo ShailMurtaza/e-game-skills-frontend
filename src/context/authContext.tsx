@@ -10,6 +10,7 @@ import {
 import { getAuthData } from "@/utils/authClientData";
 import { useRouter, usePathname } from "next/navigation";
 import protectedRoutes from "@/lib/ProtectedRoutes";
+import RoleProfilePaths from "@/lib/RoleProfilePaths";
 
 interface AuthContextType {
     isLoading: boolean;
@@ -41,14 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     setIsAuthenticated(true);
                     setUserRole(data.role);
 
-                    const rolePaths: Record<string, string> = {
-                        team: "/team_dashboard",
-                        player: "/player_dashboard",
-                        admin: "/admin_panel",
-                        pending: "/select_role",
-                    };
-
-                    const expectedPath = rolePaths[data.role];
+                    const expectedPath = RoleProfilePaths[data.role];
                     if (
                         expectedPath &&
                         !pathname.startsWith(expectedPath) &&
