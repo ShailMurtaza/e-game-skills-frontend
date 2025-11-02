@@ -7,12 +7,14 @@ import useVerifyAccount from "@/utils/handleVerifyAccount";
 import useRecoverAccount from "@/utils/handleRecoverAccount";
 import useSignin from "@/utils/handleSignin";
 import { useUI } from "@/context/UIContext";
+import { useAuth } from "@/context/authContext";
 import {
     InputAuth,
     SubmitBtn,
     SelectButton,
     LoginButton,
 } from "@/components/Auth";
+import { LoadingComponent } from "@/components/Loading";
 
 export default function Auth() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -51,6 +53,10 @@ export default function Auth() {
             notify(error, "error");
         }
     }, []);
+    const { isLoading, isAuthenticated } = useAuth();
+    if (isLoading || isAuthenticated) {
+        return <LoadingComponent />;
+    }
     return (
         <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">

@@ -1,4 +1,3 @@
-import { Play } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 import { UIProvider } from "@/context/UIContext";
@@ -6,11 +5,7 @@ import Notification from "@/components/Notification";
 import Loading from "@/components/Loading";
 import { AuthProvider } from "@/context/authContext";
 import Navbar from "@/components/Navbar";
-
-const play = Play({
-    subsets: ["latin"],
-    weight: ["400", "700"],
-});
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
     title: "e Game Skills",
@@ -21,7 +16,6 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const year = new Date().getFullYear();
     return (
         <html lang="en">
             <head>
@@ -42,9 +36,7 @@ export default function RootLayout({
                             {children}
                         </UIProvider>
                     </div>
-                    <footer className="mt-5 p-5 text-center">
-                        &copy; {year} E Game Skills, all rights reserved.
-                    </footer>
+                    <Footer />
                 </AuthProvider>
             </body>
         </html>

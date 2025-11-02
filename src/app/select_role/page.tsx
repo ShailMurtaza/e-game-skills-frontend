@@ -1,8 +1,10 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitBtn, SelectButton } from "@/components/Auth";
 import { useUI } from "@/context/UIContext";
+import { useAuth } from "@/context/authContext";
+import { LoadingComponent } from "@/components/Loading";
 
 export default function Auth() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -10,6 +12,15 @@ export default function Auth() {
     const router = useRouter();
 
     const [accountType, setAccountType] = useState<"player" | "team">("player");
+    const { isLoading, isAuthenticated, userRole } = useAuth();
+
+    if (
+        isLoading ||
+        (!isLoading && !isAuthenticated) ||
+        userRole != "pending"
+    ) {
+        return <LoadingComponent />;
+    }
 
     return (
         <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
@@ -51,6 +62,7 @@ export default function Auth() {
                                         );
 
                                     notify("Your Role Has been set", "success");
+                                    router.refresh();
                                     return true;
                                 } catch (err: any) {
                                     notify(err.message, "error");
