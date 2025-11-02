@@ -10,8 +10,12 @@ export default function TeamDashboard() {
         // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
         setLoading(false);
     }, []);
-    const { isLoading, isAuthenticated, userRole } = useAuth();
-    if (isLoading || (!isLoading && !isAuthenticated) || userRole != "team") {
+    const { isLoading, isAuthenticated, userProfile } = useAuth();
+    if (
+        isLoading ||
+        (!isLoading && !isAuthenticated) ||
+        userProfile?.role != "team"
+    ) {
         return <LoadingComponent />;
     }
     return (

@@ -17,8 +17,12 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import { LoadingComponent } from "@/components/Loading";
+import AvatarUploader from "@/components/AvatarUploader";
 
 export default function UserDashboard() {
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+    const [username, setUsername] = useState<string>();
+    const [userDescription, setUserDescription] = useState<string>();
     const { setLoading } = useUI();
     useEffect(() => {
         // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
@@ -65,8 +69,16 @@ export default function UserDashboard() {
             },
         ],
     };
-    const { isLoading, isAuthenticated, userRole } = useAuth();
-    if (isLoading || (!isLoading && !isAuthenticated) || userRole != "player") {
+    const { isLoading, isAuthenticated, userProfile } = useAuth();
+    useEffect(() => {
+        setUsername(userProfile?.username ?? "");
+        setUserDescription(userProfile?.description ?? "");
+    }, [userProfile]);
+    if (
+        isLoading ||
+        (!isLoading && !isAuthenticated) ||
+        userProfile?.role != "player"
+    ) {
         return <LoadingComponent />;
     }
     return (
@@ -74,22 +86,33 @@ export default function UserDashboard() {
             <div className="border border-white rounded-2xl bg-neutral-950">
                 <section className="flex flex-col gap-5 p-5 border-b border-white rounded-t-2xl">
                     <div className="flex flex-row items-center gap-10">
-                        <img src="/profile.png" width="100px" />
-                        <span>Username</span>
+                        <AvatarUploader onFileSelect={setAvatarFile} />
+                        <div className="flex flex-col">
+                            <div className="mb-2 font-bold">Enter Username</div>
+                            <Input
+                                name="username"
+                                placeholder="Username"
+                                type="text"
+                                value={username}
+                                className="w-fit"
+                                onChange={(e) => {
+                                    setUsername(e.target.value);
+                                }}
+                            />
+                        </div>
                     </div>
                     <div>
-                        My name is Shail, a Dota 2 player from Pakistan, with 2
-                        years of experience in competitive and casual matches. I
-                        specialize in carry and support roles, focusing on
-                        high-level strategy, coordination, and decision-making.
-                        I carry my team so good that they end up cursing me at
-                        the end of every game. Sometimes people wonder if I'm
-                        playing as carry with support hero or as support with
-                        carry hero. I’m passionate about improving as both a
-                        player and teammate and am always open to scrims or new
-                        team opportunities.
+                        <div className="mb-2 font-bold">Edit Description</div>
+                        <textarea
+                            className="w-full text-white p-4 border border-white rounded-xl outline-none"
+                            defaultValue={userDescription}
+                            rows={4}
+                            onChange={(e) => {
+                                setUserDescription(e.target.value);
+                            }}
+                        />
                     </div>
-                    <PrimaryBtn text="Edit" />
+                    <PrimaryBtn text="Save" className="w-fit" />
                 </section>
                 <section className="flex flex-row">
                     <div className="w-1/4 p-5 border-r border-white">

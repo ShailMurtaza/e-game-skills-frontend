@@ -3,15 +3,17 @@ import { AttributesType } from "@/lib/Attributes";
 export function PrimaryBtn({
     text,
     active = false,
+    className = "",
     onClick,
 }: {
     text: string;
     active?: boolean;
+    className?: string;
     onClick?: () => void;
 }) {
     return (
         <button
-            className={`p-3 font-semibold rounded-md cursor-pointer border border-emerald-700 text-white shadow hover:bg-emerald-700 transition ${active ? "bg-emerald-700" : "bg-transparent"}`}
+            className={`p-3 font-semibold rounded-md cursor-pointer border border-emerald-700 text-white shadow hover:bg-emerald-700 transition ${className} ${active ? "bg-emerald-700" : "bg-transparent"}`}
             onClick={onClick}
         >
             {text}
@@ -24,12 +26,14 @@ export function Input({
     type,
     value = "",
     placeholder,
+    className = "",
     onChange,
 }: {
     name: string;
     type: string;
     value?: string;
     placeholder: string;
+    className?: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
     return (
@@ -40,7 +44,7 @@ export function Input({
             value={value}
             onChange={onChange}
             required
-            className="block w-full rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3"
+            className={`block rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3 ${className}`}
         />
     );
 }
@@ -81,6 +85,7 @@ export function Attributes({
                                 value={attribute}
                                 type={key_input_type}
                                 placeholder={key_placeholder}
+                                className="w-full"
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {
@@ -96,6 +101,7 @@ export function Attributes({
                                 value={value}
                                 type={value_input_type}
                                 placeholder={value_placeholder}
+                                className="w-full"
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {

@@ -36,8 +36,12 @@ export default function RootLayout({
         setPageTitle(segment.charAt(0).toUpperCase() + segment.slice(1));
     }, [pathname]);
 
-    const { isLoading, isAuthenticated, userRole } = useAuth();
-    if (isLoading || (!isLoading && !isAuthenticated) || userRole != "admin") {
+    const { isLoading, isAuthenticated, userProfile } = useAuth();
+    if (
+        isLoading ||
+        (!isLoading && !isAuthenticated) ||
+        userProfile?.role != "admin"
+    ) {
         return <LoadingComponent />;
     }
     return (

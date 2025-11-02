@@ -19,7 +19,7 @@ export default function Navbar() {
     const router = useRouter();
     const { setLoading, notify } = useUI();
     const pathname = usePathname();
-    const { isLoading, isAuthenticated, userRole } = useAuth();
+    const { isLoading, isAuthenticated, userProfile } = useAuth();
     const isOnProtectedRoute = protectedRoutes.some((path) =>
         pathname.startsWith(path),
     );
@@ -52,7 +52,7 @@ export default function Navbar() {
             </ul>
 
             <ul className="flex flex-row items-center gap-5 ml-auto">
-                {isAuthenticated && userRole === "team" && (
+                {isAuthenticated && userProfile?.role === "team" && (
                     <li>
                         <Link href="/search">
                             <button>Search</button>
@@ -61,7 +61,8 @@ export default function Navbar() {
                 )}
 
                 {isAuthenticated &&
-                    (userRole === "team" || userRole === "player") && (
+                    (userProfile?.role === "team" ||
+                        userProfile?.role === "player") && (
                         <li>
                             <Link href="/messages">
                                 <button>Messages</button>
@@ -75,9 +76,9 @@ export default function Navbar() {
                     </Link>
                 </li>
 
-                {isAuthenticated && userRole && (
+                {isAuthenticated && userProfile?.role && (
                     <li>
-                        <Link href={RoleProfilePaths[userRole]}>
+                        <Link href={RoleProfilePaths[userProfile?.role]}>
                             <button>Profile</button>
                         </Link>
                     </li>

@@ -11,23 +11,24 @@ import { getAuthData } from "@/utils/authClientData";
 import { useRouter, usePathname } from "next/navigation";
 import protectedRoutes from "@/lib/ProtectedRoutes";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
+import { UserProfile } from "@/lib/User";
 
 interface AuthContextType {
     isLoading: boolean;
     isAuthenticated: boolean;
-    userRole: string | null;
+    userProfile: UserProfile | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
     isLoading: true,
     isAuthenticated: false,
-    userRole: null,
+    userProfile: null,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userRole, setUserRole] = useState<string | null>("");
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                 if (data?.role) {
                     setIsAuthenticated(true);
-                    setUserRole(data.role);
+                    setUserProfile(data);
 
                     const expectedPath = RoleProfilePaths[data.role];
                     if (
@@ -54,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     }
                 } else {
                     setIsAuthenticated(false);
-                    setUserRole(null);
+                    setUserProfile(null);
                     // Only redirect to /auth if trying to access protected route
                     if (
                         protectedRoutes.some((route) =>
@@ -70,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 if (mounted) {
                     setIsLoading(false);
                     setIsAuthenticated(false);
-                    setUserRole(null);
+                    setUserProfile(null);
                 }
             });
 
@@ -80,7 +81,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, [router, pathname]);
 
     return (
-        <AuthContext.Provider value={{ isLoading, isAuthenticated, userRole }}>
+        <AuthContext.Provider
+            value={{ isLoading, isAuthenticated, userProfile }}
+        >
             {children}
         </AuthContext.Provider>
     );

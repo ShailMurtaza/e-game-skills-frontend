@@ -19,11 +19,11 @@ export default function Auth() {
         setLoading(false);
     }, []);
 
-    const { isLoading, isAuthenticated, userRole } = useAuth();
+    const { isLoading, isAuthenticated, userProfile } = useAuth();
     if (
         isLoading ||
         (!isLoading && !isAuthenticated) ||
-        userRole != "pending"
+        userProfile?.role != "pending"
     ) {
         return <LoadingComponent />;
     }
