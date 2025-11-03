@@ -7,12 +7,14 @@ export function InputAuth({
     type,
     label,
     value = "",
+    disabled = false,
     onChange,
 }: {
     name: string;
     type: string;
     label: string;
     value?: string;
+    disabled?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }) {
     const [show, setShow] = useState(false);
@@ -28,8 +30,9 @@ export function InputAuth({
                     type={isPassword && show ? "text" : type}
                     value={value}
                     onChange={onChange}
+                    disabled={disabled}
                     required
-                    className="mt-2 block w-full rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3"
+                    className="mt-2 block w-full rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3 disabled:cursor-not-allowed disabled:opacity-40"
                 />
                 {isPassword && (
                     <button

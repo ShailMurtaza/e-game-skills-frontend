@@ -54,6 +54,15 @@ export default function Auth() {
             notify(error, "error");
         }
     }, []);
+
+    // Reset values after router/action is changed
+    useEffect(() => {
+        setName("");
+        setCodeSent(false);
+        setCode("");
+        setPassword("");
+        setConfirmPassword("");
+    }, [action]);
     const { isLoading, isAuthenticated } = useAuth();
     if (isLoading || isAuthenticated) {
         return <LoadingComponent />;
@@ -167,6 +176,7 @@ export default function Auth() {
                                 type="email"
                                 label="Email"
                                 value={email}
+                                disabled={true}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                 }}
@@ -324,9 +334,6 @@ export default function Auth() {
                                         password,
                                     )
                                 ) {
-                                    setName("");
-                                    setPassword("");
-                                    setConfirmPassword("");
                                     router.push("?action=verify");
                                 }
                             }}
