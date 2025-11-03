@@ -2,6 +2,7 @@
 import { useUI } from "@/context/UIContext";
 import { useRouter } from "next/navigation";
 import { getAuthData } from "./authClientData";
+import RoleProfilePaths from "@/lib/RoleProfilePaths";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -26,17 +27,10 @@ export default function useSignin() {
 
             if (userData.role) {
                 // 3. Redirect based on role
-                const paths: Record<string, string> = {
-                    team: "team_dashboard",
-                    player: "player_dashboard",
-                    admin: "admin_panel",
-                    pending: "select_role",
-                };
-
-                const path = paths[userData.role];
+                const path = RoleProfilePaths[userData.role];
                 if (path) {
                     notify("Signin successful", "success");
-                    router.push(`/${path}`);
+                    router.push(path);
                 } else {
                     notify("Unknown role", "error");
                 }
@@ -44,6 +38,7 @@ export default function useSignin() {
             return { result: true, action: null };
         } catch (err: any) {
             notify(err.message, "error");
+            setLoading(false);
             var action = null;
             if (err.message.includes("Verify")) action = "verify";
             return { result: false, action: action };
