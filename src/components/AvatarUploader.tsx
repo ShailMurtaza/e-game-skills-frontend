@@ -6,13 +6,13 @@ import { useDropzone } from "react-dropzone";
 import { FaCamera as Camera } from "react-icons/fa";
 
 interface AvatarUploaderProps {
-    currentAvatar?: string;
+    currentAvatar: string;
     onFileSelect: (file: File | null) => void;
 }
 
 export default function AvatarUploader({
     onFileSelect,
-    currentAvatar = "profile.png",
+    currentAvatar,
 }: AvatarUploaderProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>(currentAvatar);
