@@ -116,6 +116,20 @@ export default function UserDashboard() {
     async function handleDeleteUserGame(game_id: any) {
         setLoading(true);
         if (selectedGame == game_id) setSelectedGame(null);
+        // Check if this game doesn't exist in database by checking if 'id' exists of not
+        if (
+            !userGames
+                .find((game) => game_id === game.game_id)
+                .hasOwnProperty("id")
+        ) {
+            // Just remove from userGames state variable
+            setUserGames(
+                userGames.filter((user_game) => user_game.game_id !== game_id),
+            );
+            setInterval(() => notify("Game Deleted", "success"), 1000);
+            setUserGameDelete(null);
+            return;
+        }
         try {
             const res = await fetch(`${API_URL}/users-games/${game_id}`, {
                 method: "DELETE",
@@ -123,6 +137,7 @@ export default function UserDashboard() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
+
             notify(data.message, "success");
             setUserGames(
                 userGames.filter((user_game) => user_game.game_id !== game_id),
@@ -247,6 +262,7 @@ export default function UserDashboard() {
                                                     ...userGames,
                                                     { game_id: new_game.id },
                                                 ]);
+                                                console.log(userGames);
                                             }}
                                         >
                                             {game.name}
@@ -254,7 +270,6 @@ export default function UserDashboard() {
                                     );
                                 })}
                             </select>
-                            {/*<PrimaryBtn text="+" />*/}
                         </div>
                     </div>
                     <div className="w-3/4 p-5">
