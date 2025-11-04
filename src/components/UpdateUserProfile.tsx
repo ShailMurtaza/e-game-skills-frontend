@@ -58,7 +58,7 @@ export default function UpdateUserProfile() {
 
     return (
         <section className="flex flex-col gap-5 p-5 border-b border-white rounded-t-2xl">
-            <div className="flex flex-row items-center gap-10">
+            <div className="flex flex-row justify-around items-center gap-10">
                 <AvatarUploader
                     onFileSelect={setAvatarFile}
                     currentAvatar={
@@ -67,39 +67,35 @@ export default function UpdateUserProfile() {
                             : "profile.png"
                     }
                 />
-                <div className="flex flex-row gap-5">
-                    <div className="flex flex-col">
-                        <div className="mb-2 font-bold">Enter Username</div>
-                        <Input
-                            name="username"
-                            placeholder="Username"
-                            type="text"
-                            value={username}
-                            className="w-fit"
-                            onChange={(e) => {
-                                setUsername(e.target.value);
-                            }}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <div className="mb-2 font-bold">Select Region</div>
-                        <select
-                            className="block rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3"
-                            value={userRegion ?? ""}
-                            onChange={(e) =>
-                                setUserRegion(Number(e.target.value))
-                            }
-                        >
-                            {regions &&
-                                regions.map((r) => {
-                                    return (
-                                        <option key={r.id} value={r.id}>
-                                            {r.name}
-                                        </option>
-                                    );
-                                })}
-                        </select>
-                    </div>
+                <div className="flex flex-col">
+                    <div className="mb-2 font-bold">Enter Username</div>
+                    <Input
+                        name="username"
+                        placeholder="Username"
+                        type="text"
+                        value={username}
+                        className="w-fit"
+                        onChange={(e) => {
+                            setUsername(e.target.value);
+                        }}
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <div className="mb-2 font-bold">Select Region</div>
+                    <select
+                        className="block rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3"
+                        value={userRegion ?? ""}
+                        onChange={(e) => setUserRegion(Number(e.target.value))}
+                    >
+                        {regions &&
+                            regions.map((r) => {
+                                return (
+                                    <option key={r.id} value={r.id}>
+                                        {r.name}
+                                    </option>
+                                );
+                            })}
+                    </select>
                 </div>
             </div>
             <div>

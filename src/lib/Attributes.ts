@@ -1,1 +1,1 @@
-export type AttributesType = { [key: string]: string }[];
+export type AttributesType = { id?: number; name: string; value: string }[];
