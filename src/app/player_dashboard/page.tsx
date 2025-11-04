@@ -101,6 +101,8 @@ export default function UserDashboard() {
                 if (attribute_value) value = attribute_value.value;
                 gameAttributes.push({
                     id: attr.id,
+                    game_attribute_id: attr.id,
+                    user_game_id: attr.game_id,
                     name: attr.name,
                     value: value,
                 });
@@ -126,7 +128,7 @@ export default function UserDashboard() {
             setUserGames(
                 userGames.filter((user_game) => user_game.game_id !== game_id),
             );
-            setInterval(() => notify("Game Deleted", "success"), 1000);
+            setLoading(false);
             setUserGameDelete(null);
             return;
         }
@@ -159,6 +161,36 @@ export default function UserDashboard() {
             notify("Fill All Important Information", "error");
             return;
         }
+        // Save data locally before sending it
+        const newUserGames = userGames.map((game) => {
+            if (game.game_id === selectedGame) {
+                return {
+                    ...game,
+                    attribute_values: Information,
+                    custom_attributes: AdditionalInformation,
+                    Links: Links,
+                    WinsLoss: [
+                        ...Wins.map((win) => {
+                            return {
+                                date: win.name,
+                                value: win.value,
+                                type: "Win",
+                            };
+                        }),
+                        ...Loss.map((loss) => {
+                            return {
+                                date: loss.name,
+                                value: loss.value,
+                                type: "Loss",
+                            };
+                        }),
+                    ],
+                };
+            } else {
+                return game;
+            }
+        });
+        setUserGames(newUserGames);
         var allData = {
             game_id: selectedGame,
             UserGameAttributeValue: Information,
@@ -262,7 +294,6 @@ export default function UserDashboard() {
                                                     ...userGames,
                                                     { game_id: new_game.id },
                                                 ]);
-                                                console.log(userGames);
                                             }}
                                         >
                                             {game.name}
