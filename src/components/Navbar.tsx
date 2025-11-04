@@ -31,12 +31,12 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`${play.className} text-lg font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
+            className={`${play.className} text-xl font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
         >
             <ul className="flex flex-row items-center gap-5">
-                <li>
+                <li className="mr-5">
                     <Link href="/">
-                        <img src="/icon.svg" width="70" alt="Logo" />
+                        <img src="/icon.svg" width="100" alt="Logo" />
                     </Link>
                 </li>
                 {showPublicLinks && (
@@ -46,6 +46,9 @@ export default function Navbar() {
                         </li>
                         <li>
                             <Link href="/contactus">Contact Us</Link>
+                        </li>
+                        <li>
+                            <Link href="/services">Services</Link>
                         </li>
                     </>
                 )}
