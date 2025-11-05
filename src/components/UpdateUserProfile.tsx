@@ -4,6 +4,8 @@ import { Input, PrimaryBtn } from "@/components/Dashboard";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/authContext";
 import AvatarUploader from "@/components/AvatarUploader";
+import { FaEye } from "react-icons/fa";
+import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,6 +14,7 @@ export default function UpdateUserProfile() {
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [username, setUsername] = useState<string>("");
     const [userDescription, setUserDescription] = useState<string | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
     const [regions, setRegions] = useState<
         { id: number; name: string }[] | null
     >();
@@ -30,6 +33,7 @@ export default function UpdateUserProfile() {
         setUsername(userProfile?.username ?? "");
         setUserDescription(userProfile?.description ?? null);
         setUserRegion(userProfile?.region_id ?? null);
+        setUserId(userProfile?.userId ?? null);
     }, [userProfile]);
 
     const handleSaveProfile = async () => {
@@ -110,11 +114,20 @@ export default function UpdateUserProfile() {
                     }}
                 />
             </div>
-            <PrimaryBtn
-                text="Save"
-                className="w-fit"
-                onClick={handleSaveProfile}
-            />
+            <div className="flex flex-row gap-5">
+                <PrimaryBtn
+                    text="Save"
+                    className="w-fit"
+                    onClick={handleSaveProfile}
+                />
+                <Link
+                    href={`/portfolio/${userProfile?.userId}`}
+                    target="_blank"
+                    className="flex flex-row items-center gap-3 p-3 rounded-md outline-none cursor-pointer bg-[#0b5ed7] text-gray-100 hover:bg-[#053470] transition"
+                >
+                    <FaEye /> Preview Portfolio
+                </Link>
+            </div>
         </section>
     );
 }

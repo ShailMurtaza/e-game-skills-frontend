@@ -4,7 +4,7 @@ const services = [
         title: "Contact Us",
         description:
             "Reach out easily through our integrated contact system. We ensure every inquiry is delivered directly to the right department for quick and reliable support.",
-        link: "/contact_us",
+        link: "/contactus",
     },
     {
         title: "Different Types of Users",

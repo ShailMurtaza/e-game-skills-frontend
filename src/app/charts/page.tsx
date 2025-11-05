@@ -1,3 +1,4 @@
+"use client";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -40,5 +41,10 @@ export default function Chart() {
         ],
     };
 
-    return <Line options={options} data={lineChartData} />;
+    return (
+        <div className="grid grid-cols-2 w-96 pt-[150px]">
+            <Line options={options} data={lineChartData} />
+            <Line options={options} data={lineChartData} />
+        </div>
+    );
 }
