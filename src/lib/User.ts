@@ -3,6 +3,8 @@ export type UserProfile = {
     userId: number;
     email: string;
     username: string;
+    region: string;
+    country: string;
     role: "player" | "team" | "admin" | "pending";
     region_id: number;
     avatar: string;

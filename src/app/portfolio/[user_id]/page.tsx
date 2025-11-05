@@ -6,6 +6,7 @@ import { RiLink, RiTrophyLine, RiCloseLargeFill } from "react-icons/ri";
 import { IoLocationSharp } from "react-icons/io5";
 import { useUI } from "@/context/UIContext";
 import Chart from "@/components/Chart";
+import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Portfolio({
@@ -18,6 +19,7 @@ export default function Portfolio({
     const [user, setUser] = useState<{
         username: string;
         email: string;
+        country: string;
         region: string;
         avatar: string;
         description: string;
@@ -97,41 +99,52 @@ export default function Portfolio({
                             <h1 className="text-4xl font-bold bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                                 {user?.username}
                             </h1>
+                            <Link
+                                href={`mailto:${encodeURIComponent(user?.email || false)}`}
+                                target="_blank"
+                                className="block text-gray-300 mb-2"
+                            >
+                                {user?.email}
+                            </Link>
                             <p className="text-gray-400 max-w-2xl">
                                 {user?.description}
                             </p>
                             <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-gray-500">
                                 <IoLocationSharp size={15} />
-                                <span>{user?.region}</span>
+                                <span>
+                                    {user?.country} &bull; {user?.region}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Section 2: User Games */}
-                <section className="space-y-6">
-                    <h2 className="text-2xl font-semibold text-gray-200">
-                        Games I Play
-                    </h2>
-                    <div className="flex flex-wrap gap-3">
-                        {userGames.map((user_game) => {
-                            const game = user_game.game;
-                            return (
-                                <button
-                                    key={game.id}
-                                    onClick={() => setActiveGame(game.id)}
-                                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg border ${
-                                        activeGame === game.id
-                                            ? "bg-linear-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-purple-500/30"
-                                            : "bg-zinc-900 text-gray-300 border-zinc-700 hover:bg-zinc-800 hover:text-white hover:border-zinc-600 hover:shadow-xl"
-                                    }`}
-                                >
-                                    {game.name}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </section>
+                {userGames.length != 0 && (
+                    <section className="space-y-6">
+                        <h2 className="text-2xl font-semibold text-gray-200">
+                            Games I Play
+                        </h2>
+                        <div className="flex flex-wrap gap-3">
+                            {userGames.map((user_game) => {
+                                const game = user_game.game;
+                                return (
+                                    <button
+                                        key={game.id}
+                                        onClick={() => setActiveGame(game.id)}
+                                        className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg border ${
+                                            activeGame === game.id
+                                                ? "bg-linear-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-purple-500/30"
+                                                : "bg-zinc-900 text-gray-300 border-zinc-700 hover:bg-zinc-800 hover:text-white hover:border-zinc-600 hover:shadow-xl"
+                                        }`}
+                                    >
+                                        {game.name}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </section>
+                )}
 
                 {/* Section 3: Game Data */}
                 {currentGame && (

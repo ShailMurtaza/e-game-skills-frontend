@@ -15,24 +15,15 @@ export default function UpdateUserProfile() {
     const [username, setUsername] = useState<string>("");
     const [userDescription, setUserDescription] = useState<string | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
-    const [regions, setRegions] = useState<
-        { id: number; name: string }[] | null
-    >();
-    const [userRegion, setUserRegion] = useState<number | null>(null);
+    const [userCountry, setUserCountry] = useState<string | null>(null);
+    const [userRegion, setUserRegion] = useState<string | null>(null);
     const { setLoading, notify } = useUI();
-    useEffect(() => {
-        // Fetch regions
-        fetch(`${API_URL}/region`, {
-            method: "GET",
-        })
-            .then((res) => res.json())
-            .then((data) => setRegions(data));
-    }, []);
 
     useEffect(() => {
         setUsername(userProfile?.username ?? "");
         setUserDescription(userProfile?.description ?? null);
-        setUserRegion(userProfile?.region_id ?? null);
+        setUserCountry(userProfile?.country ?? null);
+        setUserRegion(userProfile?.region ?? null);
         setUserId(userProfile?.userId ?? null);
     }, [userProfile]);
 
@@ -42,7 +33,8 @@ export default function UpdateUserProfile() {
         if (avatarFile) form.append("avatar", avatarFile);
         form.append("username", username);
         if (userDescription) form.append("description", userDescription);
-        if (userRegion) form.append("region_id", userRegion.toString());
+        if (userRegion) form.append("region", userRegion);
+        if (userCountry) form.append("country", userCountry);
 
         try {
             const res = await fetch(`${API_URL}/users/update_profile`, {
@@ -85,21 +77,31 @@ export default function UpdateUserProfile() {
                     />
                 </div>
                 <div className="flex flex-col">
-                    <div className="mb-2 font-bold">Select Region</div>
-                    <select
-                        className="block rounded-lg bg-black border border-gray-700 text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-white-500 focus:border-indigo-500 focus:outline-none p-3"
+                    <div className="mb-2 font-bold">Enter Country</div>
+                    <Input
+                        name="country"
+                        placeholder="Country"
+                        type="text"
+                        value={userCountry ?? ""}
+                        className="w-fit"
+                        onChange={(e) => {
+                            setUserCountry(e.target.value);
+                        }}
+                    />
+                </div>
+
+                <div className="flex flex-col">
+                    <div className="mb-2 font-bold">Enter Region</div>
+                    <Input
+                        name="region"
+                        placeholder="Region"
+                        type="text"
                         value={userRegion ?? ""}
-                        onChange={(e) => setUserRegion(Number(e.target.value))}
-                    >
-                        {regions &&
-                            regions.map((r) => {
-                                return (
-                                    <option key={r.id} value={r.id}>
-                                        {r.name}
-                                    </option>
-                                );
-                            })}
-                    </select>
+                        className="w-fit"
+                        onChange={(e) => {
+                            setUserRegion(e.target.value);
+                        }}
+                    />
                 </div>
             </div>
             <div>

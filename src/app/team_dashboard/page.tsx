@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "@/components/Loading";
 import { useUI } from "@/context/UIContext";
+import UpdateUserProfile from "@/components/UpdateUserProfile";
 
 export default function TeamDashboard() {
     const { setLoading } = useUI();
@@ -19,8 +20,10 @@ export default function TeamDashboard() {
         return <LoadingComponent />;
     }
     return (
-        <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
-            <h1>Team Dashboard</h1>
+        <main className="pt-[150px] mx-10">
+            <div className="border border-white rounded-2xl bg-neutral-950">
+                <UpdateUserProfile />
+            </div>
         </main>
     );
 }
