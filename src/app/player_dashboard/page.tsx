@@ -4,10 +4,10 @@ import { AttributesType } from "@/lib/Attributes";
 import DeleteConfirmDialog from "@/components/DeleteConfirmDialog";
 import { useAuth } from "@/context/authContext";
 import { useUI } from "@/context/UIContext";
-
 import { useEffect, useState } from "react";
 import { LoadingComponent } from "@/components/Loading";
 import UpdateUserProfile from "@/components/UpdateUserProfile";
+import { MdDeleteOutline } from "react-icons/md";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -269,8 +269,9 @@ export default function UserDashboard() {
                                                 onClick={() => {
                                                     setUserGameDelete(game.id);
                                                 }}
-                                                text="X"
-                                            />
+                                            >
+                                                <MdDeleteOutline size={20} />
+                                            </DangerBtn>
                                         </div>
                                     );
                             })}

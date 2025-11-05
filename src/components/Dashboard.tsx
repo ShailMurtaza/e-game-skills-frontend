@@ -1,4 +1,5 @@
 import { AttributesType } from "@/lib/Attributes";
+import { MdDeleteOutline } from "react-icons/md";
 
 export function PrimaryBtn({
     text,
@@ -22,11 +23,11 @@ export function PrimaryBtn({
 }
 
 export function DangerBtn({
-    text,
+    children,
     className = "",
     onClick,
 }: {
-    text: string;
+    children: React.ReactNode;
     className?: string;
     onClick?: () => void;
 }) {
@@ -35,7 +36,7 @@ export function DangerBtn({
             onClick={onClick}
             className={`w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition ${className}`}
         >
-            {text}
+            {children}
         </button>
     );
 }
@@ -133,7 +134,6 @@ export function Attributes({
                             />
                             {!readonly && (
                                 <DangerBtn
-                                    text="X"
                                     onClick={() => {
                                         var newAttributes = [
                                             ...parentAttributes,
@@ -142,7 +142,9 @@ export function Attributes({
                                         parentSetAttributes(newAttributes);
                                     }}
                                     className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition"
-                                />
+                                >
+                                    <MdDeleteOutline size={20} />
+                                </DangerBtn>
                             )}
                         </div>
                     );
