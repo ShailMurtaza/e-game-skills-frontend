@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
                     const expectedPath = RoleProfilePaths[data.role];
                     if (
+                        !pathname.startsWith("/messages") &&
                         expectedPath &&
                         !pathname.startsWith(expectedPath) &&
                         protectedRoutes.some((route) =>
