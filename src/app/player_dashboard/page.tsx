@@ -66,6 +66,7 @@ export default function UserDashboard() {
                     });
                 },
             );
+            // Separate Wins and Loss
             var wins: any[] = [];
             var loss: any[] = [];
             (user_selected_game.WinsLoss ?? []).map(
@@ -191,6 +192,7 @@ export default function UserDashboard() {
             }
         });
         setUserGames(newUserGames);
+        // Send PUT request to save data
         var allData = {
             game_id: selectedGame,
             UserGameAttributeValue: Information,
@@ -201,8 +203,8 @@ export default function UserDashboard() {
         };
         setLoading(true);
         try {
-            const res = await fetch(`${API_URL}/users-games/allData`, {
-                method: "POST",
+            const res = await fetch(`${API_URL}/users-games/saveAllData`, {
+                method: "PUT",
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
