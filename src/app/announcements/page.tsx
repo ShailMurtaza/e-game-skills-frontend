@@ -3,15 +3,16 @@ import Overlay from "@/components/Overlay";
 import announcements from "./fake_announcements.json";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ImCross } from "react-icons/im";
 
 function DisplayAnnouncement({
     title = "",
     announcement = "",
-    setShowAnnouncement,
+    onClose,
 }: {
     title?: string;
     announcement?: string;
-    setShowAnnouncement: (data: any) => void;
+    onClose: () => void;
 }) {
     return (
         <>
@@ -22,17 +23,17 @@ function DisplayAnnouncement({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -50, scale: 0.95 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="w-11/12 max-w-4xl max-h-[80vh] bg-black rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.15)] overflow-hidden"
+                    className="w-11/12 max-w-4xl bg-black rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.15)] overflow-hidden"
                 >
                     <div className="flex flex-row justify-between items-center px-6 pt-6 pb-2 border-b">
                         <h3>{title}</h3>
                         <button
-                            className="bg-neutral-900 text-sm p-2 rounded-xl"
+                            className="bg-neutral-900 hover:bg-neutral-900/50 text-sm p-3 rounded-full"
                             onClick={() => {
-                                setShowAnnouncement(null);
+                                onClose();
                             }}
                         >
-                            ✕
+                            <ImCross />
                         </button>
                     </div>
 
@@ -55,22 +56,20 @@ export default function Announcements() {
                 {showAnnouncement !== null ? (
                     <DisplayAnnouncement
                         key={showAnnouncement}
-                        setShowAnnouncement={setShowAnnouncement}
+                        onClose={() => setShowAnnouncement(null)}
                         title={announcements[showAnnouncement].title}
                         announcement={
                             announcements[showAnnouncement].announcement
                         }
                     />
-                ) : (
-                    ""
-                )}
+                ) : null}
             </AnimatePresence>
 
             <h1 className="text-center mb-10">Announcements</h1>
             {announcements.map((announcement, i) => (
                 <div
                     key={i}
-                    className="p-5 flex flex-col gap-2 border-1 border-white cursor-pointer"
+                    className="p-5 flex flex-col gap-2 cursor-pointer bg-zinc-900 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-101 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                     onClick={() => {
                         setShowAnnouncement(i);
                     }}

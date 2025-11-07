@@ -1,6 +1,6 @@
 // For user profile
 export type UserProfile = {
-    userId: number;
+    id: number;
     email: string;
     username: string;
     region: string;
