@@ -13,11 +13,11 @@ import protectedRoutes from "@/lib/ProtectedRoutes";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
 import { UserProfile } from "@/lib/User";
 
-interface AuthContextType {
+type AuthContextType = {
     isLoading: boolean;
     isAuthenticated: boolean;
     userProfile: UserProfile | null;
-}
+};
 
 const AuthContext = createContext<AuthContextType>({
     isLoading: true,

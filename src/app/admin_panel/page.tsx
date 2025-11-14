@@ -1,5 +1,5 @@
 "use client";
-import { useUsersData } from "@/components/UsersData";
+import { useUsersData } from "@/context/UsersData";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
@@ -7,11 +7,13 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title);
 export default function AdminPanel() {
     const usersData = useUsersData();
     const data = {
-        labels: ["Admins", "Teams", "Players", "Banned"],
+        labels: Object.keys(usersData?.by_role || {}).map((key) =>
+            key.toUpperCase(),
+        ),
         datasets: [
             {
-                label: "# of Votes",
-                data: Object.values(usersData),
+                label: "# of Users",
+                data: Object.values(usersData?.by_role || {}),
                 backgroundColor: [
                     "rgba(255, 99, 132, 0.2)",
                     "rgba(54, 162, 235, 0.2)",
