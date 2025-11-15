@@ -18,32 +18,43 @@ export default function Users() {
     const [users, setUsers] = useState<User[]>([]);
     const [searchEmail, setSearchEmail] = useState<string>("");
     const [searchUsername, setSearchUsername] = useState<string>("");
-    const [searchRole, setSearchRole] = useState<string>("");
-    const [searchBanned, setSearchBanned] = useState<string>("");
+    const [searchRole, setSearchRole] = useState<string>("all");
+    const [searchBanned, setSearchBanned] = useState<string>("all");
 
     const [showUserEditor, setShowUserEditor] = useState<User | null>(null);
-    useEffect(() => {
-        async function fetchUsers() {
-            try {
-                setLoading(true);
-                const res = await fetch(
-                    `${API_URL}/admin/users?page=${pageNumber}`,
-                    {
-                        method: "GET",
-                        credentials: "include",
-                    },
-                );
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.message || "Failed");
-                setUsers(data.users);
-                setMaxPages(data.max_pages);
-            } catch (e: any) {
-                notify(e.message, "error");
-            } finally {
-                setLoading(false);
-            }
+    async function fetchUsers(page: number = 1) {
+        setLoading(true);
+        let searchData: Record<string, any> = {};
+        setSearchEmail(searchEmail.trim());
+        setSearchUsername(searchUsername.trim());
+        if (searchEmail.length) searchData["email"] = searchEmail;
+        if (searchUsername.length) searchData["username"] = searchUsername;
+        if (searchRole !== "all") searchData["role"] = searchRole;
+        if (searchBanned !== "all")
+            searchData["banned"] = searchBanned === "true";
+        try {
+            const res = await fetch(`${API_URL}/admin/users?page=${page}`, {
+                body: JSON.stringify(searchData),
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setUsers(data.users);
+            setMaxPages(data.max_pages);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
         }
-        fetchUsers();
+    }
+    useEffect(() => {
+        fetchUsers(Number(pageNumber));
     }, [pageNumber]);
     return (
         <main>
@@ -103,7 +114,18 @@ export default function Users() {
                         <option value="true">Banned</option>
                         <option value="false">Un-banned</option>
                     </select>
-                    <PrimaryBtn text="Search" />
+                    <PrimaryBtn
+                        text="Search"
+                        onClick={() => {
+                            if (Number(pageNumber) !== 1) {
+                                // Updating query will cause fetchUser and automatic search
+                                router.push("?page=1");
+                            } else {
+                                // If pageNumber is already 1 then fetch users
+                                fetchUsers();
+                            }
+                        }}
+                    />
                 </div>
 
                 {/* Users List */}
@@ -114,7 +136,6 @@ export default function Users() {
                             className="p-3 bg-gray-850 rounded border border-gray-800"
                         >
                             <div className="flex items-center justify-between">
-                                {u.id}
                                 <div>
                                     <div className="font-medium text-white">
                                         {u.username}
@@ -141,9 +162,6 @@ export default function Users() {
                                     }}
                                 >
                                     Open
-                                </button>
-                                <button className="px-2 py-1 rounded bg-red-700 text-sm">
-                                    {u.banned ? "Unban" : "Ban"}
                                 </button>
                             </div>
                         </div>
