@@ -1,19 +1,46 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Overlay from "./Overlay";
 import { motion } from "framer-motion";
 import { User } from "@/lib/User";
+import { useUI } from "@/context/UIContext";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function UserEditor({
     user,
     setShowUserEditor,
+    setUser,
 }: {
     user: User;
-    setShowUserEditor: (data: User | null) => void;
+    setShowUserEditor: (data: number | null) => void;
+    setUser: (data: User) => void;
 }) {
     const [form, setForm] = useState<User>({ ...user });
+    const { setLoading, notify } = useUI();
 
-    useEffect(() => setForm({ ...user }), [user]);
+    async function updateUser() {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/admin/user/update`, {
+                body: JSON.stringify(form),
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setUser(form);
+            notify(data.message, "success");
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <>
@@ -98,7 +125,10 @@ export default function UserEditor({
                     </div>
 
                     <div className="mt-4 flex gap-2">
-                        <button className="px-3 py-2 rounded bg-green-700 text-sm">
+                        <button
+                            className="px-3 py-2 rounded bg-green-700 text-sm"
+                            onClick={updateUser}
+                        >
                             Save
                         </button>
                         <button

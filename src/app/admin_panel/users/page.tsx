@@ -21,7 +21,8 @@ export default function Users() {
     const [searchRole, setSearchRole] = useState<string>("all");
     const [searchBanned, setSearchBanned] = useState<string>("all");
 
-    const [showUserEditor, setShowUserEditor] = useState<User | null>(null);
+    // Index user from users array not the user.id
+    const [showUserEditor, setShowUserEditor] = useState<number | null>(null);
     async function fetchUsers(page: number = 1) {
         setLoading(true);
         let searchData: Record<string, any> = {};
@@ -62,8 +63,16 @@ export default function Users() {
             <AnimatePresence mode="wait">
                 {showUserEditor !== null ? (
                     <UserEditor
-                        user={showUserEditor}
+                        user={users[showUserEditor]}
                         setShowUserEditor={setShowUserEditor}
+                        setUser={(updated_user: User) => {
+                            const updatedUsers = users.map((user) => {
+                                return user.id === updated_user.id
+                                    ? updated_user
+                                    : user;
+                            });
+                            setUsers(updatedUsers);
+                        }}
                     />
                 ) : (
                     ""
@@ -158,7 +167,7 @@ export default function Users() {
                                 <button
                                     className="flex-1 px-2 py-1 rounded bg-gray-800 text-sm"
                                     onClick={() => {
-                                        setShowUserEditor(users[index]);
+                                        setShowUserEditor(index);
                                     }}
                                 >
                                     Open
