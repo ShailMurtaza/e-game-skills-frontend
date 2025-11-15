@@ -58,7 +58,6 @@ export default function UserEditor({
                                     setForm({
                                         ...form,
                                         role: e.target.value as User["role"],
-                                        isAdmin: e.target.value === "admin",
                                     })
                                 }
                                 className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
@@ -88,7 +87,7 @@ export default function UserEditor({
                         <label className="text-xs text-gray-400 col-span-1 md:col-span-2">
                             Notes
                             <textarea
-                                value={form.notes}
+                                value={form?.notes || ""}
                                 onChange={(e) =>
                                     setForm({ ...form, notes: e.target.value })
                                 }

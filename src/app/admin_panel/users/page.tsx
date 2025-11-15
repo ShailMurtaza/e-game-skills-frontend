@@ -1,41 +1,50 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Input, PrimaryBtn } from "@/components/Dashboard";
 import Pagination from "@/components/Pagination";
 import UserEditor from "@/components/UserEditor";
 import { User } from "@/lib/User";
+import { useUI } from "@/context/UIContext";
+import { useRouter, useSearchParams } from "next/navigation";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Users() {
-    // Simple mock data generator
-    const ROLE = ["player", "team", "admin"] as const;
-    const generateUsers = (n = 20) => {
-        const users: User[] = [];
-        for (let i = 1; i <= n; i++) {
-            const role = ROLE[Math.floor(Math.random() * ROLE.length)];
-            const banned = Math.random() < 0.08;
-            users.push({
-                id: i,
-                username: `user${i}`,
-                email: `user${i}@example.com`,
-                role,
-                isAdmin: role === "admin",
-                banned,
-                notes: "",
-                createdAt: new Date(
-                    Date.now() - Math.floor(Math.random() * 10000000000),
-                ).toISOString(),
-            });
-        }
-        return users;
-    };
-    const users = generateUsers();
+    const router = useRouter();
+    const { setLoading, notify } = useUI();
+    const searchParams = useSearchParams();
+    const pageNumber = searchParams.get("page") ?? "1";
+    const [maxPages, setMaxPages] = useState<number>(1);
+    const [users, setUsers] = useState<User[]>([]);
     const [searchEmail, setSearchEmail] = useState<string>("");
     const [searchUsername, setSearchUsername] = useState<string>("");
     const [searchRole, setSearchRole] = useState<string>("");
     const [searchBanned, setSearchBanned] = useState<string>("");
 
     const [showUserEditor, setShowUserEditor] = useState<User | null>(null);
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                setLoading(true);
+                const res = await fetch(
+                    `${API_URL}/admin/users?page=${pageNumber}`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    },
+                );
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || "Failed");
+                setUsers(data.users);
+                setMaxPages(data.max_pages);
+            } catch (e: any) {
+                notify(e.message, "error");
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchUsers();
+    }, [pageNumber]);
     return (
         <main>
             {/* User Details Editor */}
@@ -105,6 +114,7 @@ export default function Users() {
                             className="p-3 bg-gray-850 rounded border border-gray-800"
                         >
                             <div className="flex items-center justify-between">
+                                {u.id}
                                 <div>
                                     <div className="font-medium text-white">
                                         {u.username}
@@ -139,7 +149,14 @@ export default function Users() {
                         </div>
                     ))}
                 </div>
-                <Pagination page={2} pages={10} setPage={() => {}} />
+                <Pagination
+                    page={Number(pageNumber)}
+                    pages={maxPages}
+                    setPage={(page: number) => {
+                        if (page !== Number(pageNumber))
+                            router.push(`?page=${page}`);
+                    }}
+                />
             </div>
         </main>
     );

@@ -5,10 +5,8 @@ export default function Pagination({
 }: {
     page: number;
     pages: number;
-    setPage: () => void;
+    setPage: (data: any) => void;
 }) {
-    const prev = () => 1;
-    const next = () => 3;
     return (
         <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-gray-400">
@@ -16,14 +14,14 @@ export default function Pagination({
             </div>
             <div className="flex gap-2">
                 <button
-                    onClick={prev}
-                    className="px-3 py-1 rounded bg-gray-800 text-sm"
+                    onClick={() => setPage(Math.max(page - 1, 1))}
+                    className={`px-3 py-1 rounded text-sm transition-colors ${page === 1 ? "cursor-not-allowed bg-gray-900" : "bg-gray-800 hover:bg-gray-700"}`}
                 >
                     Prev
                 </button>
                 <button
-                    onClick={next}
-                    className="px-3 py-1 rounded bg-gray-800 text-sm"
+                    onClick={() => setPage(Math.min(page + 1, pages))}
+                    className={`px-3 py-1 rounded text-sm transition-colors ${page === pages ? "cursor-not-allowed bg-gray-900" : "bg-gray-800 hover:bg-gray-700"}`}
                 >
                     Next
                 </button>
