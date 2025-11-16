@@ -1,6 +1,6 @@
 "use client";
 import { AIReport } from "@/lib/AIReport";
-import AIReportViewer from "@/components/AIReportViewer";
+import AIReportViewer from "@/components/AdminPanel/AIReportViewer";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Overlay from "./Overlay";
+import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { User } from "@/lib/User";
 import { useUI } from "@/context/UIContext";

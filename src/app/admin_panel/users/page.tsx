@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Input, PrimaryBtn } from "@/components/Dashboard";
 import Pagination from "@/components/Pagination";
-import UserEditor from "@/components/UserEditor";
+import UserEditor from "@/components/AdminPanel/UserEditor";
 import { User } from "@/lib/User";
 import { useUI } from "@/context/UIContext";
 import { useRouter, useSearchParams } from "next/navigation";

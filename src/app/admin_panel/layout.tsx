@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import AdminPanelNavbar from "@/components/AdminPanelNavbar";
+import AdminPanelNavbar from "@/components/AdminPanel/Navbar";
 import { UsersDataProvider } from "@/context/UsersData";
 import { useAuth } from "@/context/authContext";
 import { LoadingComponent } from "@/components/Loading";

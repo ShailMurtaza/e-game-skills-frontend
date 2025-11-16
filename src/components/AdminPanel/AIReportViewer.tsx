@@ -1,5 +1,5 @@
 "use client";
-import Overlay from "./Overlay";
+import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { AIReport } from "@/lib/AIReport";
 
