@@ -6,6 +6,7 @@ export default function AdminPanelNavbar() {
         { href: "/admin_panel", label: "Summary" },
         { href: "/admin_panel/users", label: "Users" },
         { href: "/admin_panel/games", label: "Games" },
+        { href: "/admin_panel/announcements", label: "Announcements" },
         { href: "/admin_panel/reports", label: "Reports" },
         { href: "/admin_panel/ai_reports", label: "AI Reports" },
     ];

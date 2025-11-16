@@ -1,9 +1,11 @@
 "use client";
 import Overlay from "@/components/Overlay";
-import announcements from "./fake_announcements.json";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ImCross } from "react-icons/im";
+import { useUI } from "@/context/UIContext";
+import { Announcement } from "@/lib/Announcement";
+import fetchAnnouncements from "@/lib/FetchAnnouncements";
 
 function DisplayAnnouncement({
     title = "",
@@ -50,6 +52,19 @@ export default function Announcements() {
     const [showAnnouncement, setShowAnnouncement] = useState<number | null>(
         null,
     );
+    const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+    const { setLoading, notify } = useUI();
+    useEffect(() => {
+        async function loadAnnouncements() {
+            setLoading(true);
+            const result = await fetchAnnouncements();
+            setAnnouncements(result.announcements);
+            if (result.error) notify(result.message, "error");
+            setLoading(false);
+        }
+        loadAnnouncements();
+    }, []);
+
     return (
         <main className="pt-[150px] mx-10 min-h-screen flex flex-col gap-5 p-6 bg-black text-gray-100">
             <AnimatePresence mode="wait">
@@ -78,7 +93,7 @@ export default function Announcements() {
                     <div className="line-clamp-2">
                         {announcement.announcement}
                     </div>
-                    <div className="text-sm">23, October 2025</div>
+                    <div className="text-sm">{announcement.date}</div>
                 </div>
             ))}
         </main>
