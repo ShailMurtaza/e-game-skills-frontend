@@ -5,19 +5,58 @@ import { motion } from "framer-motion";
 import { Game, GameAttr } from "@/lib/Game";
 import { GameAttributes } from "./AdminPanel/GameAttributes";
 import Button from "./AdminPanel/Buttons";
+import { useUI } from "@/context/UIContext";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function GameEditor({
     game,
     setShowGameEditor,
+    setGame,
 }: {
     game: Game;
-    setShowGameEditor: (data: Game | null) => void;
+    setShowGameEditor: (data: number | null) => void;
+    setGame: (data: Game) => void;
 }) {
+    const { setLoading, notify } = useUI();
     const [form, setForm] = useState<Game>({ ...game });
+    const [gameName, setGameName] = useState<string>("");
     useEffect(() => setForm({ ...game }), [game]);
+    // Set attributes for editing and set all to update
+    const [attributes, setAttributes] = useState<GameAttr[]>([]);
+    useEffect(() => {
+        setAttributes(
+            form.attributes.map((attr) => ({ ...attr, action: "update" })),
+        );
+        setGameName(form.name);
+    }, [form]);
 
-    const [attributes, setAttributes] = useState<GameAttr[]>(form.attributes);
-
+    async function saveGame() {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/games`, {
+                method: "PATCH",
+                credentials: "include",
+                body: JSON.stringify({
+                    ...form,
+                    name: gameName,
+                    attributes: attributes,
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            notify(data.message, "success");
+            setGame(data.game);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
     return (
         <>
             <Overlay display="" />
@@ -33,18 +72,15 @@ export default function GameEditor({
                         <label className="text-xs text-gray-400">
                             Title
                             <input
-                                value={form.title}
-                                onChange={(e) =>
-                                    setForm({
-                                        ...form,
-                                        title: e.target.value,
-                                    })
-                                }
+                                value={gameName}
+                                onChange={(e) => setGameName(e.target.value)}
+                                placeholder="Title of game"
                                 className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
                             />
                         </label>
                         <GameAttributes
                             label="Attributes"
+                            gameId={form.id}
                             placeholder="Enter name of attribute e.g., Rank, Rold etc"
                             parentAttributes={attributes}
                             parentSetAttributes={setAttributes}
@@ -55,7 +91,7 @@ export default function GameEditor({
                         <Button
                             label="Save"
                             variant="primary"
-                            onClick={() => {}}
+                            onClick={saveGame}
                         />
                         <Button
                             label="Close"

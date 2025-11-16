@@ -1,7 +1,12 @@
-export type GameAttr = Record<string, "text" | "number" | "date">;
+export type GameAttr = {
+    id?: number;
+    name: string;
+    game_id: number;
+    action?: "create" | "update" | "delete";
+};
 
 export type Game = {
-    id: number;
-    title: string;
+    id?: number;
+    name: string;
     attributes: GameAttr[];
 };
