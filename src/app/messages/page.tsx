@@ -1,8 +1,10 @@
 function Profile() {
     return (
-        <div className="flex flex-row items-center gap-5 p-5 border-b-1 border-white last:border-b-0 cursor-pointer hover:bg-gray-900 rounded-xl transition-all duration-100">
-            <img src="/profile.png" width="50px" />
-            <span>Username</span>
+        <div className="mb-5 bg-zinc-900 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer">
+            <div className="flex flex-row items-center gap-5">
+                <img src="/profile.png" width="50px" />
+                <span>Username</span>
+            </div>
         </div>
     );
 }
@@ -13,7 +15,7 @@ function Message() {
             <div className="text-center text-gray-400 text-sm">Today</div>
 
             <div className="flex justify-start">
-                <div className="bg-gray-800 px-4 py-2 rounded-2xl max-w-xs">
+                <div className="bg-gray-800 px-4 py-2 rounded-2xl max-w-fit">
                     <p>Hello, how are you?</p>
                     <span className="block text-xs text-gray-400 text-right mt-1">
                         10:12 AM
@@ -22,7 +24,7 @@ function Message() {
             </div>
 
             <div className="flex justify-end">
-                <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-xs">
+                <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-fit">
                     <p>Doing great, thanks!</p>
                     <span className="block text-xs text-gray-300 text-right mt-1">
                         10:13 AM
@@ -37,8 +39,8 @@ export default function Messages() {
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
 
-            <div className="mx-5 flex flex-row border border-white rounded-xl h-[calc(100vh-300px)]">
-                <section className="border-r border-r-white w-1/4 overflow-y-auto">
+            <div className="mx-5 flex flex-row gap-5 rounded-xl h-[calc(100vh-300px)]">
+                <section className="p-5 w-1/4 overflow-y-auto">
                     <Profile />
                     <Profile />
                     <Profile />
@@ -59,18 +61,21 @@ export default function Messages() {
                     <Profile />
                 </section>
 
-                <section className="relative w-3/4 rounded-r-xl overflow-hidden">
-                    <div className="absolute top-0 w-full border-b border-gray-700 text-lg font-semibold bg-gray-800 p-4">
-                        Username
+                <section className="relative w-3/4 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                    <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4">
+                        <div className="flex flex-row items-center gap-5">
+                            <img src="/profile.png" width="50px" />
+                            <span>Username</span>
+                        </div>
                     </div>
 
-                    <div className="absolute bottom-0 w-full border-t border-gray-700 bg-gray-800 p-4 flex items-center">
+                    <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center">
                         <input
                             type="text"
                             placeholder="Type a message..."
-                            className="flex-1 bg-gray-900 text-white px-4 py-2 rounded-xl outline-none"
+                            className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
                         />
-                        <button className="ml-3 bg-blue-600 px-4 py-2 rounded-xl">
+                        <button className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl">
                             Send
                         </button>
                     </div>
