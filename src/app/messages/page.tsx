@@ -1,100 +1,90 @@
-function Profile() {
-    return (
-        <div className="mb-5 bg-zinc-900 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer">
-            <div className="flex flex-row items-center gap-5">
-                <img src="/profile.png" width="50px" />
-                <span>Username</span>
-            </div>
-        </div>
-    );
-}
+"use client";
+import { useUI } from "@/context/UIContext";
+import { Conversation } from "@/lib/Conversation";
+import { useEffect, useState } from "react";
+import { Profile } from "@/components/Messages";
+import UserConversation from "@/components/Conversation";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-function Message() {
-    return (
-        <div className="flex-1 p-4 space-y-6">
-            <div className="text-center text-gray-400 text-sm">Today</div>
-
-            <div className="flex justify-start">
-                <div className="bg-gray-800 px-4 py-2 rounded-2xl max-w-fit">
-                    <p>Hello, how are you?</p>
-                    <span className="block text-xs text-gray-400 text-right mt-1">
-                        10:12 AM
-                    </span>
-                </div>
-            </div>
-
-            <div className="flex justify-end">
-                <div className="bg-blue-600 px-4 py-2 rounded-2xl max-w-fit">
-                    <p>Doing great, thanks!</p>
-                    <span className="block text-xs text-gray-300 text-right mt-1">
-                        10:13 AM
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
-}
 export default function Messages() {
+    const { setLoading, notify } = useUI();
+    const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [userConversation, setUserConversation] =
+        useState<Conversation | null>(null);
+    function connect() {
+        const socket = new WebSocket("ws://localhost:3002");
+        socket.onopen = function () {
+            console.log("Connected");
+            socket.send(
+                JSON.stringify({
+                    event: "sendMessage",
+                    data: {
+                        toUserId: 123,
+                        content: "what the fuck?",
+                    },
+                }),
+            );
+            socket.onmessage = (e) => {
+                const msg = JSON.parse(e.data);
+
+                switch (msg.event) {
+                    case "newMessage":
+                        console.log("Received:", msg.data);
+                        break;
+                    case "messageSent":
+                        console.log("Delivered:", msg.data);
+                        break;
+                }
+            };
+        };
+    }
+
+    async function fetchMessages() {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API_URL}/messages`, {
+                method: "GET",
+                credentials: "include",
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setConversations(data);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        fetchMessages();
+    }, []);
     return (
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
 
-            <div className="mx-5 flex flex-row gap-5 rounded-xl h-[calc(100vh-300px)]">
-                <section className="p-5 w-1/4 overflow-y-auto">
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                    <Profile />
-                </section>
-
-                <section className="relative w-3/4 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                    <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4">
-                        <div className="flex flex-row items-center gap-5">
-                            <img src="/profile.png" width="50px" />
-                            <span>Username</span>
-                        </div>
-                    </div>
-
-                    <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center">
-                        <input
-                            type="text"
-                            placeholder="Type a message..."
-                            className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+            <div className="mx-5 grid grid-cols-4 gap-5 rounded-xl h-[calc(100vh-250px)]">
+                <section
+                    className={`p-5 overflow-y-auto overflow-x-hidden ${userConversation === null ? "col-span-4" : "col-span-1"}`}
+                >
+                    {conversations.map((c) => (
+                        <Profile
+                            key={c.id}
+                            username={c.username}
+                            avatar={c.avatar}
+                            onClick={() => {
+                                setUserConversation(c);
+                            }}
                         />
-                        <button className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl">
-                            Send
-                        </button>
-                    </div>
-
-                    <div className="overflow-y-auto max-h-full pt-[75px] pb-[75px] px-5 space-y-6">
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                        <Message />
-                    </div>
+                    ))}
                 </section>
+
+                {userConversation !== null && (
+                    <section className="relative col-span-3 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                        <UserConversation conversation={userConversation} />
+                    </section>
+                )}
             </div>
         </main>
     );

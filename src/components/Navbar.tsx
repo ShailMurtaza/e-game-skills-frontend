@@ -63,15 +63,13 @@ export default function Navbar() {
                     </li>
                 )}
 
-                {isAuthenticated &&
-                    (userProfile?.role === "team" ||
-                        userProfile?.role === "player") && (
-                        <li>
-                            <Link href="/messages">
-                                <button>Messages</button>
-                            </Link>
-                        </li>
-                    )}
+                {isAuthenticated && userProfile?.role !== "pending" && (
+                    <li>
+                        <Link href="/messages">
+                            <button>Messages</button>
+                        </Link>
+                    </li>
+                )}
 
                 <li>
                     <Link href="/announcements">
