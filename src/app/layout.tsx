@@ -6,6 +6,7 @@ import Loading from "@/components/Loading";
 import { AuthProvider } from "@/context/authContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { MessageProvider } from "@/context/messagesContext";
 
 export const metadata: Metadata = {
     title: "e Game Skills",
@@ -29,12 +30,14 @@ export default function RootLayout({
             <body>
                 <AuthProvider>
                     <UIProvider>
-                        <Navbar />
-                        <div>
-                            <Notification />
-                            <Loading />
-                            {children}
-                        </div>
+                        <MessageProvider>
+                            <Navbar />
+                            <div>
+                                <Notification />
+                                <Loading />
+                                {children}
+                            </div>
+                        </MessageProvider>
                     </UIProvider>
                     <Footer />
                 </AuthProvider>

@@ -8,6 +8,8 @@ import { useUI } from "@/context/UIContext";
 import { LoadingComponent } from "./Loading";
 import protectedRoutes from "@/lib/ProtectedRoutes";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
+import { useState } from "react";
+import { useMessageProvider } from "@/context/messagesContext";
 
 const play = Play({
     subsets: ["latin"],
@@ -18,6 +20,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Navbar() {
     const router = useRouter();
     const { setLoading, notify } = useUI();
+    const { unreadMsgCount } = useMessageProvider();
     const pathname = usePathname();
     const { isLoading, isAuthenticated, userProfile } = useAuth();
     const isOnProtectedRoute = protectedRoutes.some((path) =>
@@ -66,7 +69,16 @@ export default function Navbar() {
                 {isAuthenticated && userProfile?.role !== "pending" && (
                     <li>
                         <Link href="/messages">
-                            <button>Messages</button>
+                            <button className="relative">
+                                Messages
+                                {unreadMsgCount > 0 && (
+                                    <div className="absolute -top-4 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                                        {unreadMsgCount > 99
+                                            ? "99+"
+                                            : unreadMsgCount}
+                                    </div>
+                                )}
+                            </button>
                         </Link>
                     </li>
                 )}

@@ -3,6 +3,7 @@ export type Message = {
     content: string;
     sender_id: number;
     receiver_id: number;
+    read: boolean;
     timestamp: Date;
 };
 

@@ -15,11 +15,9 @@ export default function UserConversation({
             ...conversation.received_messages,
             ...conversation.sent_messages,
         ];
-        console.log(messages);
         const sortedMessages = [...messages].sort(
             (a, b) => +a.timestamp - +b.timestamp,
         );
-        console.log(sortedMessages);
         setUserMessages(sortedMessages);
     }, [conversation]);
     return (

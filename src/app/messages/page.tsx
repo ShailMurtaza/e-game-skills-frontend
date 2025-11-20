@@ -11,33 +11,6 @@ export default function Messages() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [userConversation, setUserConversation] =
         useState<Conversation | null>(null);
-    function connect() {
-        const socket = new WebSocket("ws://localhost:3002");
-        socket.onopen = function () {
-            console.log("Connected");
-            socket.send(
-                JSON.stringify({
-                    event: "sendMessage",
-                    data: {
-                        toUserId: 123,
-                        content: "what the fuck?",
-                    },
-                }),
-            );
-            socket.onmessage = (e) => {
-                const msg = JSON.parse(e.data);
-
-                switch (msg.event) {
-                    case "newMessage":
-                        console.log("Received:", msg.data);
-                        break;
-                    case "messageSent":
-                        console.log("Delivered:", msg.data);
-                        break;
-                }
-            };
-        };
-    }
 
     async function fetchMessages() {
         try {
