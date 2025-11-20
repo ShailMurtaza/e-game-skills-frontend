@@ -1,5 +1,7 @@
-import { Conversation } from "@/lib/Conversation";
-import { Message } from "./Messages";
+"use client";
+import { useEffect, useState } from "react";
+import { Conversation, Message } from "@/lib/Conversation";
+import { MessageComponent } from "./Messages";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
@@ -7,6 +9,19 @@ export default function UserConversation({
 }: {
     conversation: Conversation;
 }) {
+    const [userMessages, setUserMessages] = useState<Message[]>([]);
+    useEffect(() => {
+        const messages: Message[] = [
+            ...conversation.received_messages,
+            ...conversation.sent_messages,
+        ];
+        console.log(messages);
+        const sortedMessages = [...messages].sort(
+            (a, b) => +a.timestamp - +b.timestamp,
+        );
+        console.log(sortedMessages);
+        setUserMessages(sortedMessages);
+    }, [conversation]);
     return (
         <>
             <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4">
@@ -35,18 +50,39 @@ export default function UserConversation({
                 </button>
             </div>
 
-            <div className="overflow-y-auto max-h-full pt-[75px] pb-[75px] px-5 space-y-6">
-                <Message
-                    type="sent"
-                    content="Hi! How are you?"
-                    date="Today"
-                    time="04:50 PM"
-                />
-                <Message
-                    type="received"
-                    content="I'm fine. what is up?"
-                    time="10:40 PM"
-                />
+            <div className="overflow-y-auto max-h-full pt-[75px] pb-[75px] px-5">
+                {userMessages.map((m: Message, idx: number) => {
+                    const currentDate = m.timestamp.toLocaleDateString();
+                    const prevDate =
+                        idx > 0
+                            ? userMessages[
+                                  idx - 1
+                              ].timestamp.toLocaleDateString()
+                            : null;
+                    const showDate = prevDate !== currentDate;
+                    const currentDateString = m.timestamp.toLocaleDateString(
+                        "en-US",
+                        {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        },
+                    );
+                    return (
+                        <MessageComponent
+                            key={idx}
+                            type={
+                                m.sender_id === conversation.id
+                                    ? "sent"
+                                    : "received"
+                            }
+                            content={m.content}
+                            time={m.timestamp.toLocaleTimeString()}
+                            date={showDate ? currentDateString : null}
+                        />
+                    );
+                })}
             </div>
         </>
     );

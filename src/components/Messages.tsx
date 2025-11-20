@@ -29,7 +29,7 @@ export function Profile({
     );
 }
 
-export function Message({
+export function MessageComponent({
     type,
     content,
     date,
@@ -37,12 +37,18 @@ export function Message({
 }: {
     type: "sent" | "received";
     content: string;
-    date?: string;
+    date: string | null;
     time: string;
 }) {
     return (
         <div className="flex-1 p-4">
-            <div className="text-center text-gray-400 text-sm">{date}</div>
+            {date && (
+                <div className="flex justify-center">
+                    <div className="w-fit text-gray-400 bg-zinc-900 text-sm rounded-2xl px-5 py-1">
+                        {date}
+                    </div>
+                </div>
+            )}
             <div
                 className={`flex ${type === "sent" ? "justify-start" : "justify-end"}`}
             >

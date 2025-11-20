@@ -1,9 +1,9 @@
-type Message = {
+export type Message = {
     id: number;
     content: string;
     sender_id: number;
     receiver_id: number;
-    timestamp: string;
+    timestamp: Date;
 };
 
 export type Conversation = {

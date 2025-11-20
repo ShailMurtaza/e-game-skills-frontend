@@ -48,7 +48,21 @@ export default function Messages() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
-            setConversations(data);
+            setConversations(
+                data.map((c: Conversation) => {
+                    return {
+                        ...c,
+                        sent_messages: c.sent_messages.map((m) => ({
+                            ...m,
+                            timestamp: new Date(m.timestamp),
+                        })),
+                        received_messages: c.received_messages.map((m) => ({
+                            ...m,
+                            timestamp: new Date(m.timestamp),
+                        })),
+                    } as Conversation;
+                }),
+            );
         } catch (e: unknown) {
             const message =
                 e instanceof Error ? e.message : "An unexpected error occurred";
