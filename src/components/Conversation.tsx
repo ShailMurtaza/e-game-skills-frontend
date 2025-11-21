@@ -30,8 +30,7 @@ export default function UserConversation({
                                 ? `${API_URL}/users/avatar/${conversation.avatar}`
                                 : "/profile.png"
                         }
-                        width="50px"
-                        className="rounded-full"
+                        className="rounded-full w-[50px] h-[50px]"
                     />
                     <span>{conversation.username}</span>
                 </div>

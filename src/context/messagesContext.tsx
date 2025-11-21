@@ -1,5 +1,5 @@
 "use client";
-import { Conversation } from "@/lib/Conversation";
+import { Conversation, Message } from "@/lib/Conversation";
 import {
     createContext,
     ReactNode,
@@ -9,9 +9,10 @@ import {
     useState,
 } from "react";
 import { useUI } from "./UIContext";
+import { UserProfile } from "@/lib/User";
 
 type MessageContextType = {
-    messages: Conversation[];
+    receivedConversations: Conversation[];
     unreadMsgCount: number;
     resetUnreadCount: () => void;
 };
@@ -21,7 +22,9 @@ const WEBSOCKET_SERVER = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER;
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
 
 export function MessageProvider({ children }: { children: ReactNode }) {
-    const [messages, setMessages] = useState<Conversation[]>([]);
+    const [receivedConversations, setReceivedConversations] = useState<
+        Conversation[]
+    >([]);
     const [unreadMsgCount, setUnreadCount] = useState<number>(0);
     const { setLoading, notify } = useUI();
     const wsRef = useRef<WebSocket | null>(null);
@@ -47,7 +50,6 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }
     useEffect(() => {
         let isMounted = true;
-        console.log(WEBSOCKET_SERVER!);
         function connect() {
             if (!isMounted) return;
             const ws = new WebSocket(WEBSOCKET_SERVER!);
@@ -58,24 +60,85 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                     clearTimeout(reconnectTimer.current);
                     reconnectTimer.current = null;
                 }
-                ws.send(
-                    JSON.stringify({
-                        event: "sendMessage",
-                        data: {
-                            toUserId: 1,
-                            content: "New Message",
-                        },
-                    }),
-                );
                 ws.onmessage = (e) => {
-                    const msg = JSON.parse(e.data);
+                    const data: {
+                        event: string;
+                        data: {
+                            message: string | null;
+                            error: boolean;
+                            data: {
+                                content: string;
+                                id: number;
+                                read: boolean;
+                                sender_id: number;
+                                receiver_id: number;
+                                timestamp: string;
+                                receiver: {
+                                    id: number;
+                                    username: string;
+                                    avatar: string;
+                                };
+                                sender: {
+                                    id: number;
+                                    username: string;
+                                    avatar: string;
+                                };
+                            };
+                        };
+                    } = JSON.parse(e.data);
+                    if (data.data.error) {
+                        notify(data.data.message!, "error");
+                        return;
+                    }
 
-                    switch (msg.event) {
+                    const isOpen = window.location.pathname === "/messages";
+                    switch (data.event) {
                         case "newMessage":
-                            console.log("Received:", msg.data);
+                            if (isOpen) {
+                                const message = data.data.data;
+                                const newMessage: Message = {
+                                    id: message.id,
+                                    content: message.content,
+                                    sender_id: message.sender_id,
+                                    receiver_id: message.receiver_id,
+                                    read: message.read,
+                                    timestamp: new Date(message.timestamp),
+                                };
+                                let found = false;
+                                let newMessages: Conversation[] =
+                                    receivedConversations.map((u) => {
+                                        if (u.id === message.sender_id) {
+                                            found = true;
+                                            // Append new received message
+                                            return {
+                                                ...u,
+                                                received_messages: [
+                                                    ...u.received_messages,
+                                                    newMessage,
+                                                ],
+                                            };
+                                        }
+                                        return u;
+                                    });
+                                if (!found) {
+                                    newMessages = [
+                                        ...newMessages,
+                                        {
+                                            id: message.sender.id,
+                                            username: message.sender.username,
+                                            avatar: message.sender.avatar,
+                                            received_messages: [newMessage],
+                                            sent_messages: [],
+                                        },
+                                    ];
+                                }
+                                setReceivedConversations(newMessages);
+                            }
+                            notify("New Message", "success");
+                            console.log("Received: ", data);
                             break;
                         case "messageSent":
-                            console.log("Delivered:", msg.data);
+                            console.log("Delivered: ", data);
                             break;
                     }
                 };
@@ -109,7 +172,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }
     return (
         <MessageContext.Provider
-            value={{ messages, unreadMsgCount, resetUnreadCount }}
+            value={{ receivedConversations, unreadMsgCount, resetUnreadCount }}
         >
             {children}
         </MessageContext.Provider>

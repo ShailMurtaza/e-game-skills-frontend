@@ -20,8 +20,7 @@ export function Profile({
                             ? `${API_URL}/users/avatar/${avatar}`
                             : "/profile.png"
                     }
-                    width="50px"
-                    className="rounded-full"
+                    className="rounded-full w-[50px] h-[50px]"
                 />
                 <span>{username}</span>
             </div>

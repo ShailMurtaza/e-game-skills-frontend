@@ -4,13 +4,18 @@ import { Conversation } from "@/lib/Conversation";
 import { useEffect, useState } from "react";
 import { Profile } from "@/components/Messages";
 import UserConversation from "@/components/Conversation";
+import { useMessageProvider } from "@/context/messagesContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Messages() {
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
+    const { receivedConversations, resetUnreadCount } = useMessageProvider();
     const [userConversation, setUserConversation] =
         useState<Conversation | null>(null);
+    const [allConversations, setAllConversations] = useState<
+        Conversation[] | null
+    >(null);
 
     async function fetchMessages() {
         try {
@@ -46,7 +51,39 @@ export default function Messages() {
     }
     useEffect(() => {
         fetchMessages();
+        resetUnreadCount();
     }, []);
+    useEffect(() => {
+        let copyReceivedConversations: Conversation[] = JSON.parse(
+            JSON.stringify(receivedConversations),
+        );
+        console.log("asdf: ", copyReceivedConversations);
+        let combinedConvo: Conversation[] = [];
+        conversations.forEach((convo1: Conversation, x: number) => {
+            receivedConversations.forEach((convo2: Conversation, y: number) => {
+                if (convo1.id === convo2.id) {
+                    combinedConvo.push({
+                        ...convo1,
+                        received_messages: [
+                            ...convo1.received_messages,
+                            ...convo2.received_messages,
+                        ],
+                        sent_messages: [
+                            ...convo1.sent_messages,
+                            ...convo2.sent_messages,
+                        ],
+                    });
+                    copyReceivedConversations =
+                        copyReceivedConversations.filter((item) => {
+                            return item.id !== convo1.id;
+                        });
+                } else combinedConvo.push(convo1);
+            });
+        });
+        combinedConvo = [...combinedConvo, ...copyReceivedConversations];
+        setAllConversations(combinedConvo);
+        console.log(combinedConvo);
+    }, [conversations, receivedConversations]);
     return (
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
