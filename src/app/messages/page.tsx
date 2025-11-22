@@ -11,11 +11,14 @@ export default function Messages() {
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const { receivedConversations, resetUnreadCount } = useMessageProvider();
-    const [userConversation, setUserConversation] =
-        useState<Conversation | null>(null);
-    const [allConversations, setAllConversations] = useState<
-        Conversation[] | null
+    const [activeConversationId, setActiveConversationId] = useState<
+        number | null
     >(null);
+    const [allConversations, setAllConversations] = useState<Conversation[]>(
+        [],
+    );
+    const userConversation: Conversation | null =
+        allConversations.find((c) => c.id === activeConversationId) || null;
 
     async function fetchMessages() {
         try {
@@ -57,9 +60,13 @@ export default function Messages() {
         let copyReceivedConversations: Conversation[] = JSON.parse(
             JSON.stringify(receivedConversations),
         );
-        console.log("asdf: ", copyReceivedConversations);
+        console.log(
+            "receviedConversations messages page:",
+            receivedConversations,
+        );
         let combinedConvo: Conversation[] = [];
         conversations.forEach((convo1: Conversation, x: number) => {
+            let found = false;
             receivedConversations.forEach((convo2: Conversation, y: number) => {
                 if (convo1.id === convo2.id) {
                     combinedConvo.push({
@@ -77,12 +84,13 @@ export default function Messages() {
                         copyReceivedConversations.filter((item) => {
                             return item.id !== convo1.id;
                         });
-                } else combinedConvo.push(convo1);
+                    found = true;
+                }
             });
+            if (!found) combinedConvo.push(convo1);
         });
         combinedConvo = [...combinedConvo, ...copyReceivedConversations];
         setAllConversations(combinedConvo);
-        console.log(combinedConvo);
     }, [conversations, receivedConversations]);
     return (
         <main className="pt-[150px]">
@@ -92,13 +100,13 @@ export default function Messages() {
                 <section
                     className={`p-5 overflow-y-auto overflow-x-hidden ${userConversation === null ? "col-span-4" : "col-span-1"}`}
                 >
-                    {conversations.map((c) => (
+                    {allConversations.map((c) => (
                         <Profile
                             key={c.id}
                             username={c.username}
                             avatar={c.avatar}
                             onClick={() => {
-                                setUserConversation(c);
+                                setActiveConversationId(c.id);
                             }}
                         />
                     ))}

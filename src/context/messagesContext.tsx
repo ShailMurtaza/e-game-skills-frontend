@@ -9,12 +9,13 @@ import {
     useState,
 } from "react";
 import { useUI } from "./UIContext";
-import { UserProfile } from "@/lib/User";
 
+type msgData = { toUserId: number; content: string };
 type MessageContextType = {
     receivedConversations: Conversation[];
     unreadMsgCount: number;
     resetUnreadCount: () => void;
+    sendMsg: (data: msgData) => void;
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -104,41 +105,49 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                                     read: message.read,
                                     timestamp: new Date(message.timestamp),
                                 };
-                                let found = false;
-                                let newMessages: Conversation[] =
-                                    receivedConversations.map((u) => {
-                                        if (u.id === message.sender_id) {
-                                            found = true;
-                                            // Append new received message
-                                            return {
-                                                ...u,
-                                                received_messages: [
-                                                    ...u.received_messages,
-                                                    newMessage,
-                                                ],
-                                            };
+                                setReceivedConversations(
+                                    (prevConversations) => {
+                                        let found = false;
+                                        let newMessages: Conversation[] =
+                                            prevConversations.map((u) => {
+                                                if (
+                                                    u.id === message.sender_id
+                                                ) {
+                                                    found = true;
+                                                    // Append new received message
+                                                    return {
+                                                        ...u,
+                                                        sent_messages: [
+                                                            ...u.sent_messages,
+                                                            newMessage,
+                                                        ],
+                                                    };
+                                                }
+                                                return u;
+                                            });
+                                        if (!found) {
+                                            newMessages = [
+                                                ...newMessages,
+                                                {
+                                                    id: message.sender.id,
+                                                    username:
+                                                        message.sender.username,
+                                                    avatar: message.sender
+                                                        .avatar,
+                                                    sent_messages: [newMessage],
+                                                    received_messages: [],
+                                                },
+                                            ];
                                         }
-                                        return u;
-                                    });
-                                if (!found) {
-                                    newMessages = [
-                                        ...newMessages,
-                                        {
-                                            id: message.sender.id,
-                                            username: message.sender.username,
-                                            avatar: message.sender.avatar,
-                                            received_messages: [newMessage],
-                                            sent_messages: [],
-                                        },
-                                    ];
-                                }
-                                setReceivedConversations(newMessages);
+                                        return newMessages;
+                                    },
+                                );
                             }
                             notify("New Message", "success");
-                            console.log("Received: ", data);
+                            // console.log("Received: ", data);
                             break;
                         case "messageSent":
-                            console.log("Delivered: ", data);
+                            // console.log("Delivered: ", data);
                             break;
                     }
                 };
@@ -170,9 +179,22 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     function resetUnreadCount() {
         setUnreadCount(0);
     }
+    function sendMsg(data: msgData) {
+        wsRef.current?.send(
+            JSON.stringify({
+                event: "sendMessage",
+                data: data,
+            }),
+        );
+    }
     return (
         <MessageContext.Provider
-            value={{ receivedConversations, unreadMsgCount, resetUnreadCount }}
+            value={{
+                receivedConversations,
+                unreadMsgCount,
+                resetUnreadCount,
+                sendMsg,
+            }}
         >
             {children}
         </MessageContext.Provider>
