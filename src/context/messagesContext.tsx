@@ -11,12 +11,54 @@ import {
 import { useUI } from "./UIContext";
 
 type msgData = { toUserId: number; content: string };
+type OnlineUsers = { id: number; online: boolean };
 type MessageContextType = {
     receivedConversations: Conversation[];
     unreadMsgCount: number;
     resetUnreadCount: () => void;
     sendMsg: (data: msgData) => void;
+    contactedUsers: number[];
+    setContactedUsers: (users: number[]) => void;
+    onlineUsers: OnlineUsers[];
 };
+type WSMessagePayload = {
+    message: string | null;
+    error: boolean;
+    data: {
+        content: string;
+        id: number;
+        read: boolean;
+        sender_id: number;
+        receiver_id: number;
+        timestamp: string;
+        receiver: {
+            id: number;
+            username: string;
+            avatar: string;
+        };
+        sender: {
+            id: number;
+            username: string;
+            avatar: string;
+        };
+    };
+};
+
+type WSMessageEvent = {
+    event: "newMessage" | "messageSent";
+    data: WSMessagePayload;
+};
+
+type WSOnlineEvent = {
+    event: "isOnline";
+    data: {
+        message: string | null;
+        error: boolean;
+        data: { id: number; online: boolean }[];
+    };
+};
+
+type WSEvent = WSMessageEvent | WSOnlineEvent;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const WEBSOCKET_SERVER = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER;
@@ -30,6 +72,8 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     const { setLoading, notify } = useUI();
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimer = useRef<NodeJS.Timeout | null>(null);
+    const [contactedUsers, setContactedUsers] = useState<number[]>([]);
+    const [onlineUsers, setOnlineUsers] = useState<OnlineUsers[]>([]);
 
     async function getUnreadMsg() {
         try {
@@ -49,7 +93,22 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             setLoading(false);
         }
     }
+    const contactedUsersRef = useRef<number[]>([]);
+
     useEffect(() => {
+        contactedUsersRef.current = contactedUsers;
+    }, [contactedUsers]);
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (wsRef.current && contactedUsersRef.current.length) {
+                wsRef.current.send(
+                    JSON.stringify({
+                        event: "isOnline",
+                        data: contactedUsersRef.current,
+                    }),
+                );
+            }
+        }, 3000);
         let isMounted = true;
         function connect() {
             if (!isMounted) return;
@@ -62,31 +121,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                     reconnectTimer.current = null;
                 }
                 ws.onmessage = (e) => {
-                    const data: {
-                        event: string;
-                        data: {
-                            message: string | null;
-                            error: boolean;
-                            data: {
-                                content: string;
-                                id: number;
-                                read: boolean;
-                                sender_id: number;
-                                receiver_id: number;
-                                timestamp: string;
-                                receiver: {
-                                    id: number;
-                                    username: string;
-                                    avatar: string;
-                                };
-                                sender: {
-                                    id: number;
-                                    username: string;
-                                    avatar: string;
-                                };
-                            };
-                        };
-                    } = JSON.parse(e.data);
+                    const data = JSON.parse(e.data) as WSEvent;
                     if (data.data.error) {
                         notify(data.data.message!, "error");
                         return;
@@ -119,7 +154,13 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                                                         ...u,
                                                         sent_messages: [
                                                             ...u.sent_messages,
-                                                            newMessage,
+                                                            {
+                                                                ...newMessage,
+                                                                timestamp:
+                                                                    new Date(
+                                                                        newMessage.timestamp,
+                                                                    ),
+                                                            },
                                                         ],
                                                     };
                                                 }
@@ -134,7 +175,14 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                                                         message.sender.username,
                                                     avatar: message.sender
                                                         .avatar,
-                                                    sent_messages: [newMessage],
+                                                    sent_messages: [
+                                                        {
+                                                            ...newMessage,
+                                                            timestamp: new Date(
+                                                                newMessage.timestamp,
+                                                            ),
+                                                        },
+                                                    ],
                                                     received_messages: [],
                                                 },
                                             ];
@@ -144,11 +192,11 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                                 );
                             }
                             notify("New Message", "success");
-                            // console.log("Received: ", data);
                             break;
                         case "messageSent":
-                            // console.log("Delivered: ", data);
                             break;
+                        case "isOnline":
+                            setOnlineUsers(data.data.data);
                     }
                 };
                 ws.onclose = () => {
@@ -174,6 +222,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             isMounted = false;
             wsRef.current?.close();
             if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+            clearInterval(intervalId);
         };
     }, []);
     function resetUnreadCount() {
@@ -194,6 +243,9 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                 unreadMsgCount,
                 resetUnreadCount,
                 sendMsg,
+                contactedUsers,
+                setContactedUsers,
+                onlineUsers,
             }}
         >
             {children}

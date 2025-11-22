@@ -3,10 +3,12 @@ export function Profile({
     username,
     avatar,
     onClick,
+    isOnline,
 }: {
     username: string;
     avatar: string | null;
     onClick: () => void;
+    isOnline: boolean;
 }) {
     return (
         <div
@@ -22,7 +24,26 @@ export function Profile({
                     }
                     className="rounded-full w-[50px] h-[50px]"
                 />
-                <span>{username}</span>
+                <div className="flex-1">
+                    <h3 className="text-white font-semibold text-lg">
+                        {username}
+                    </h3>
+                    <p
+                        className={`
+                            text-sm font-medium flex items-center gap-1.5
+                            ${isOnline ? "text-emerald-400" : "text-zinc-500"}
+                        `}
+                    >
+                        <span className="relative flex">
+                            <span
+                                className={`w-2 h-2 rounded-full ${
+                                    isOnline ? "bg-emerald-400" : "bg-zinc-600"
+                                }`}
+                            />
+                        </span>
+                        {isOnline ? "Online" : "Offline"}
+                    </p>
+                </div>
             </div>
         </div>
     );

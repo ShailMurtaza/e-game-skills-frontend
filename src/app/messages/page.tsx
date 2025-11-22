@@ -10,7 +10,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Messages() {
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
-    const { receivedConversations, resetUnreadCount } = useMessageProvider();
+    const {
+        receivedConversations,
+        resetUnreadCount,
+        setContactedUsers,
+        onlineUsers,
+    } = useMessageProvider();
     const [activeConversationId, setActiveConversationId] = useState<
         number | null
     >(null);
@@ -57,11 +62,7 @@ export default function Messages() {
         resetUnreadCount();
     }, []);
     useEffect(() => {
-        let copyReceivedConversations: Conversation[] = JSON.parse(
-            JSON.stringify(receivedConversations),
-        );
-        console.log(
-            "receviedConversations messages page:",
+        let copyReceivedConversations: Conversation[] = structuredClone(
             receivedConversations,
         );
         let combinedConvo: Conversation[] = [];
@@ -91,6 +92,7 @@ export default function Messages() {
         });
         combinedConvo = [...combinedConvo, ...copyReceivedConversations];
         setAllConversations(combinedConvo);
+        setContactedUsers(combinedConvo.map((u) => u.id));
     }, [conversations, receivedConversations]);
     return (
         <main className="pt-[150px]">
@@ -108,6 +110,9 @@ export default function Messages() {
                             onClick={() => {
                                 setActiveConversationId(c.id);
                             }}
+                            isOnline={
+                                onlineUsers.find((u) => u.id === c.id)?.online!
+                            }
                         />
                     ))}
                 </section>
