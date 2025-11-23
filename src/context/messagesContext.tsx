@@ -21,27 +21,28 @@ type MessageContextType = {
     setContactedUsers: (users: number[]) => void;
     onlineUsers: OnlineUsers[];
 };
+type UserConvo = {
+    content: string;
+    id: number;
+    read: boolean;
+    sender_id: number;
+    receiver_id: number;
+    timestamp: string;
+    receiver: {
+        id: number;
+        username: string;
+        avatar: string;
+    };
+    sender: {
+        id: number;
+        username: string;
+        avatar: string;
+    };
+};
 type WSMessagePayload = {
     message: string | null;
     error: boolean;
-    data: {
-        content: string;
-        id: number;
-        read: boolean;
-        sender_id: number;
-        receiver_id: number;
-        timestamp: string;
-        receiver: {
-            id: number;
-            username: string;
-            avatar: string;
-        };
-        sender: {
-            id: number;
-            username: string;
-            avatar: string;
-        };
-    };
+    data: UserConvo;
 };
 
 type WSMessageEvent = {
@@ -95,6 +96,93 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }
     const contactedUsersRef = useRef<number[]>([]);
 
+    function setNewMesssage(message: UserConvo, type: "received" | "sent") {
+        const newMessage: Message = {
+            id: message.id,
+            content: message.content,
+            sender_id: message.sender_id,
+            receiver_id: message.receiver_id,
+            read: message.read,
+            timestamp: new Date(message.timestamp),
+        };
+        setReceivedConversations((prevConversations) => {
+            let found = false;
+            let newMessages: Conversation[] = [];
+            if (type === "received") {
+                newMessages = prevConversations.map((u) => {
+                    if (u.id === message.sender_id) {
+                        found = true;
+                        // Append new received message
+                        return {
+                            ...u,
+                            sent_messages: [
+                                ...u.sent_messages,
+                                {
+                                    ...newMessage,
+                                    timestamp: new Date(newMessage.timestamp),
+                                },
+                            ],
+                        };
+                    }
+                    return u;
+                });
+                if (!found) {
+                    newMessages = [
+                        ...newMessages,
+                        {
+                            id: message.sender.id,
+                            username: message.sender.username,
+                            avatar: message.sender.avatar,
+                            sent_messages: [
+                                {
+                                    ...newMessage,
+                                    timestamp: new Date(newMessage.timestamp),
+                                },
+                            ],
+                            received_messages: [],
+                        },
+                    ];
+                }
+            } else {
+                newMessages = prevConversations.map((u) => {
+                    if (u.id === message.receiver_id) {
+                        found = true;
+                        // Append new sent message
+                        return {
+                            ...u,
+                            received_messages: [
+                                ...u.received_messages,
+                                {
+                                    ...newMessage,
+                                    timestamp: new Date(newMessage.timestamp),
+                                },
+                            ],
+                        };
+                    }
+                    return u;
+                });
+                if (!found) {
+                    newMessages = [
+                        ...newMessages,
+                        {
+                            id: message.receiver.id,
+                            username: message.receiver.username,
+                            avatar: message.receiver.avatar,
+                            received_messages: [
+                                {
+                                    ...newMessage,
+                                    timestamp: new Date(newMessage.timestamp),
+                                },
+                            ],
+                            sent_messages: [],
+                        },
+                    ];
+                }
+            }
+            return newMessages;
+        });
+    }
+
     useEffect(() => {
         contactedUsersRef.current = contactedUsers;
     }, [contactedUsers]);
@@ -132,69 +220,16 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                         case "newMessage":
                             if (isOpen) {
                                 const message = data.data.data;
-                                const newMessage: Message = {
-                                    id: message.id,
-                                    content: message.content,
-                                    sender_id: message.sender_id,
-                                    receiver_id: message.receiver_id,
-                                    read: message.read,
-                                    timestamp: new Date(message.timestamp),
-                                };
-                                setReceivedConversations(
-                                    (prevConversations) => {
-                                        console.log(prevConversations);
-                                        let found = false;
-                                        let newMessages: Conversation[] =
-                                            prevConversations.map((u) => {
-                                                if (
-                                                    u.id === message.sender_id
-                                                ) {
-                                                    found = true;
-                                                    // Append new received message
-                                                    return {
-                                                        ...u,
-                                                        sent_messages: [
-                                                            ...u.sent_messages,
-                                                            {
-                                                                ...newMessage,
-                                                                timestamp:
-                                                                    new Date(
-                                                                        newMessage.timestamp,
-                                                                    ),
-                                                            },
-                                                        ],
-                                                    };
-                                                }
-                                                return u;
-                                            });
-                                        if (!found) {
-                                            newMessages = [
-                                                ...newMessages,
-                                                {
-                                                    id: message.sender.id,
-                                                    username:
-                                                        message.sender.username,
-                                                    avatar: message.sender
-                                                        .avatar,
-                                                    sent_messages: [
-                                                        {
-                                                            ...newMessage,
-                                                            timestamp: new Date(
-                                                                newMessage.timestamp,
-                                                            ),
-                                                        },
-                                                    ],
-                                                    received_messages: [],
-                                                },
-                                            ];
-                                        }
-                                        return newMessages;
-                                    },
-                                );
+                                setNewMesssage(message, "received");
                             }
                             notify("New Message", "success");
                             break;
                         case "messageSent":
+                            if (isOpen) {
+                                const message = data.data.data;
+                                console.log("Message Sent: ", message);
+                                setNewMesssage(message, "sent");
+                            }
                             break;
                         case "isOnline":
                             setOnlineUsers(data.data.data);

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Conversation, Message } from "@/lib/Conversation";
 import { MessageComponent } from "./Messages";
+import { useMessageProvider } from "@/context/messagesContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
@@ -10,6 +11,8 @@ export default function UserConversation({
     conversation: Conversation;
 }) {
     const [userMessages, setUserMessages] = useState<Message[]>([]);
+    const [msg, setMsg] = useState<string>("");
+    const { sendMsg } = useMessageProvider();
     useEffect(() => {
         const messages: Message[] = [
             ...conversation.received_messages,
@@ -20,6 +23,10 @@ export default function UserConversation({
         );
         setUserMessages(sortedMessages);
     }, [conversation]);
+    function handleSendMsg() {
+        sendMsg({ toUserId: conversation.id, content: msg });
+        setMsg("");
+    }
     return (
         <>
             <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4">
@@ -41,8 +48,22 @@ export default function UserConversation({
                     type="text"
                     placeholder="Type a message..."
                     className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                    value={msg}
+                    onChange={(e) => {
+                        setMsg(e.target.value);
+                    }}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                            handleSendMsg();
+                        }
+                    }}
                 />
-                <button className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl">
+                <button
+                    className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl"
+                    onClick={() => {
+                        handleSendMsg();
+                    }}
+                >
                     Send
                 </button>
             </div>

@@ -11,10 +11,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Messages() {
     const searchParams = useSearchParams();
-    const user_id = Number(searchParams.get("user")) ?? null;
+    const user_id = searchParams.get("user")
+        ? Number(searchParams.get("user"))
+        : null;
     const router = useRouter();
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [isConversationsFetched, setIsConversationsFetched] =
+        useState<Boolean>(false);
     const {
         receivedConversations,
         resetUnreadCount,
@@ -24,7 +28,7 @@ export default function Messages() {
     const [allConversations, setAllConversations] = useState<Conversation[]>(
         [],
     );
-    const [userConversation, setuserConversation] =
+    const [userConversation, setUserConversation] =
         useState<Conversation | null>(null);
     async function fetchUser(user_id: number): Promise<PublicUser | null> {
         setLoading(true);
@@ -65,8 +69,7 @@ export default function Messages() {
                         } as Conversation;
                     }),
                 ];
-                if (!conversations.find((c) => c.id === user_id))
-                    conversations = [...conversations, ...prev];
+                setIsConversationsFetched(true);
                 return conversations;
             });
         } catch (e: unknown) {
@@ -79,34 +82,35 @@ export default function Messages() {
     }
     useEffect(() => {
         async function setConversation() {
-            let conversation: Conversation | null =
-                allConversations.find((c) => c.id === user_id) ?? null;
-            if (!conversation) {
-                const fetchedUser: PublicUser | null = await fetchUser(user_id);
-                if (fetchedUser) {
-                    conversation = {
-                        id: user_id,
-                        avatar: fetchedUser.avatar,
-                        username: fetchedUser.username,
-                        received_messages: [],
-                        sent_messages: [],
-                    };
-                    setConversations((prev) => {
-                        console.log("Conversation: ", conversation);
-                        return [...prev, conversation!];
-                    });
+            if (isConversationsFetched) {
+                let conversation: Conversation | null =
+                    conversations.find((c) => c.id === user_id) ?? null;
+                if (!conversation && user_id !== null) {
+                    const fetchedUser: PublicUser | null =
+                        await fetchUser(user_id);
+                    if (fetchedUser) {
+                        conversation = {
+                            id: user_id,
+                            avatar: fetchedUser.avatar,
+                            username: fetchedUser.username,
+                            received_messages: [],
+                            sent_messages: [],
+                        };
+                        setConversations((prev) => {
+                            return [...prev, conversation!];
+                        });
+                    }
                 }
+                setUserConversation(conversation);
             }
-            setuserConversation(conversation);
         }
         setConversation();
-    }, [user_id]);
+    }, [user_id, isConversationsFetched]);
     useEffect(() => {
         fetchMessages();
         resetUnreadCount();
     }, []);
     useEffect(() => {
-        console.log("Updated Conversation", conversations);
         let copyReceivedConversations: Conversation[] = structuredClone(
             receivedConversations,
         );
@@ -139,6 +143,15 @@ export default function Messages() {
         setAllConversations(combinedConvo);
         setContactedUsers(combinedConvo.map((u) => u.id));
     }, [conversations, receivedConversations]);
+
+    // Update active userConversation if allConversations updates
+    useEffect(() => {
+        let conversation: Conversation | null =
+            allConversations.find((c) => c.id === user_id) ?? null;
+        if (user_id && conversation) {
+            setUserConversation(conversation);
+        }
+    }, [allConversations]);
     return (
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
