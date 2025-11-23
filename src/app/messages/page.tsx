@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import { Profile } from "@/components/Messages";
 import UserConversation from "@/components/Conversation";
 import { useMessageProvider } from "@/context/messagesContext";
+import { useSearchParams, useRouter } from "next/navigation";
+import { PublicUser } from "@/lib/User";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Messages() {
+    const searchParams = useSearchParams();
+    const user_id = Number(searchParams.get("user")) ?? null;
+    const router = useRouter();
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const {
@@ -16,15 +21,25 @@ export default function Messages() {
         setContactedUsers,
         onlineUsers,
     } = useMessageProvider();
-    const [activeConversationId, setActiveConversationId] = useState<
-        number | null
-    >(null);
     const [allConversations, setAllConversations] = useState<Conversation[]>(
         [],
     );
-    const userConversation: Conversation | null =
-        allConversations.find((c) => c.id === activeConversationId) || null;
-
+    const [userConversation, setuserConversation] =
+        useState<Conversation | null>(null);
+    async function fetchUser(user_id: number): Promise<PublicUser | null> {
+        setLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/users/profile/${user_id}`);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            return data;
+        } catch (e: any) {
+            notify(e.message, "error");
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
     async function fetchMessages() {
         try {
             setLoading(true);
@@ -34,21 +49,26 @@ export default function Messages() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
-            setConversations(
-                data.map((c: Conversation) => {
-                    return {
-                        ...c,
-                        sent_messages: c.sent_messages.map((m) => ({
-                            ...m,
-                            timestamp: new Date(m.timestamp),
-                        })),
-                        received_messages: c.received_messages.map((m) => ({
-                            ...m,
-                            timestamp: new Date(m.timestamp),
-                        })),
-                    } as Conversation;
-                }),
-            );
+            setConversations((prev) => {
+                let conversations = [
+                    ...data.map((c: Conversation) => {
+                        return {
+                            ...c,
+                            sent_messages: c.sent_messages.map((m) => ({
+                                ...m,
+                                timestamp: new Date(m.timestamp),
+                            })),
+                            received_messages: c.received_messages.map((m) => ({
+                                ...m,
+                                timestamp: new Date(m.timestamp),
+                            })),
+                        } as Conversation;
+                    }),
+                ];
+                if (!conversations.find((c) => c.id === user_id))
+                    conversations = [...conversations, ...prev];
+                return conversations;
+            });
         } catch (e: unknown) {
             const message =
                 e instanceof Error ? e.message : "An unexpected error occurred";
@@ -58,10 +78,35 @@ export default function Messages() {
         }
     }
     useEffect(() => {
+        async function setConversation() {
+            let conversation: Conversation | null =
+                allConversations.find((c) => c.id === user_id) ?? null;
+            if (!conversation) {
+                const fetchedUser: PublicUser | null = await fetchUser(user_id);
+                if (fetchedUser) {
+                    conversation = {
+                        id: user_id,
+                        avatar: fetchedUser.avatar,
+                        username: fetchedUser.username,
+                        received_messages: [],
+                        sent_messages: [],
+                    };
+                    setConversations((prev) => {
+                        console.log("Conversation: ", conversation);
+                        return [...prev, conversation!];
+                    });
+                }
+            }
+            setuserConversation(conversation);
+        }
+        setConversation();
+    }, [user_id]);
+    useEffect(() => {
         fetchMessages();
         resetUnreadCount();
     }, []);
     useEffect(() => {
+        console.log("Updated Conversation", conversations);
         let copyReceivedConversations: Conversation[] = structuredClone(
             receivedConversations,
         );
@@ -108,7 +153,7 @@ export default function Messages() {
                             username={c.username}
                             avatar={c.avatar}
                             onClick={() => {
-                                setActiveConversationId(c.id);
+                                router.push(`?user=${c.id}`);
                             }}
                             isOnline={
                                 onlineUsers.find((u) => u.id === c.id)?.online!

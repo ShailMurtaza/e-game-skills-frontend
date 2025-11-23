@@ -83,7 +83,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                 credentials: "include",
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed");
+            if (!res.ok) throw new Error(data.message ?? "Failed");
             setUnreadCount(data.count);
         } catch (e: unknown) {
             const message =
@@ -142,6 +142,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                                 };
                                 setReceivedConversations(
                                     (prevConversations) => {
+                                        console.log(prevConversations);
                                         let found = false;
                                         let newMessages: Conversation[] =
                                             prevConversations.map((u) => {

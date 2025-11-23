@@ -16,3 +16,12 @@ export type User = UserProfile & {
     banned?: boolean;
     notes?: string;
 };
+
+export type PublicUser = {
+    username: string;
+    email: string;
+    country: string;
+    region: string;
+    avatar: string;
+    description: string;
+};

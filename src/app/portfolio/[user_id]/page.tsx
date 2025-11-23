@@ -7,6 +7,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import { useUI } from "@/context/UIContext";
 import Chart from "@/components/Chart";
 import Link from "next/link";
+import { PublicUser } from "@/lib/User";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Portfolio({
@@ -16,14 +17,7 @@ export default function Portfolio({
 }) {
     const { user_id } = React.use(params);
     const { setLoading, notify } = useUI();
-    const [user, setUser] = useState<{
-        username: string;
-        email: string;
-        country: string;
-        region: string;
-        avatar: string;
-        description: string;
-    } | null>(null);
+    const [user, setUser] = useState<PublicUser | null>(null);
     const [userGames, setUserGames] = useState<any[]>([]);
     useEffect(() => {
         async function fetchUser() {
@@ -114,6 +108,14 @@ export default function Portfolio({
                                 <span>
                                     {user?.country} &bull; {user?.region}
                                 </span>
+                            </div>
+                            <div className="mt-6">
+                                <Link
+                                    href={`/messages?user=${user_id}`}
+                                    className="p-4 rounded-xl transition bg-emerald-700 hover:bg-emerald-800 text-white font-semibold"
+                                >
+                                    Contact Me
+                                </Link>
                             </div>
                         </div>
                     </div>
