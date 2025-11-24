@@ -19,12 +19,8 @@ export default function Messages() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [isConversationsFetched, setIsConversationsFetched] =
         useState<Boolean>(false);
-    const {
-        receivedConversations,
-        resetUnreadCount,
-        setContactedUsers,
-        onlineUsers,
-    } = useMessageProvider();
+    const { receivedConversations, setContactedUsers, onlineUsers, setRead } =
+        useMessageProvider();
     const [allConversations, setAllConversations] = useState<Conversation[]>(
         [],
     );
@@ -100,15 +96,16 @@ export default function Messages() {
                             return [...prev, conversation!];
                         });
                     }
+                } else if (conversation && user_id !== null) {
+                    setRead(user_id);
                 }
                 setUserConversation(conversation);
             }
         }
         setConversation();
-    }, [user_id, isConversationsFetched]);
+    }, [user_id, isConversationsFetched, receivedConversations]);
     useEffect(() => {
         fetchMessages();
-        resetUnreadCount();
     }, []);
     useEffect(() => {
         let copyReceivedConversations: Conversation[] = structuredClone(

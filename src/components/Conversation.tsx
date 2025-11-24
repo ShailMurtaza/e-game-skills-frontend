@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Conversation, Message } from "@/lib/Conversation";
 import { MessageComponent } from "./Messages";
 import { useMessageProvider } from "@/context/messagesContext";
@@ -12,6 +12,7 @@ export default function UserConversation({
 }) {
     const [userMessages, setUserMessages] = useState<Message[]>([]);
     const [msg, setMsg] = useState<string>("");
+    const bottomRef = useRef<HTMLDivElement>(null);
     const { sendMsg } = useMessageProvider();
     useEffect(() => {
         const messages: Message[] = [
@@ -22,10 +23,31 @@ export default function UserConversation({
             (a, b) => +a.timestamp - +b.timestamp,
         );
         setUserMessages(sortedMessages);
+        initialScrollRef.current = true;
     }, [conversation]);
+
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    // flag to detect the initial scroll for the current conversation
+    const initialScrollRef = useRef<boolean>(true);
+    useLayoutEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        if (initialScrollRef.current) {
+            // instant (no animation) so there's no visible jump
+            el.scrollTop = el.scrollHeight;
+            initialScrollRef.current = false;
+        } else {
+            // smooth for subsequent updates (new incoming messages)
+            // prefer element.scrollTo so we control the container directly
+            el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+        }
+    }, [userMessages]);
     function handleSendMsg() {
-        sendMsg({ toUserId: conversation.id, content: msg });
-        setMsg("");
+        if (msg.trim().length > 0) {
+            sendMsg({ toUserId: conversation.id, content: msg.trim() });
+            setMsg("");
+        }
     }
     return (
         <>
@@ -68,7 +90,10 @@ export default function UserConversation({
                 </button>
             </div>
 
-            <div className="overflow-y-auto max-h-full pt-[75px] pb-[75px] px-5">
+            <div
+                ref={containerRef}
+                className="absolute top-[75px] bottom-[75px] w-full overflow-y-auto px-5"
+            >
                 {userMessages.map((m: Message, idx: number) => {
                     const currentDate = m.timestamp.toLocaleDateString();
                     const prevDate =
@@ -101,6 +126,7 @@ export default function UserConversation({
                         />
                     );
                 })}
+                <div ref={bottomRef}></div>
             </div>
         </>
     );

@@ -15,11 +15,11 @@ type OnlineUsers = { id: number; online: boolean };
 type MessageContextType = {
     receivedConversations: Conversation[];
     unreadMsgCount: number;
-    resetUnreadCount: () => void;
     sendMsg: (data: msgData) => void;
     contactedUsers: number[];
     setContactedUsers: (users: number[]) => void;
     onlineUsers: OnlineUsers[];
+    setRead: (user_id: number) => void;
 };
 type UserConvo = {
     content: string;
@@ -58,8 +58,15 @@ type WSOnlineEvent = {
         data: { id: number; online: boolean }[];
     };
 };
-
-type WSEvent = WSMessageEvent | WSOnlineEvent;
+type WSUnreadEvent = {
+    event: "setUnread";
+    data: {
+        message: string | null;
+        error: boolean;
+        data: number;
+    };
+};
+type WSEvent = WSMessageEvent | WSOnlineEvent | WSUnreadEvent;
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const WEBSOCKET_SERVER = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER;
@@ -78,7 +85,6 @@ export function MessageProvider({ children }: { children: ReactNode }) {
 
     async function getUnreadMsg() {
         try {
-            setLoading(true);
             const res = await fetch(`${API_URL}/messages/unread`, {
                 method: "GET",
                 credentials: "include",
@@ -90,8 +96,6 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             const message =
                 e instanceof Error ? e.message : "An unexpected error occurred";
             notify(message, "error");
-        } finally {
-            setLoading(false);
         }
     }
     const contactedUsersRef = useRef<number[]>([]);
@@ -218,6 +222,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                     const isOpen = window.location.pathname === "/messages";
                     switch (data.event) {
                         case "newMessage":
+                            getUnreadMsg();
                             if (isOpen) {
                                 const message = data.data.data;
                                 setNewMesssage(message, "received");
@@ -225,14 +230,19 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                             notify("New Message", "success");
                             break;
                         case "messageSent":
+                            getUnreadMsg();
                             if (isOpen) {
                                 const message = data.data.data;
-                                console.log("Message Sent: ", message);
                                 setNewMesssage(message, "sent");
                             }
                             break;
                         case "isOnline":
                             setOnlineUsers(data.data.data);
+                            break;
+                        case "setUnread":
+                            const message = data.data.data;
+                            setUnreadCount(message);
+                            break;
                     }
                 };
                 ws.onclose = () => {
@@ -261,9 +271,6 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             clearInterval(intervalId);
         };
     }, []);
-    function resetUnreadCount() {
-        setUnreadCount(0);
-    }
     function sendMsg(data: msgData) {
         wsRef.current?.send(
             JSON.stringify({
@@ -272,16 +279,24 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             }),
         );
     }
+    function setRead(user_id: number) {
+        wsRef.current?.send(
+            JSON.stringify({
+                event: "setRead",
+                data: user_id,
+            }),
+        );
+    }
     return (
         <MessageContext.Provider
             value={{
                 receivedConversations,
                 unreadMsgCount,
-                resetUnreadCount,
                 sendMsg,
                 contactedUsers,
                 setContactedUsers,
                 onlineUsers,
+                setRead,
             }}
         >
             {children}
