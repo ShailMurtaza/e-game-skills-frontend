@@ -24,7 +24,7 @@ export default function UpdateUserProfile() {
         setUserDescription(userProfile?.description ?? null);
         setUserCountry(userProfile?.country ?? null);
         setUserRegion(userProfile?.region ?? null);
-        setUserId(userProfile?.userId ?? null);
+        setUserId(userProfile?.id ?? null);
     }, [userProfile]);
 
     const handleSaveProfile = async () => {
@@ -123,7 +123,7 @@ export default function UpdateUserProfile() {
                     onClick={handleSaveProfile}
                 />
                 <Link
-                    href={`/portfolio/${userProfile?.userId}`}
+                    href={`/portfolio/${userProfile?.id}`}
                     target="_blank"
                     className="flex flex-row items-center gap-3 p-3 rounded-md outline-none cursor-pointer bg-[#0b5ed7] text-gray-100 hover:bg-[#053470] transition"
                 >
