@@ -3,6 +3,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Conversation, Message } from "@/lib/Conversation";
 import { MessageComponent } from "./Messages";
 import { useMessageProvider } from "@/context/messagesContext";
+import { DangerBtn } from "./Dashboard";
+import { MdOutlineReportProblem } from "react-icons/md";
+import ReportPopup from "./ReportPopup";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
@@ -10,9 +13,13 @@ export default function UserConversation({
 }: {
     conversation: Conversation;
 }) {
+    const [report, setReport] = useState<boolean>(false);
     const [userMessages, setUserMessages] = useState<Message[]>([]);
     const [msg, setMsg] = useState<string>("");
     const bottomRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    // flag to detect the initial scroll for the current conversation
+    const initialScrollRef = useRef<boolean>(true);
     const { sendMsg } = useMessageProvider();
     useEffect(() => {
         const messages: Message[] = [
@@ -26,9 +33,6 @@ export default function UserConversation({
         initialScrollRef.current = true;
     }, [conversation]);
 
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    // flag to detect the initial scroll for the current conversation
-    const initialScrollRef = useRef<boolean>(true);
     useLayoutEffect(() => {
         const el = containerRef.current;
         if (!el) return;
@@ -51,7 +55,14 @@ export default function UserConversation({
     }
     return (
         <>
-            <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4">
+            {report && (
+                <ReportPopup
+                    username={conversation.username}
+                    user_id={conversation.id}
+                    setReport={setReport}
+                />
+            )}
+            <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4 z-10">
                 <div className="flex flex-row items-center gap-5">
                     <img
                         src={
@@ -62,10 +73,21 @@ export default function UserConversation({
                         className="rounded-full w-[50px] h-[50px]"
                     />
                     <span>{conversation.username}</span>
+                    <div className="ml-auto">
+                        <DangerBtn
+                            onClick={() => {
+                                setReport(true);
+                            }}
+                            className="flex flex-row justify-center items-center gap-1"
+                        >
+                            <MdOutlineReportProblem size={20} />
+                            Report
+                        </DangerBtn>
+                    </div>
                 </div>
             </div>
 
-            <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center">
+            <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center z-0">
                 <input
                     type="text"
                     placeholder="Type a message..."

@@ -41,9 +41,9 @@ export default function ReportViewer({
                             </p>
                         </div>
                         <div className="col-span-2">
-                            <h5 className="text-gray-400">Note</h5>
+                            <h5 className="text-gray-400">Description</h5>
                             <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
-                                {report.note}
+                                {report.description}
                             </p>
                         </div>
                     </div>

@@ -34,7 +34,7 @@ export function DangerBtn({
     return (
         <button
             onClick={onClick}
-            className={`w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition ${className}`}
+            className={`w-fit px-4 py-2 font-semibold rounded-md cursor-pointer bg-red-600 text-white shadow hover:bg-red-700 transition ${className}`}
         >
             {children}
         </button>

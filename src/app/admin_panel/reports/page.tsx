@@ -16,8 +16,9 @@ export default function Reports() {
                 reporterId: Math.ceil(Math.random() * 200),
                 targetId: Math.ceil(Math.random() * 250),
                 reason: report_resons[Math.floor(Math.random() * 3)],
-                note: "The user sent an offensive and disrespectful message directed at another participant. The content contained personal insults, inappropriate language, and behavior that promotes hostility. Such communication creates an uncomfortable environment and goes against the platform’s community standards. It is recommended that the message be reviewed and appropriate action be taken to maintain a respectful and safe space for all users.",
-                createdAt: new Date(Date.now() - i * 10000000).toISOString(),
+                description:
+                    "The user sent an offensive and disrespectful message directed at another participant. The content contained personal insults, inappropriate language, and behavior that promotes hostility. Such communication creates an uncomfortable environment and goes against the platform’s community standards. It is recommended that the message be reviewed and appropriate action be taken to maintain a respectful and safe space for all users.",
+                timestamp: new Date(Date.now() - i * 10000000).toISOString(),
             });
         }
         return r;
@@ -56,7 +57,7 @@ export default function Reports() {
                                 Reporter: {r.reporterId} · Target: {r.targetId}
                             </div>
                             <div className="text-xs text-gray-500 mt-2">
-                                {new Date(r.createdAt).toLocaleString()}
+                                {new Date(r.timestamp).toLocaleString()}
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">

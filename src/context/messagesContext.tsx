@@ -77,7 +77,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
         Conversation[]
     >([]);
     const [unreadMsgCount, setUnreadCount] = useState<number>(0);
-    const { setLoading, notify } = useUI();
+    const { notify } = useUI();
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimer = useRef<NodeJS.Timeout | null>(null);
     const [contactedUsers, setContactedUsers] = useState<number[]>([]);
@@ -193,7 +193,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (wsRef.current && contactedUsersRef.current.length) {
-                wsRef.current.send(
+                wsRef.current?.send(
                     JSON.stringify({
                         event: "isOnline",
                         data: contactedUsersRef.current,
