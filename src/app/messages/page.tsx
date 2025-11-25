@@ -19,6 +19,8 @@ export default function Messages() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [isConversationsFetched, setIsConversationsFetched] =
         useState<Boolean>(false);
+    const [isConversationsCombined, setIsConversationsCombined] =
+        useState<Boolean>(false);
     const {
         receivedConversations,
         setContactedUsers,
@@ -83,9 +85,9 @@ export default function Messages() {
     }
     useEffect(() => {
         async function setConversation() {
-            if (isConversationsFetched) {
+            if (isConversationsFetched && isConversationsCombined) {
                 let conversation: Conversation | null =
-                    conversations.find((c) => c.id === user_id) ?? null;
+                    allConversations.find((c) => c.id === user_id) ?? null;
                 if (!conversation && user_id !== null) {
                     const fetchedUser: PublicUser | null =
                         await fetchUser(user_id);
@@ -108,7 +110,7 @@ export default function Messages() {
             }
         }
         setConversation();
-    }, [user_id, isConversationsFetched, receivedConversations]);
+    }, [user_id, isConversationsFetched, isConversationsCombined]);
     useEffect(() => {
         fetchMessages();
     }, []);
@@ -144,6 +146,7 @@ export default function Messages() {
         combinedConvo = [...combinedConvo, ...copyReceivedConversations];
         setAllConversations(combinedConvo);
         setContactedUsers(combinedConvo.map((u) => u.id));
+        if (isConversationsFetched) setIsConversationsCombined(true);
     }, [conversations, receivedConversations]);
 
     // Update active userConversation if allConversations updates
