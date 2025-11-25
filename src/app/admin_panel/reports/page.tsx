@@ -1,32 +1,67 @@
 "use client";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/AdminPanel/Pagination";
 import { Report } from "@/lib/Report";
-import ReportViewer from "@/components/ReportViewer";
+import ReportViewer from "@/components/AdminPanel/ReportViewer";
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUI } from "@/context/UIContext";
+import { useSearchParams, useRouter } from "next/navigation";
+import { PrimaryBtn } from "@/components/Dashboard";
 
 export default function Reports() {
-    // Reports mock
-    function createReports() {
-        const report_resons = ["spam", "abuse", "impersonation"] as const;
-        const r: Report[] = [];
-        for (let i = 1; i <= 34; i++) {
-            r.push({
-                id: i,
-                reporterId: Math.ceil(Math.random() * 200),
-                targetId: Math.ceil(Math.random() * 250),
-                reason: report_resons[Math.floor(Math.random() * 3)],
-                description:
-                    "The user sent an offensive and disrespectful message directed at another participant. The content contained personal insults, inappropriate language, and behavior that promotes hostility. Such communication creates an uncomfortable environment and goes against the platform’s community standards. It is recommended that the message be reviewed and appropriate action be taken to maintain a respectful and safe space for all users.",
-                timestamp: new Date(Date.now() - i * 10000000).toISOString(),
-            });
-        }
-        return r;
-    }
-    const reports = createReports();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const pageNumber = searchParams.get("page") ?? "1";
+    const [maxPages, setMaxPages] = useState<number>(1);
+    const [reports, setReports] = useState<Report[]>([]);
+    const [searchReviewed, setSerachReviewed] = useState<string>("all");
+    const { setLoading, notify } = useUI();
     const [showReportViewer, setShowReportViewer] = useState<Report | null>(
         null,
     );
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+    async function fetchReports(page: number = 1) {
+        try {
+            setLoading(true);
+            const searchData: Record<string, any> = {};
+            if (searchReviewed !== "all")
+                searchData["is_reviewed"] = searchReviewed === "true";
+            const res = await fetch(
+                `${API_URL}/reports/getReports?page=${page}`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(searchData),
+                    credentials: "include",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                    },
+                },
+            );
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setReports(
+                data.reports.map(
+                    (item: Report) =>
+                        ({
+                            ...item,
+                            timestamp: new Date(item.timestamp),
+                        }) as Report,
+                ),
+            );
+            console.log(data);
+            setMaxPages(data.max_pages);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        fetchReports(Number(pageNumber));
+    }, [pageNumber]);
     return (
         <main>
             {/* Reports Viewer */}
@@ -43,6 +78,31 @@ export default function Reports() {
                 )}
             </AnimatePresence>
             <h4>Reports by Users</h4>
+            <div className="mt-5 flex flex-row gap-5">
+                <select
+                    className="bg-gray-800 p-5 rounded outline-none"
+                    value={searchReviewed}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        setSerachReviewed(e.target.value);
+                    }}
+                >
+                    <option value="all">All Reports</option>
+                    <option value="true">Reviewed</option>
+                    <option value="false">Not Reviewed</option>
+                </select>
+                <PrimaryBtn
+                    text="Search"
+                    onClick={() => {
+                        if (Number(pageNumber) !== 1) {
+                            // Updating query will cause fetchReports and automatic search
+                            router.push("?page=1");
+                        } else {
+                            // If pageNumber is already 1 then fetch reports
+                            fetchReports();
+                        }
+                    }}
+                />
+            </div>
             <div className="mt-5 space-y-3">
                 {reports.map((r) => (
                     <div
@@ -54,7 +114,8 @@ export default function Reports() {
                                 Report #{r.id} — {r.reason}
                             </div>
                             <div className="text-xs text-gray-400">
-                                Reporter: {r.reporterId} · Target: {r.targetId}
+                                Reporter: {r.reporter_id} · Target:{" "}
+                                {r.target_id}
                             </div>
                             <div className="text-xs text-gray-500 mt-2">
                                 {new Date(r.timestamp).toLocaleString()}
@@ -69,14 +130,23 @@ export default function Reports() {
                             >
                                 View
                             </button>
-                            <button className="px-2 py-1 rounded bg-red-800 text-sm">
-                                Resolved
+                            <button
+                                className={`px-2 py-1 rounded text-sm ${r.is_reviewed ? "bg-green-800" : "bg-red-800"}`}
+                            >
+                                {r.is_reviewed ? "Reviewed" : "Not Reviewed"}
                             </button>
                         </div>
                     </div>
                 ))}
             </div>
-            <Pagination page={1} pages={2} setPage={() => {}} />
+            <Pagination
+                page={Number(pageNumber)}
+                pages={maxPages}
+                setPage={(page: number) => {
+                    if (page !== Number(pageNumber))
+                        router.push(`?page=${page}`);
+                }}
+            />
         </main>
     );
 }

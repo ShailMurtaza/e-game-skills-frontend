@@ -1,8 +1,9 @@
 export type Report = {
     id: number;
-    reporterId: number;
-    targetId: number;
+    reporter_id: number;
+    target_id: number;
     reason: string;
     description: string;
-    timestamp: string;
+    is_reviewed: boolean;
+    timestamp: Date;
 };

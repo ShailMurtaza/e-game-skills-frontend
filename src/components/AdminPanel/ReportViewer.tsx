@@ -1,5 +1,5 @@
 "use client";
-import Overlay from "./Overlay";
+import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { Report } from "@/lib/Report";
 
@@ -25,13 +25,13 @@ export default function ReportViewer({
                         <div className="md:col-span-1">
                             <h5 className="text-gray-400">Reporter</h5>
                             <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
-                                <b>User ID:</b> {report.reporterId}
+                                <b>User ID:</b> {report.reporter_id}
                             </p>
                         </div>
                         <div className="md:col-span-1">
                             <h5 className="text-gray-400">Target</h5>
                             <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
-                                <b>User ID:</b> {report.targetId}
+                                <b>User ID:</b> {report.target_id}
                             </p>
                         </div>
                         <div className="col-span-2">
@@ -42,9 +42,9 @@ export default function ReportViewer({
                         </div>
                         <div className="col-span-2">
                             <h5 className="text-gray-400">Description</h5>
-                            <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
+                            <pre className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
                                 {report.description}
-                            </p>
+                            </pre>
                         </div>
                     </div>
 
