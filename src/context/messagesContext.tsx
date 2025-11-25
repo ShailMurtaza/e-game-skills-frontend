@@ -11,10 +11,11 @@ import {
 import { useUI } from "./UIContext";
 
 type msgData = { toUserId: number; content: string };
+type UnreadCountType = { sender_id: number; unreadMsgs: number };
 type OnlineUsers = { id: number; online: boolean };
 type MessageContextType = {
     receivedConversations: Conversation[];
-    unreadMsgCount: number;
+    unreadMsgCount: UnreadCountType[];
     sendMsg: (data: msgData) => void;
     contactedUsers: number[];
     setContactedUsers: (users: number[]) => void;
@@ -63,7 +64,7 @@ type WSUnreadEvent = {
     data: {
         message: string | null;
         error: boolean;
-        data: number;
+        data: UnreadCountType[];
     };
 };
 type WSEvent = WSMessageEvent | WSOnlineEvent | WSUnreadEvent;
@@ -76,7 +77,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     const [receivedConversations, setReceivedConversations] = useState<
         Conversation[]
     >([]);
-    const [unreadMsgCount, setUnreadCount] = useState<number>(0);
+    const [unreadMsgCount, setUnreadCount] = useState<UnreadCountType[]>([]);
     const { notify } = useUI();
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimer = useRef<NodeJS.Timeout | null>(null);

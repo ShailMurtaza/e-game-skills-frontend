@@ -4,11 +4,13 @@ export function Profile({
     avatar,
     onClick,
     isOnline,
+    unreadMsgs,
 }: {
     username: string;
     avatar: string | null;
     onClick: () => void;
     isOnline: boolean;
+    unreadMsgs: number;
 }) {
     return (
         <div
@@ -44,6 +46,11 @@ export function Profile({
                         {isOnline ? "Online" : "Offline"}
                     </p>
                 </div>
+                {unreadMsgs > 0 && (
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                        {unreadMsgs}
+                    </div>
+                )}
             </div>
         </div>
     );

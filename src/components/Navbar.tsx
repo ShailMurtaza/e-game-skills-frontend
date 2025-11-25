@@ -8,7 +8,7 @@ import { useUI } from "@/context/UIContext";
 import { LoadingComponent } from "./Loading";
 import protectedRoutes from "@/lib/ProtectedRoutes";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMessageProvider } from "@/context/messagesContext";
 
 const play = Play({
@@ -21,11 +21,18 @@ export default function Navbar() {
     const router = useRouter();
     const { setLoading, notify } = useUI();
     const { unreadMsgCount } = useMessageProvider();
+    const [unreadMsgCountNum, setUnreadMsgCountNum] = useState<number>(0);
     const pathname = usePathname();
     const { isLoading, isAuthenticated, userProfile } = useAuth();
     const isOnProtectedRoute = protectedRoutes.some((path) =>
         pathname.startsWith(path),
     );
+
+    useEffect(() => {
+        let unread_msgs = 0;
+        unreadMsgCount.forEach((item) => (unread_msgs += item.unreadMsgs));
+        setUnreadMsgCountNum(unread_msgs);
+    }, [unreadMsgCount]);
     const showPublicLinks = !isAuthenticated || !isOnProtectedRoute;
 
     if (isLoading) {
@@ -71,11 +78,11 @@ export default function Navbar() {
                         <Link href="/messages">
                             <button className="relative">
                                 Messages
-                                {unreadMsgCount > 0 && (
+                                {unreadMsgCountNum > 0 && (
                                     <div className="absolute -top-4 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                                        {unreadMsgCount > 99
+                                        {unreadMsgCountNum > 99
                                             ? "99+"
-                                            : unreadMsgCount}
+                                            : unreadMsgCountNum}
                                     </div>
                                 )}
                             </button>

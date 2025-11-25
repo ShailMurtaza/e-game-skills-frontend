@@ -19,8 +19,13 @@ export default function Messages() {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [isConversationsFetched, setIsConversationsFetched] =
         useState<Boolean>(false);
-    const { receivedConversations, setContactedUsers, onlineUsers, setRead } =
-        useMessageProvider();
+    const {
+        receivedConversations,
+        setContactedUsers,
+        onlineUsers,
+        setRead,
+        unreadMsgCount,
+    } = useMessageProvider();
     const [allConversations, setAllConversations] = useState<Conversation[]>(
         [],
     );
@@ -167,6 +172,11 @@ export default function Messages() {
                             }}
                             isOnline={
                                 onlineUsers.find((u) => u.id === c.id)?.online!
+                            }
+                            unreadMsgs={
+                                unreadMsgCount.find(
+                                    (item) => item.sender_id === c.id,
+                                )?.unreadMsgs ?? 0
                             }
                         />
                     ))}
