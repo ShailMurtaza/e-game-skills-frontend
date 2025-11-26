@@ -18,13 +18,13 @@ export default function ReportViewer({
     CloseAction: () => void;
 }) {
     return (
-        <div className="fixed inset-0 flex justify-center items-center w-full h-full z-30 bg-black/80">
+        <div className="fixed inset-0 flex justify-center items-center w-full z-30 bg-black/80">
             <motion.div
                 initial={{ opacity: 0, y: -50, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -50, scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
+                className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800 overflow-y-auto max-h-screen"
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div className="md:col-span-1 flex flex-col gap-1">
@@ -99,13 +99,13 @@ export default function ReportViewer({
                     </div>
                     <div className="col-span-2">
                         <h5 className="text-gray-400">Reason</h5>
-                        <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
+                        <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded">
                             {report.reason}
                         </p>
                     </div>
                     <div className="col-span-2">
                         <h5 className="text-gray-400">Description</h5>
-                        <pre className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none">
+                        <pre className="w-full mt-1 bg-gray-800 px-2 py-2 rounded overflow-y-auto max-h-[calc(80vh-90px)]">
                             {report.description}
                         </pre>
                     </div>
