@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useUI } from "@/context/UIContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PrimaryBtn } from "@/components/Dashboard";
+import Button from "@/components/AdminPanel/Buttons";
 
 export default function Reports() {
     const router = useRouter();
@@ -16,7 +17,7 @@ export default function Reports() {
     const [reports, setReports] = useState<Report[]>([]);
     const [searchReviewed, setSerachReviewed] = useState<string>("all");
     const { setLoading, notify } = useUI();
-    const [showReportViewer, setShowReportViewer] = useState<Report | null>(
+    const [showReportViewer, setShowReportViewer] = useState<number | null>(
         null,
     );
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -49,8 +50,39 @@ export default function Reports() {
                         }) as Report,
                 ),
             );
-            console.log(data);
             setMaxPages(data.max_pages);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
+    async function updateReport(update: {
+        report_id: number;
+        is_reviewed: boolean;
+    }) {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API_URL}/reports`, {
+                method: "PATCH",
+                body: JSON.stringify(update),
+                credentials: "include",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setReports((prev) =>
+                prev.map((report) => {
+                    if (report.id === update.report_id)
+                        return { ...report, is_reviewed: update.is_reviewed };
+                    return report;
+                }),
+            );
+            notify(data.message, "success");
         } catch (e: unknown) {
             const message =
                 e instanceof Error ? e.message : "An unexpected error occurred";
@@ -68,10 +100,11 @@ export default function Reports() {
             <AnimatePresence mode="wait">
                 {showReportViewer !== null ? (
                     <ReportViewer
-                        report={showReportViewer}
+                        report={reports[showReportViewer]}
                         CloseAction={() => {
                             setShowReportViewer(null);
                         }}
+                        updateReportAction={updateReport}
                     />
                 ) : (
                     ""
@@ -104,7 +137,7 @@ export default function Reports() {
                 />
             </div>
             <div className="mt-5 space-y-3">
-                {reports.map((r) => (
+                {reports.map((r, idx) => (
                     <div
                         key={r.id}
                         className="p-3 bg-gray-850 rounded border border-gray-800 flex justify-between items-start"
@@ -122,19 +155,19 @@ export default function Reports() {
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <button
-                                className="px-2 py-1 rounded bg-gray-800 text-sm"
+                            <Button
+                                label="View"
+                                variant="neutral"
+                                className="w-full"
                                 onClick={() => {
-                                    setShowReportViewer(r);
+                                    setShowReportViewer(idx);
                                 }}
-                            >
-                                View
-                            </button>
-                            <button
+                            />
+                            <div
                                 className={`px-2 py-1 rounded text-sm ${r.is_reviewed ? "bg-green-800" : "bg-red-800"}`}
                             >
                                 {r.is_reviewed ? "Reviewed" : "Not Reviewed"}
-                            </button>
+                            </div>
                         </div>
                     </div>
                 ))}

@@ -10,15 +10,17 @@ type ButtonVariant = "neutral" | "primary" | "secondary" | "danger";
 export default function Button({
     label,
     variant = "neutral",
+    className = "",
     onClick,
 }: {
     label: string;
     variant: ButtonVariant;
+    className?: string;
     onClick: () => void;
 }) {
     return (
         <button
-            className={`w-fit px-3 py-2 rounded text-sm ${styles[variant]}`}
+            className={`w-fit px-3 py-2 rounded text-sm ${styles[variant]} ${className}`}
             onClick={onClick}
         >
             {label}

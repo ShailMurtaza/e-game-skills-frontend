@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Game } from "@/lib/Game";
-import GameEditor from "@/components/GameEditor";
+import GameEditor from "@/components/AdminPanel/GameEditor";
 import Button from "@/components/AdminPanel/Buttons";
 import { useUI } from "@/context/UIContext";
 import DeleteConfirmDialog from "@/components/DeleteConfirmDialog";

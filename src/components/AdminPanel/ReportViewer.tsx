@@ -2,12 +2,18 @@
 import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { Report } from "@/lib/Report";
+import Button from "./Buttons";
 
 export default function ReportViewer({
     report,
+    updateReportAction,
     CloseAction,
 }: {
     report: Report;
+    updateReportAction: (data: {
+        report_id: number;
+        is_reviewed: boolean;
+    }) => void;
     CloseAction: () => void;
 }) {
     return (
@@ -19,7 +25,7 @@ export default function ReportViewer({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -50, scale: 0.95 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
+                    className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="md:col-span-1">
@@ -48,14 +54,29 @@ export default function ReportViewer({
                         </div>
                     </div>
 
-                    <button
-                        onClick={() => {
-                            CloseAction();
-                        }}
-                        className="mt-3 px-3 py-2 rounded bg-gray-800 text-sm"
-                    >
-                        Close
-                    </button>
+                    <div className="flex flex-row gap-5">
+                        <Button
+                            label={
+                                report.is_reviewed
+                                    ? "Set as Not Reviewed"
+                                    : "Set as Reviewed"
+                            }
+                            variant={report.is_reviewed ? "danger" : "primary"}
+                            onClick={() => {
+                                updateReportAction({
+                                    report_id: report.id,
+                                    is_reviewed: !report.is_reviewed,
+                                });
+                            }}
+                        />
+                        <Button
+                            label="close"
+                            onClick={() => {
+                                CloseAction();
+                            }}
+                            variant="neutral"
+                        />
+                    </div>
                 </motion.div>
             </div>
         </>

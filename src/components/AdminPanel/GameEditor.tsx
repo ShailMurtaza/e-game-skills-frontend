@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import Overlay from "./Overlay";
+import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { Game, GameAttr } from "@/lib/Game";
-import { GameAttributes } from "./AdminPanel/GameAttributes";
-import Button from "./AdminPanel/Buttons";
+import { GameAttributes } from "./GameAttributes";
+import Button from "./Buttons";
 import { useUI } from "@/context/UIContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
