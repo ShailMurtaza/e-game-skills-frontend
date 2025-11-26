@@ -21,7 +21,28 @@ export default function ContactsPage() {
     const pageNumber = searchParams.get("page") ?? "1";
     const [contactDelete, setContactDelete] = useState<number | null>(null);
     const { setLoading, notify } = useUI();
-    async function deleteContact(id: number) {}
+    async function deleteContact(id: number) {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API_URL}/contacts/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setContacts((prev) => {
+                return prev.filter((c) => c.id !== id);
+            });
+            setContactDelete(null);
+            notify(data.message, "success");
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
     async function fetchContacts(page: number = 1) {
         try {
             setLoading(true);
