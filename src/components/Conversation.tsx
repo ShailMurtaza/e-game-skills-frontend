@@ -7,6 +7,7 @@ import { DangerBtn } from "./Dashboard";
 import { MdOutlineReportProblem } from "react-icons/md";
 import ReportPopup from "./ReportPopup";
 import { UserProfile } from "@/lib/User";
+import formatDate from "@/lib/FormatDate";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
@@ -147,15 +148,7 @@ export default function UserConversation({
                               ].timestamp.toLocaleDateString()
                             : null;
                     const showDate = prevDate !== currentDate;
-                    const currentDateString = m.timestamp.toLocaleDateString(
-                        "en-US",
-                        {
-                            weekday: "long",
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        },
-                    );
+                    const currentDateString = formatDate(m.timestamp);
                     return (
                         <MessageComponent
                             key={idx}

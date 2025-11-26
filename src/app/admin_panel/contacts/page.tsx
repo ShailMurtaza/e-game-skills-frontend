@@ -1,23 +1,22 @@
 "use client";
 import Button from "@/components/AdminPanel/Buttons";
+import Pagination from "@/components/AdminPanel/Pagination";
 import DeleteConfirmDialog from "@/components/DeleteConfirmDialog";
 import { useUI } from "@/context/UIContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type Contacts = {
-    id: number;
-    email: string;
-    name: string;
-    message: string;
-    timestamp: Date;
-};
+import { ContactMessage } from "@/lib/ContactMessage";
+import { AnimatePresence } from "framer-motion";
+import ContactMessageViewer from "@/components/AdminPanel/ContactMessageViewer";
+import formatDate from "@/lib/FormatDate";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function ContactsPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [contacts, setContacts] = useState<Contacts[]>([]);
+    const [contacts, setContacts] = useState<ContactMessage[]>([]);
+    const [showContactMessage, setShowContactMessage] =
+        useState<ContactMessage | null>(null);
     const [maxPages, setMaxPages] = useState<number>(1);
     const pageNumber = searchParams.get("page") ?? "1";
     const [contactDelete, setContactDelete] = useState<number | null>(null);
@@ -34,11 +33,11 @@ export default function ContactsPage() {
             if (!res.ok) throw new Error(data.message || "Failed");
             setContacts(
                 data.contacts.map(
-                    (c: Contacts) =>
+                    (c: ContactMessage) =>
                         ({
                             ...c,
                             timestamp: new Date(c.timestamp),
-                        }) as Contacts,
+                        }) as ContactMessage,
                 ),
             );
             setMaxPages(data.max_pages);
@@ -55,6 +54,19 @@ export default function ContactsPage() {
     }, [pageNumber]);
     return (
         <main>
+            {/* Contact Message Viewer */}
+            <AnimatePresence mode="wait">
+                {showContactMessage !== null ? (
+                    <ContactMessageViewer
+                        contactMessage={showContactMessage}
+                        CloseAction={() => {
+                            setShowContactMessage(null);
+                        }}
+                    />
+                ) : (
+                    ""
+                )}
+            </AnimatePresence>
             {contactDelete && (
                 <DeleteConfirmDialog
                     onCancel={() => {
@@ -78,11 +90,17 @@ export default function ContactsPage() {
                                     {c.email}
                                 </div>
                                 <div className="text-xs text-gray-400">
-                                    {c.timestamp.toISOString()}
+                                    {formatDate(c.timestamp)}
                                 </div>
                             </div>
                             <div className="flex gap-2">
-                                <Button label="View" variant="secondary" />
+                                <Button
+                                    label="View"
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setShowContactMessage(c);
+                                    }}
+                                />
                                 <Button
                                     label="Delete"
                                     variant="danger"
@@ -94,6 +112,14 @@ export default function ContactsPage() {
                         </div>
                     );
                 })}
+                <Pagination
+                    page={Number(pageNumber)}
+                    pages={maxPages}
+                    setPage={(page: number) => {
+                        if (page !== Number(pageNumber))
+                            router.push(`?page=${page}`);
+                    }}
+                />
             </div>
         </main>
     );
