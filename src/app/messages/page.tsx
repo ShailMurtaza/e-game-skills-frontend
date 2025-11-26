@@ -155,6 +155,7 @@ export default function Messages() {
             allConversations.find((c) => c.id === user_id) ?? null;
         if (user_id && conversation) {
             setUserConversation(conversation);
+            setRead(user_id);
         }
     }, [allConversations]);
     return (
@@ -177,9 +178,11 @@ export default function Messages() {
                                 onlineUsers.find((u) => u.id === c.id)?.online!
                             }
                             unreadMsgs={
-                                unreadMsgCount.find(
-                                    (item) => item.sender_id === c.id,
-                                )?.unreadMsgs ?? 0
+                                c.id !== userConversation?.id
+                                    ? (unreadMsgCount.find(
+                                          (item) => item.sender_id === c.id,
+                                      )?.unreadMsgs ?? 0)
+                                    : 0
                             }
                         />
                     ))}
