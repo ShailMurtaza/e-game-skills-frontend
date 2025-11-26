@@ -1,5 +1,5 @@
 const styles = {
-    neutral: "bg-gray-800 hover:bg-gray-700",
+    neutral: "bg-gray-700 hover:bg-gray-800",
     primary: "bg-green-700 hover:bg-green-800",
     secondary: "bg-blue-700 hover:bg-blue-800",
     danger: "bg-red-700 hover:bg-red-800",
@@ -20,7 +20,7 @@ export default function Button({
 }) {
     return (
         <button
-            className={`w-fit px-3 py-2 rounded text-sm ${styles[variant]} ${className}`}
+            className={`transition w-fit px-3 py-2 rounded text-sm ${styles[variant]} ${className}`}
             onClick={onClick}
         >
             {label}

@@ -28,27 +28,75 @@ export default function ReportViewer({
                     className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="md:col-span-1">
-                            <h5 className="text-gray-400">Reporter</h5>
-                            <p
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none hover:bg-gray-600 cursor-pointer"
+                        <div className="md:col-span-1 flex flex-col gap-1">
+                            <h5 className="text-gray-400">
+                                Reporter | User ID: {report.reporter_id}
+                            </h5>
+                            <Button
+                                label="Edit User"
+                                variant="neutral"
+                                className="w-full"
                                 onClick={() => {
                                     OpenUserAction(report.reporter_id);
                                 }}
-                            >
-                                <b>User ID:</b> {report.reporter_id}
-                            </p>
+                            />
+                            <Button
+                                label="Open Portfolio"
+                                variant="neutral"
+                                className="w-full"
+                                onClick={() => {
+                                    window.open(
+                                        `/portfolio/${report.reporter_id}`,
+                                        "_blank",
+                                    );
+                                }}
+                            />
+                            <Button
+                                label="Message"
+                                variant="neutral"
+                                className="w-full"
+                                onClick={() => {
+                                    window.open(
+                                        `/messages?user=${report.reporter_id}`,
+                                        "_blank",
+                                    );
+                                }}
+                            />
                         </div>
-                        <div className="md:col-span-1">
-                            <h5 className="text-gray-400">Target</h5>
-                            <p
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded outline-none hover:bg-gray-600 cursor-pointer"
+                        <div className="md:col-span-1 flex flex-col gap-1">
+                            <h5 className="text-gray-400">
+                                Target | User ID: {report.target_id}
+                            </h5>
+                            <Button
+                                label="Edit User"
+                                variant="neutral"
+                                className="w-full"
                                 onClick={() => {
                                     OpenUserAction(report.target_id);
                                 }}
-                            >
-                                <b>User ID:</b> {report.target_id}
-                            </p>
+                            />
+                            <Button
+                                label="Open Portfolio"
+                                variant="neutral"
+                                className="w-full"
+                                onClick={() => {
+                                    window.open(
+                                        `/portfolio/${report.target_id}`,
+                                        "_blank",
+                                    );
+                                }}
+                            />
+                            <Button
+                                label="Message"
+                                variant="neutral"
+                                className="w-full"
+                                onClick={() => {
+                                    window.open(
+                                        `/messages?user=${report.target_id}`,
+                                        "_blank",
+                                    );
+                                }}
+                            />
                         </div>
                         <div className="col-span-2">
                             <h5 className="text-gray-400">Reason</h5>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { User } from "@/lib/User";
 import { useUI } from "@/context/UIContext";
+import Button from "./Buttons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function UserEditor({
@@ -121,22 +122,41 @@ export default function UserEditor({
                             />
                         </label>
                     </div>
+                    <div className="mt-4 flex flex-row gap-2">
+                        <Button
+                            label="Open Portfolio"
+                            variant="neutral"
+                            className="w-full"
+                            onClick={() => {
+                                window.open(`/portfolio/${form.id}`, "_blank");
+                            }}
+                        />
+                        <Button
+                            label="Message User"
+                            variant="neutral"
+                            className="w-full"
+                            onClick={() => {
+                                window.open(
+                                    `/messages?user=${form.id}`,
+                                    "_blank",
+                                );
+                            }}
+                        />
+                    </div>
 
                     <div className="mt-4 flex gap-2">
-                        <button
-                            className="px-3 py-2 rounded bg-green-700 text-sm"
+                        <Button
+                            label="Save"
+                            variant="primary"
                             onClick={updateUser}
-                        >
-                            Save
-                        </button>
-                        <button
+                        />
+                        <Button
+                            label="Close"
+                            variant="neutral"
                             onClick={() => {
                                 setShowUserEditor(null);
                             }}
-                            className="px-3 py-2 rounded bg-gray-800 text-sm"
-                        >
-                            Close
-                        </button>
+                        />
                     </div>
                 </motion.div>
             </div>
