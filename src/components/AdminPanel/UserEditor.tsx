@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { User } from "@/lib/User";
 import { useUI } from "@/context/UIContext";
@@ -44,8 +43,7 @@ export default function UserEditor({
 
     return (
         <>
-            <Overlay display="" />
-            <div className="fixed inset-0 flex justify-center items-center w-full h-full z-30">
+            <div className="fixed inset-0 flex justify-center items-center w-full h-full z-40 bg-black/80">
                 <motion.div
                     initial={{ opacity: 0, y: -50, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}

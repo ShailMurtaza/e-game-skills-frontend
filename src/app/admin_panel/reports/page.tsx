@@ -8,6 +8,8 @@ import { useUI } from "@/context/UIContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PrimaryBtn } from "@/components/Dashboard";
 import Button from "@/components/AdminPanel/Buttons";
+import UserEditor from "@/components/AdminPanel/UserEditor";
+import { User } from "@/lib/User";
 
 export default function Reports() {
     const router = useRouter();
@@ -20,6 +22,8 @@ export default function Reports() {
     const [showReportViewer, setShowReportViewer] = useState<number | null>(
         null,
     );
+    const [showUserEditor, setShowUserEditor] = useState<number | null>(null);
+    const [users, setUsers] = useState<User[]>([]);
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     async function fetchReports(page: number = 1) {
@@ -91,6 +95,30 @@ export default function Reports() {
             setLoading(false);
         }
     }
+    async function OpenUser(user_id: number) {
+        try {
+            setLoading(true);
+            const res = await fetch(`${API_URL}/admin/users`, {
+                body: JSON.stringify({ id: user_id }),
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Failed");
+            setUsers(data.users);
+            // There can only be 1 user so open editor of nidex 0 user
+            setShowUserEditor(0);
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
+        } finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         fetchReports(Number(pageNumber));
     }, [pageNumber]);
@@ -105,6 +133,26 @@ export default function Reports() {
                             setShowReportViewer(null);
                         }}
                         updateReportAction={updateReport}
+                        OpenUserAction={OpenUser}
+                    />
+                ) : (
+                    ""
+                )}
+            </AnimatePresence>
+            {/* User Details Editor */}
+            <AnimatePresence mode="wait">
+                {showUserEditor !== null ? (
+                    <UserEditor
+                        user={users[showUserEditor]}
+                        setShowUserEditor={setShowUserEditor}
+                        setUser={(updated_user: User) => {
+                            const updatedUsers = users.map((user) => {
+                                return user.id === updated_user.id
+                                    ? updated_user
+                                    : user;
+                            });
+                            setUsers(updatedUsers);
+                        }}
                     />
                 ) : (
                     ""
