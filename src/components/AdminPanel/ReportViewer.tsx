@@ -66,6 +66,17 @@ export default function ReportViewer({
 
                     <div className="flex flex-row gap-5">
                         <Button
+                            label="Open Conversation"
+                            variant="secondary"
+                            onClick={() => {
+                                window.open(
+                                    `/conversation?sender_id=${report.reporter_id}&receiver_id=${report.target_id}`,
+                                    "_blank",
+                                    "noopener,noreferrer",
+                                );
+                            }}
+                        />
+                        <Button
                             label={
                                 report.is_reviewed
                                     ? "Set as Not Reviewed"

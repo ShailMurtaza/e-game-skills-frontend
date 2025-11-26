@@ -6,12 +6,15 @@ import { useMessageProvider } from "@/context/messagesContext";
 import { DangerBtn } from "./Dashboard";
 import { MdOutlineReportProblem } from "react-icons/md";
 import ReportPopup from "./ReportPopup";
+import { UserProfile } from "@/lib/User";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
     conversation,
+    receiver = null,
 }: {
     conversation: Conversation;
+    receiver?: UserProfile | null;
 }) {
     const [report, setReport] = useState<boolean>(false);
     const [userMessages, setUserMessages] = useState<Message[]>([]);
@@ -32,6 +35,9 @@ export default function UserConversation({
         setUserMessages(sortedMessages);
         initialScrollRef.current = true;
     }, [conversation]);
+    useEffect(() => {
+        console.log(receiver);
+    }, [receiver]);
 
     useLayoutEffect(() => {
         const el = containerRef.current;
@@ -74,43 +80,59 @@ export default function UserConversation({
                     />
                     <span>{conversation.username}</span>
                     <div className="ml-auto">
-                        <DangerBtn
-                            onClick={() => {
-                                setReport(true);
-                            }}
-                            className="flex flex-row justify-center items-center gap-1"
-                        >
-                            <MdOutlineReportProblem size={20} />
-                            Report
-                        </DangerBtn>
+                        {receiver ? (
+                            <div className="flex flex-row items-center gap-5">
+                                <span>{receiver.username}</span>
+                                <img
+                                    src={
+                                        receiver.avatar !== null
+                                            ? `${API_URL}/users/avatar/${receiver.avatar}`
+                                            : "/profile.png"
+                                    }
+                                    className="rounded-full w-[50px] h-[50px]"
+                                />
+                            </div>
+                        ) : (
+                            <DangerBtn
+                                onClick={() => {
+                                    setReport(true);
+                                }}
+                                className="flex flex-row justify-center items-center gap-1"
+                            >
+                                <MdOutlineReportProblem size={20} />
+                                Report
+                            </DangerBtn>
+                        )}
                     </div>
                 </div>
             </div>
 
-            <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center z-0">
-                <input
-                    type="text"
-                    placeholder="Type a message..."
-                    className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
-                    value={msg}
-                    onChange={(e) => {
-                        setMsg(e.target.value);
-                    }}
-                    onKeyUp={(e) => {
-                        if (e.key === "Enter") {
+            {receiver === null && (
+                <div className="absolute bottom-0 w-full bg-zinc-900 p-4 flex items-center z-0">
+                    <input
+                        type="text"
+                        placeholder="Type a message..."
+                        className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent"
+                        value={msg}
+                        onChange={(e) => {
+                            setMsg(e.target.value);
+                        }}
+                        onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                                handleSendMsg();
+                            }
+                        }}
+                    />
+                    <button
+                        className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl"
+                        onClick={() => {
                             handleSendMsg();
-                        }
-                    }}
-                />
-                <button
-                    className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl"
-                    onClick={() => {
-                        handleSendMsg();
-                    }}
-                >
-                    Send
-                </button>
-            </div>
+                        }}
+                    >
+                        Send
+                    </button>
+                </div>
+            )}
 
             <div
                 ref={containerRef}

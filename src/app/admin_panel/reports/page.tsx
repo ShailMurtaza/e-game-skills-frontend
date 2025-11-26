@@ -11,6 +11,7 @@ import Button from "@/components/AdminPanel/Buttons";
 import UserEditor from "@/components/AdminPanel/UserEditor";
 import { User } from "@/lib/User";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Reports() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -24,7 +25,6 @@ export default function Reports() {
     );
     const [showUserEditor, setShowUserEditor] = useState<number | null>(null);
     const [users, setUsers] = useState<User[]>([]);
-    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     async function fetchReports(page: number = 1) {
         try {
