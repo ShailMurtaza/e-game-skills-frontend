@@ -184,7 +184,7 @@ export default function Reports() {
                 {reports.map((r, idx) => (
                     <div
                         key={r.id}
-                        className="p-3 bg-gray-850 rounded border border-gray-800 flex justify-between items-start"
+                        className="p-3 bg-gray-850 rounded border border-gray-800 flex justify-between items-start lg:flex-row flex-col lg:gap-0 gap-5"
                     >
                         <div>
                             <div className="text-sm text-white">
@@ -197,7 +197,7 @@ export default function Reports() {
                                 {new Date(r.timestamp).toLocaleString()}
                             </div>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 lg:w-fit w-full">
                             <Button
                                 label="View"
                                 variant="neutral"
@@ -207,7 +207,7 @@ export default function Reports() {
                                 }}
                             />
                             <div
-                                className={`px-2 py-1 rounded text-sm ${r.is_reviewed ? "bg-green-800" : "bg-red-800"}`}
+                                className={`px-2 py-1 text-center rounded text-sm ${r.is_reviewed ? "bg-green-800" : "bg-red-800"}`}
                             >
                                 {r.is_reviewed ? "Reviewed" : "Not Reviewed"}
                             </div>

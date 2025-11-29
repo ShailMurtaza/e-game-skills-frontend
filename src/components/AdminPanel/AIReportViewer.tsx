@@ -26,8 +26,8 @@ export default function AIReportViewer({
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800 overflow-y-auto max-h-screen"
             >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="md:col-span-1 flex flex-col gap-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                    <div className="lg:col-span-1 flex flex-col gap-1">
                         <h5 className="text-gray-400">
                             Victim | User ID: {report.msg_receiver_user.id}
                         </h5>
@@ -62,7 +62,7 @@ export default function AIReportViewer({
                             }}
                         />
                     </div>
-                    <div className="md:col-span-1 flex flex-col gap-1">
+                    <div className="lg:col-span-1 flex flex-col gap-1">
                         <h5 className="text-gray-400">
                             Target | User ID: {report.msg_sender_user.id}
                         </h5>
@@ -97,13 +97,13 @@ export default function AIReportViewer({
                             }}
                         />
                     </div>
-                    <div className="col-span-2">
+                    <div className="lg:col-span-2">
                         <h5 className="text-gray-400">Toxicity</h5>
                         <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded">
                             {report.toxicity}
                         </p>
                     </div>
-                    <div className="col-span-2">
+                    <div className="lg:col-span-2">
                         <h5 className="text-gray-400">Message</h5>
                         <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded">
                             {report.message}
@@ -111,10 +111,11 @@ export default function AIReportViewer({
                     </div>
                 </div>
 
-                <div className="flex flex-row gap-5">
+                <div className="flex lg:flex-row flex-col lg:gap-5 gap-2">
                     <Button
                         label="Open Conversation"
                         variant="secondary"
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             window.open(
                                 `/conversation?sender_id=${report.msg_sender_user.id}&receiver_id=${report.msg_receiver_user.id}`,
@@ -130,6 +131,7 @@ export default function AIReportViewer({
                                 : "Set as Reviewed"
                         }
                         variant={report.is_reviewed ? "danger" : "primary"}
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             updateReportAction({
                                 report_id: report.id,
@@ -139,10 +141,11 @@ export default function AIReportViewer({
                     />
                     <Button
                         label="close"
+                        variant="neutral"
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             CloseAction();
                         }}
-                        variant="neutral"
                     />
                 </div>
             </motion.div>
