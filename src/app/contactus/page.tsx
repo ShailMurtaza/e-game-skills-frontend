@@ -82,20 +82,18 @@ export default function Auth() {
         }
     }
     return (
-        <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
-            <div className="w-full max-w-fit bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-x-hidden">
+        <main className="pt-[150px] md:mx-10 mx-4 min-h-screen flex items-center justify-center bg-black text-gray-100">
+            <div className="w-full lg:max-w-fit bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-x-hidden">
                 <section className="flex flex-row gap-10 justify-center p-8 min-h-[520px]">
                     <form
-                        className="flex flex-col justify-between"
+                        className="flex flex-col justify-between w-full"
                         onSubmit={(e) => {
                             e.preventDefault();
                             submitMessage();
                         }}
                     >
-                        <h3 className="text-2xl font-bold text-gray-100">
-                            Contact Us
-                        </h3>
-                        <div className="flex flex-row justify-center gap-5 my-5">
+                        <h3 className="font-bold text-gray-100">Contact Us</h3>
+                        <div className="flex lg:flex-row flex-col justify-center gap-5 my-5">
                             <InputField
                                 name="email"
                                 type="email"
