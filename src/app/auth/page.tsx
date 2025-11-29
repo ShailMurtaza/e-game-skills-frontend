@@ -68,7 +68,7 @@ export default function Auth() {
         return <LoadingComponent />;
     }
     return (
-        <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
+        <main className="pt-[150px] mx-3 lg:mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">
                 <div
                     className={`grid grid-cols-4 relative h-[620px] md:h-[520px] w-[400%] transition-transform duration-700 ease-in-out ${translation}`}
@@ -76,7 +76,7 @@ export default function Auth() {
                     {/* ---------- Recovery Section ---------- */}
                     <section className="flex flex-row gap-10 justify-center p-8">
                         <div
-                            className={`flex flex-col w-1/2 ${codeSent ? "justify-between" : "justify-start gap-10"}`}
+                            className={`flex flex-col sm:w-1/2 w-full  ${codeSent ? "justify-between" : "justify-start gap-10"}`}
                         >
                             <h3 className="text-2xl font-bold text-gray-100">
                                 Enter Email to get verfication code
@@ -152,7 +152,7 @@ export default function Auth() {
                                 </>
                             ) : null}
                         </div>
-                        <div className="flex flex-col h-full justify-center items-center w-1/2">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
                             <h2 className="text-2xl font-semibold text-white">
                                 Welcome Back
                             </h2>
@@ -165,7 +165,7 @@ export default function Auth() {
                     {/* ---------- Verification Section ---------- */}
                     <section className="flex flex-row gap-10 justify-center p-8">
                         <form
-                            className="flex flex-col justify-start gap-10 w-1/2"
+                            className="flex flex-col justify-start gap-10 sm:w-1/2 w-full"
                             onSubmit={(e) => e.preventDefault()}
                         >
                             <h3 className="text-2xl font-bold text-gray-100">
@@ -217,7 +217,7 @@ export default function Auth() {
                                 </>
                             ) : null}
                         </form>
-                        <div className="flex flex-col h-full justify-center items-center w-1/2">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
                             <h2 className="text-2xl font-semibold text-white">
                                 Welcome Back
                             </h2>
@@ -229,7 +229,7 @@ export default function Auth() {
                     {/* ---------- Login Section ---------- */}
                     <section className="flex flex-row gap-10 justify-center p-8">
                         <form
-                            className="flex flex-col justify-between w-1/2"
+                            className="flex flex-col justify-between sm:w-1/2 w-full"
                             onSubmit={async (e) => {
                                 e.preventDefault();
                                 const result = await handleSignin(
@@ -306,7 +306,7 @@ export default function Auth() {
                             <SubmitBtn text="Log in" />
                         </form>
 
-                        <div className="flex flex-col h-full justify-center items-center w-1/2">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
                             <h2 className="text-2xl font-semibold text-white">
                                 Welcome Back
                             </h2>
@@ -319,7 +319,7 @@ export default function Auth() {
                     {/* ---------- Signup Section ---------- */}
                     <section className="flex flex-row gap-10 justify-center p-8">
                         <form
-                            className="flex flex-col justify-between w-1/2"
+                            className="flex flex-col justify-between sm:w-1/2 w-full"
                             onSubmit={async (e) => {
                                 e.preventDefault();
                                 if (password != confirmPassword) {
@@ -392,7 +392,7 @@ export default function Auth() {
                             <SubmitBtn text="Create account" />
                         </form>
 
-                        <div className="flex flex-col h-full justify-center items-center w-1/2">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
                             <h2 className="text-2xl font-semibold text-white">
                                 Create New Account
                             </h2>
