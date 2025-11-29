@@ -229,7 +229,7 @@ export default function UserDashboard() {
         return <LoadingComponent />;
     }
     return (
-        <main className="pt-[150px] mx-10">
+        <main className="pt-[150px] mx-5 lg:mx-10">
             {userGameDelete && (
                 <DeleteConfirmDialog
                     onCancel={() => {
@@ -242,8 +242,8 @@ export default function UserDashboard() {
             )}
             <div className="border border-white rounded-2xl bg-neutral-950">
                 <UpdateUserProfile />
-                <section className="flex flex-row">
-                    <div className="w-1/4 p-5 border-r border-white">
+                <section className="flex flex-col lg:flex-row">
+                    <div className="w-full lg:w-1/4 p-5 border-b lg:border-r lg:border-b-0 border-white">
                         <h4 className="mb-5">Your Games</h4>
                         <div className="flex flex-col gap-5">
                             {userGames.map((g) => {
@@ -306,10 +306,10 @@ export default function UserDashboard() {
                             </select>
                         </div>
                     </div>
-                    <div className="w-3/4 p-5">
+                    <div className="lg:w-3/4 w-full p-5">
                         {selectedGame ? (
                             <>
-                                <h3 className="mb-5">{selectedGameName}</h3>
+                                <h2 className="mb-5">{selectedGameName}</h2>
                                 <Attributes
                                     title="Important Information"
                                     readonly={true}

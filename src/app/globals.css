@@ -35,7 +35,9 @@ body {
   }
 
   h4 {
-    @apply text-2xl font-semibold;
+    @apply text-xl font-semibold;
+    @apply lg:text-2xl;
+
   }
 
   h5 {

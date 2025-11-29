@@ -34,7 +34,7 @@ export function DangerBtn({
     return (
         <button
             onClick={onClick}
-            className={`w-fit px-4 py-2 font-semibold rounded-md cursor-pointer bg-red-600 text-white shadow hover:bg-red-700 transition ${className}`}
+            className={`flex justify-center items-center lg:w-fit w-full text-center px-4 py-2 font-semibold rounded-md cursor-pointer bg-red-600 text-white shadow hover:bg-red-700 transition ${className}`}
         >
             {children}
         </button>
@@ -101,7 +101,7 @@ export function Attributes({
                     return (
                         <div
                             key={i}
-                            className="flex flex-row gap-10 items-center"
+                            className="flex lg:flex-row flex-col lg:gap-10 gap-2 items-center"
                         >
                             <Input
                                 name={`attr_${i}`}
@@ -141,7 +141,6 @@ export function Attributes({
                                         newAttributes.splice(i, 1);
                                         parentSetAttributes(newAttributes);
                                     }}
-                                    className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-red-700 text-white shadow hover:bg-red-500 transition"
                                 >
                                     <MdDeleteOutline size={20} />
                                 </DangerBtn>
