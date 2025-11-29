@@ -59,14 +59,13 @@ export default function GameEditor({
     }
     return (
         <>
-            <Overlay display="" />
-            <div className="fixed inset-0 flex justify-center items-center w-full h-full z-30">
+            <div className="fixed inset-0 flex justify-center items-center w-full h-full z-30 bg-black/80">
                 <motion.div
                     initial={{ opacity: 0, y: -50, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -50, scale: 0.95 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
+                    className="w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800 overflow-y-auto max-h-screen"
                 >
                     <div className="flex flex-col gap-3">
                         <label className="text-xs text-gray-400">
