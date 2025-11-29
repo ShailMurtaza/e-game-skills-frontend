@@ -11,7 +11,7 @@ import RoleProfilePaths from "@/lib/RoleProfilePaths";
 import { useEffect, useState } from "react";
 import { useMessageProvider } from "@/context/messagesContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 
 const play = Play({
     subsets: ["latin"],
@@ -37,7 +37,7 @@ export default function Navbar() {
         setUnreadMsgCountNum(unread_msgs);
     }, [unreadMsgCount]);
     const showPublicLinks = !isAuthenticated || !isOnProtectedRoute;
-    function MenuItems({ className = "" }: { className?: string }) {
+    function MenuItems() {
         return (
             <>
                 {showPublicLinks && (
@@ -161,13 +161,31 @@ export default function Navbar() {
                 <Link href="/" className="lg:m-0 ml-10 mt-2">
                     <img src="/icon.svg" width="100" alt="Logo" />
                 </Link>
-                <RxHamburgerMenu
-                    size={35}
-                    className="lg:hidden"
-                    onClick={() => {
-                        setNavOpen((prev) => !prev);
-                    }}
-                />
+                {navOpen ? (
+                    <motion.div
+                        key="close"
+                        initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                        exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                        transition={{ duration: 0.5 }}
+                        className="lg:hidden"
+                        onClick={() => setNavOpen((p) => !p)}
+                    >
+                        <RxCross1 size={35} />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="hamburger"
+                        initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                        exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                        transition={{ duration: 0.5 }}
+                        className="lg:hidden"
+                        onClick={() => setNavOpen((p) => !p)}
+                    >
+                        <RxHamburgerMenu size={35} />
+                    </motion.div>
+                )}
             </section>
 
             <section className="lg:flex-row flex-col gap-5 justify-between w-full hidden lg:flex">
