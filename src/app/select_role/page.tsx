@@ -29,13 +29,13 @@ export default function Auth() {
     }
 
     return (
-        <main className="pt-[150px] mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
+        <main className="pt-[150px] lg:mx-10 mx-2 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
             <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">
-                <section className="grid grid-cols-2 gap-10 justify-center items-center p-8">
+                <section className="grid lg:grid-cols-2 gap-10 justify-center items-center p-8">
                     <div className="flex flex-col gap-10">
-                        <h3 className="text-2xl font-bold text-gray-100">
+                        <h2 className="font-bold text-gray-100">
                             Select Your Role
-                        </h3>
+                        </h2>
                         <div className="w-full flex flex-row gap-2">
                             <SelectButton
                                 label="Player"
@@ -80,7 +80,7 @@ export default function Auth() {
                         />
                     </div>
                     <div className="flex flex-col">
-                        <h2 className="text-2xl font-semibold text-white">
+                        <h2 className="font-semibold text-white">
                             Thanks for Signing Up in E Game Skills
                         </h2>
                         <p className="mt-2 text-sm text-gray-400">
