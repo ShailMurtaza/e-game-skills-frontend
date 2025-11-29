@@ -81,7 +81,7 @@ export default function Users() {
             <h4>Users</h4>
             <div className="mt-4">
                 {/* Searching Containaer */}
-                <div className="flex flex-row gap-10">
+                <div className="flex flex-col lg:flex-row lg:gap-10 gap-5">
                     <Input
                         name="email"
                         type="email"
