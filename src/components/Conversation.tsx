@@ -74,12 +74,14 @@ export default function UserConversation({
             )}
             <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4 z-10">
                 <div className="flex flex-row items-center gap-5">
-                    <button
-                        className="lg:hidden p-2 bg-zinc-700 shadow-[2px_3px_5px_2px_rgba(255,255,255,0.3)] rounded-full text-white"
-                        onClick={closeConversationAction}
-                    >
-                        <MdOutlineArrowBackIosNew size={25} />
-                    </button>
+                    {receiver === null && (
+                        <button
+                            className="lg:hidden p-2 bg-zinc-700 shadow-[2px_3px_5px_2px_rgba(255,255,255,0.3)] rounded-full text-white"
+                            onClick={closeConversationAction}
+                        >
+                            <MdOutlineArrowBackIosNew size={25} />
+                        </button>
+                    )}
                     <img
                         src={
                             conversation.avatar !== null
@@ -88,11 +90,15 @@ export default function UserConversation({
                         }
                         className="rounded-full w-[50px] h-[50px]"
                     />
-                    <span>{conversation.username}</span>
+                    <span className="lg:text-base text-sm">
+                        {conversation.username}
+                    </span>
                     <div className="ml-auto">
                         {receiver ? (
-                            <div className="flex flex-row items-center gap-5">
-                                <span>{receiver.username}</span>
+                            <div className="flex flex-row items-center lg:gap-5 gap-2">
+                                <span className="lg:text-base text-sm">
+                                    {receiver.username}
+                                </span>
                                 <img
                                     src={
                                         receiver.avatar !== null
