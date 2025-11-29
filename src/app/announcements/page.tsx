@@ -66,7 +66,7 @@ export default function Announcements() {
     }, []);
 
     return (
-        <main className="pt-[150px] mx-10 min-h-screen flex flex-col gap-5 p-6 bg-black text-gray-100">
+        <main className="pt-[150px] lg:mx-10 mx-1 min-h-screen flex flex-col gap-5 p-6 bg-black text-gray-100">
             <AnimatePresence mode="wait">
                 {showAnnouncement !== null ? (
                     <DisplayAnnouncement
@@ -90,10 +90,12 @@ export default function Announcements() {
                     }}
                 >
                     <h3>{announcement.title}</h3>
-                    <div className="line-clamp-2">
+                    <div className="lg:text-base text-sm line-clamp-2">
                         {announcement.announcement}
                     </div>
-                    <div className="text-sm">{announcement.date}</div>
+                    <div className="lg:text-sm text-xs">
+                        {announcement.date}
+                    </div>
                 </div>
             ))}
         </main>

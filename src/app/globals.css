@@ -24,12 +24,14 @@ body {
 
   h2 {
     @apply text-2xl font-bold;
-    @apply lg:text-3xl
+    @apply lg:text-3xl;
   }
 
   h3 {
-    @apply text-2xl font-bold;
-    @apply lg:text-3xl
+    @apply font-bold;
+    @apply lg:text-3xl;
+    @apply md:text-2xl;
+    @apply sm:text-xl;
   }
 
   h4 {
