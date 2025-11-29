@@ -1,10 +1,10 @@
 export default function Aboutus() {
     return (
         <main className="pt-[150px] mx-10">
-            <h1 className="text-5xl font-bold text-center">About Us</h1>
-            <section className="px-96 py-20">
+            <h1 className="font-bold text-center">About Us</h1>
+            <section className="lg:px-96 lg:py-20 px-5 py-15">
                 <div className="py-5">
-                    <h2 className="text-2xl font-bold mb-1">Who We Are</h2>
+                    <h2 className="font-bold mb-1">Who We Are</h2>
                     <div>
                         We are a team of passionate gamers and computer science
                         students driven by the idea of bridging the gap between
@@ -17,7 +17,7 @@ export default function Aboutus() {
                     </div>
                 </div>
                 <div className="py-5">
-                    <h2 className="text-2xl font-bold mb-1">Our Vision</h2>
+                    <h2 className="font-bold mb-1">Our Vision</h2>
                     <div>
                         Our vision is to redefine e-sports recruitment by
                         creating a platform where skill and merit truly shine.
@@ -28,7 +28,7 @@ export default function Aboutus() {
                     </div>
                 </div>
                 <div className="py-5">
-                    <h2 className="text-2xl font-bold mb-1">What We Do</h2>
+                    <h2 className="font-bold mb-1">What We Do</h2>
                     <div>
                         Our platform, E Game Skills, serves as a structured
                         recruitment system for competitive gaming.
@@ -50,7 +50,7 @@ export default function Aboutus() {
                     </div>
                 </div>
                 <div className="py-5">
-                    <h2 className="text-2xl font-bold mb-1">Our Motivation</h2>
+                    <h2 className="font-bold mb-1">Our Motivation</h2>
                     <div>
                         As gamers ourselves, we’ve seen both sides of the
                         challenge:
@@ -58,7 +58,7 @@ export default function Aboutus() {
                             <li>Talented players often lack visibility.</li>
                             <li>
                                 Teams spend hours searching for the right
-                                members.{" "}
+                                members.
                             </li>
                         </ul>
                         This inspired us to combine our technical expertise in
@@ -68,7 +68,7 @@ export default function Aboutus() {
                     </div>
                 </div>
                 <div className="py-5">
-                    <h2 className="text-2xl font-bold mb-1">
+                    <h2 className="font-bold mb-1">
                         Join Us in Shaping the Future of E-Sports
                     </h2>
                     <div>
