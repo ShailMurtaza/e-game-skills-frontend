@@ -14,7 +14,7 @@ export function Profile({
 }) {
     return (
         <div
-            className="mb-5 bg-zinc-900 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer"
+            className="mb-5 bg-zinc-900 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-105 lg:hover:scale-102 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer"
             onClick={onClick}
         >
             <div className="flex flex-row items-center gap-5">
@@ -68,9 +68,9 @@ export function MessageComponent({
     time: string;
 }) {
     return (
-        <div className="flex-1 p-4">
+        <div>
             {date && (
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-3">
                     <div className="w-fit text-gray-400 bg-zinc-900 text-sm rounded-2xl px-5 py-1">
                         {date}
                     </div>

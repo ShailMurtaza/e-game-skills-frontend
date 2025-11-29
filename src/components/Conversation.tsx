@@ -7,14 +7,17 @@ import { DangerBtn } from "./Dashboard";
 import { MdOutlineReportProblem } from "react-icons/md";
 import ReportPopup from "./ReportPopup";
 import { UserProfile } from "@/lib/User";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import formatDate from "@/lib/FormatDate";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
     conversation,
+    closeConversationAction,
     receiver = null,
 }: {
     conversation: Conversation;
+    closeConversationAction: () => void;
     receiver?: UserProfile | null;
 }) {
     const [report, setReport] = useState<boolean>(false);
@@ -71,6 +74,12 @@ export default function UserConversation({
             )}
             <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4 z-10">
                 <div className="flex flex-row items-center gap-5">
+                    <button
+                        className="lg:hidden p-2 bg-zinc-700 shadow-[2px_3px_5px_2px_rgba(255,255,255,0.3)] rounded-full text-white"
+                        onClick={closeConversationAction}
+                    >
+                        <MdOutlineArrowBackIosNew size={25} />
+                    </button>
                     <img
                         src={
                             conversation.avatar !== null
@@ -137,7 +146,7 @@ export default function UserConversation({
 
             <div
                 ref={containerRef}
-                className="absolute top-[75px] bottom-[75px] w-full overflow-y-auto px-5"
+                className="flex flex-col gap-5 py-5 absolute top-[75px] bottom-[75px] w-full overflow-y-auto px-5"
             >
                 {userMessages.map((m: Message, idx: number) => {
                     const currentDate = m.timestamp.toLocaleDateString();

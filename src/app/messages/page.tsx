@@ -7,6 +7,7 @@ import UserConversation from "@/components/Conversation";
 import { useMessageProvider } from "@/context/messagesContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PublicUser } from "@/lib/User";
+import { AnimatePresence, motion } from "framer-motion";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Messages() {
@@ -162,7 +163,7 @@ export default function Messages() {
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
 
-            <div className="mx-5 grid grid-cols-4 gap-5 rounded-xl h-[calc(100vh-250px)]">
+            <div className="mx-5 grid lg:grid-cols-4 gap-5 rounded-xl h-[calc(100vh-250px)]">
                 <section
                     className={`p-5 overflow-y-auto overflow-x-hidden ${userConversation === null ? "col-span-4" : "col-span-1"}`}
                 >
@@ -188,11 +189,24 @@ export default function Messages() {
                     ))}
                 </section>
 
-                {userConversation !== null && (
-                    <section className="relative col-span-3 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                        <UserConversation conversation={userConversation} />
-                    </section>
-                )}
+                <AnimatePresence>
+                    {userConversation !== null && (
+                        <motion.section
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="fixed z-50 w-screen h-screen lg:w-full lg:h-full bg-black top-0 left-0 lg:relative lg:col-span-3 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                        >
+                            <UserConversation
+                                conversation={userConversation}
+                                closeConversationAction={() => {
+                                    router.push("?");
+                                }}
+                            />
+                        </motion.section>
+                    )}
+                </AnimatePresence>
             </div>
         </main>
     );
