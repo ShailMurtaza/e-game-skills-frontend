@@ -54,7 +54,7 @@ export default function Navbar() {
                     </ul>
                 )}
 
-                <ul className="flex flex-col lg:flex-row items-center gap-5">
+                <ul className="flex flex-col lg:flex-row items-center gap-5 lg:ml-auto">
                     {isAuthenticated && userProfile?.role === "team" && (
                         <li>
                             <Link href="/search">
@@ -198,7 +198,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="flex lg:flex-row flex-col gap-5 justify-between w-full"
+                        className="flex lg:flex-row flex-col gap-5 justify-between w-full lg:hidden"
                     >
                         <MenuItems />
                     </motion.section>
