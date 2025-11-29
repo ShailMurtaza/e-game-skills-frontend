@@ -121,24 +121,25 @@ export default function Announcements() {
                     if (ann?.id)
                         return (
                             <div key={ann.id}>
-                                <div className="p-3 bg-gray-850 rounded border border-gray-800 flex justify-between items-center">
+                                <div className="p-3 bg-gray-850 rounded border border-gray-800 flex lg:flex-row flex-col lg:justify-between lg:items-center lg:gap-0 gap-3">
                                     <div>
                                         <div className="text-sm text-white">
                                             {ann.title}
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
+                                    <div className="flex justify-center gap-2">
                                         <Button
                                             label="Edit"
                                             variant="secondary"
+                                            className="lg:w-fit w-full"
                                             onClick={() => {
-                                                console.log(announcements);
                                                 setShowAnnouncementEditor(idx);
                                             }}
                                         />
                                         <Button
                                             label="Delete"
                                             variant="danger"
+                                            className="lg:w-fit w-full"
                                             onClick={() => {
                                                 setAnnoucementDelete(ann.id!);
                                             }}
