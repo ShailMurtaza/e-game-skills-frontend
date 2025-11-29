@@ -37,9 +37,14 @@ export default function Navbar() {
         setUnreadMsgCountNum(unread_msgs);
     }, [unreadMsgCount]);
     const showPublicLinks = !isAuthenticated || !isOnProtectedRoute;
-    function MenuItems() {
+    function MenuItems({ smallNav }: { smallNav: boolean }) {
         return (
-            <>
+            <div
+                className={`${smallNav ? "lg:hidden flex" : "hidden lg:flex"} lg:flex-row flex-col gap-5 justify-between w-full`}
+                onClick={() => {
+                    setNavOpen(false);
+                }}
+            >
                 {showPublicLinks && (
                     <ul className="flex lg:flex-row flex-col items-center gap-5">
                         <li>
@@ -54,7 +59,7 @@ export default function Navbar() {
                     </ul>
                 )}
 
-                <ul className="flex flex-col lg:flex-row items-center gap-5 lg:ml-auto">
+                <ul className="flex flex-col lg:flex-row items-center gap-5 ml-auto">
                     {isAuthenticated && userProfile?.role === "team" && (
                         <li>
                             <Link href="/search">
@@ -145,7 +150,7 @@ export default function Navbar() {
                         </li>
                     )}
                 </ul>
-            </>
+            </div>
         );
     }
 
@@ -188,8 +193,8 @@ export default function Navbar() {
                 )}
             </section>
 
-            <section className="lg:flex-row flex-col gap-5 justify-between w-full hidden lg:flex">
-                <MenuItems />
+            <section className="w-full">
+                <MenuItems smallNav={false} />
             </section>
             <AnimatePresence>
                 {navOpen && (
@@ -198,9 +203,8 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="flex lg:flex-row flex-col gap-5 justify-between w-full lg:hidden"
                     >
-                        <MenuItems />
+                        <MenuItems smallNav={true} />
                     </motion.section>
                 )}
             </AnimatePresence>
