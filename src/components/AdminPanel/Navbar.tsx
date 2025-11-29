@@ -12,7 +12,7 @@ export default function AdminPanelNavbar() {
         { href: "/admin_panel/contacts", label: "Contacts" },
     ];
     return (
-        <nav className="flex gap-2 bg-gray-900/40 p-2 rounded-md">
+        <nav className="flex flex-row justify-center flex-wrap gap-2 bg-gray-900/40 p-2 rounded-md">
             {navItems.map((item, i) => {
                 const active = pathname == item.href;
                 return (

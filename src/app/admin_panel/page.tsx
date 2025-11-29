@@ -51,8 +51,10 @@ export default function AdminPanel() {
         <main>
             <h4>Summary</h4>
             <div className="flex justify-center">
-                <div className="w-xl">
-                    <Pie options={options} data={data} />
+                <div className="w-full max-w-sm sm:max-w-md lg:max-w-xl">
+                    <div className="relative h-64 sm:h-80 lg:h-auto flex justify-center">
+                        <Pie options={options} data={data} />
+                    </div>
                 </div>
             </div>
         </main>

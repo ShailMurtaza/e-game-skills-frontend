@@ -38,10 +38,10 @@ export default function RootLayout({
         return <LoadingComponent />;
     }
     return (
-        <main className="admin-page pt-[150px] mx-10 min-h-screen flex flex-col p-6 bg-black">
-            <header className="flex items-center justify-between mb-6">
+        <main className="admin-page pt-[150px] lg:mx-10 mx-3 min-h-screen flex flex-col p-6 bg-black">
+            <header className="flex lg:items-center lg:justify-between flex-col lg:flex-row gap-5 mb-6 w-full">
                 <div>
-                    <h3 className="">Admin Dashboard</h3>
+                    <h3>Admin Dashboard</h3>
                     <p className="text-sm text-gray-400">{pageTitle}</p>
                 </div>
                 <AdminPanelNavbar />
