@@ -10,6 +10,8 @@ import protectedRoutes from "@/lib/ProtectedRoutes";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
 import { useEffect, useState } from "react";
 import { useMessageProvider } from "@/context/messagesContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const play = Play({
     subsets: ["latin"],
@@ -22,6 +24,7 @@ export default function Navbar() {
     const { setLoading, notify } = useUI();
     const { unreadMsgCount } = useMessageProvider();
     const [unreadMsgCountNum, setUnreadMsgCountNum] = useState<number>(0);
+    const [navOpen, setNavOpen] = useState<boolean>(false);
     const pathname = usePathname();
     const { isLoading, isAuthenticated, userProfile } = useAuth();
     const isOnProtectedRoute = protectedRoutes.some((path) =>
@@ -34,23 +37,11 @@ export default function Navbar() {
         setUnreadMsgCountNum(unread_msgs);
     }, [unreadMsgCount]);
     const showPublicLinks = !isAuthenticated || !isOnProtectedRoute;
-
-    if (isLoading) {
-        return <LoadingComponent />;
-    }
-
-    return (
-        <nav
-            className={`${play.className} text-xl font-bold flex flex-row p-7 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
-        >
-            <ul className="flex flex-row items-center gap-5">
-                <li className="mr-5">
-                    <Link href="/">
-                        <img src="/icon.svg" width="100" alt="Logo" />
-                    </Link>
-                </li>
+    function MenuItems({ className = "" }: { className?: string }) {
+        return (
+            <>
                 {showPublicLinks && (
-                    <>
+                    <ul className="flex lg:flex-row flex-col items-center gap-5">
                         <li>
                             <Link href="/aboutus">About Us</Link>
                         </li>
@@ -60,98 +51,141 @@ export default function Navbar() {
                         <li>
                             <Link href="/services">Services</Link>
                         </li>
-                    </>
-                )}
-            </ul>
-
-            <ul className="flex flex-row items-center gap-5 ml-auto">
-                {isAuthenticated && userProfile?.role === "team" && (
-                    <li>
-                        <Link href="/search">
-                            <button>Search</button>
-                        </Link>
-                    </li>
+                    </ul>
                 )}
 
-                {isAuthenticated && userProfile?.role !== "pending" && (
-                    <li>
-                        <Link href="/messages">
-                            <button className="relative">
-                                Messages
-                                {unreadMsgCountNum > 0 && (
-                                    <div className="absolute -top-4 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                                        {unreadMsgCountNum > 99
-                                            ? "99+"
-                                            : unreadMsgCountNum}
-                                    </div>
-                                )}
-                            </button>
-                        </Link>
-                    </li>
-                )}
-
-                <li>
-                    <Link href="/announcements">
-                        <button>Announcements</button>
-                    </Link>
-                </li>
-
-                {isAuthenticated && userProfile?.role && (
-                    <li>
-                        <Link href={RoleProfilePaths[userProfile?.role]}>
-                            <button>Profile</button>
-                        </Link>
-                    </li>
-                )}
-
-                {!isAuthenticated ? (
-                    <>
+                <ul className="flex flex-col lg:flex-row items-center gap-5">
+                    {isAuthenticated && userProfile?.role === "team" && (
                         <li>
-                            <Link href="/auth?action=signin">
-                                <button>Sign In</button>
+                            <Link href="/search">
+                                <button>Search</button>
                             </Link>
                         </li>
+                    )}
+
+                    {isAuthenticated && userProfile?.role !== "pending" && (
                         <li>
-                            <Link href="/auth?action=signup">
-                                <button>Sign Up</button>
+                            <Link href="/messages">
+                                <button className="relative">
+                                    Messages
+                                    {unreadMsgCountNum > 0 && (
+                                        <div className="absolute -top-4 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                                            {unreadMsgCountNum > 99
+                                                ? "99+"
+                                                : unreadMsgCountNum}
+                                        </div>
+                                    )}
+                                </button>
                             </Link>
                         </li>
-                    </>
-                ) : (
+                    )}
+
                     <li>
-                        <Link href="#">
-                            <button
-                                onClick={async () => {
-                                    setLoading(true);
-                                    try {
-                                        const res = await fetch(
-                                            `${API_URL}/auth/logout`,
-                                            {
-                                                method: "GET",
-                                                credentials: "include",
-                                            },
-                                        );
-                                        if (!res.ok) {
-                                            throw new Error(
-                                                "Something went wrong",
+                        <Link href="/announcements">
+                            <button>Announcements</button>
+                        </Link>
+                    </li>
+
+                    {isAuthenticated && userProfile?.role && (
+                        <li>
+                            <Link href={RoleProfilePaths[userProfile?.role]}>
+                                <button>Profile</button>
+                            </Link>
+                        </li>
+                    )}
+
+                    {!isAuthenticated ? (
+                        <>
+                            <li>
+                                <Link href="/auth?action=signin">
+                                    <button>Sign In</button>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/auth?action=signup">
+                                    <button>Sign Up</button>
+                                </Link>
+                            </li>
+                        </>
+                    ) : (
+                        <li>
+                            <Link href="#">
+                                <button
+                                    onClick={async () => {
+                                        setLoading(true);
+                                        try {
+                                            const res = await fetch(
+                                                `${API_URL}/auth/logout`,
+                                                {
+                                                    method: "GET",
+                                                    credentials: "include",
+                                                },
                                             );
-                                        } else {
-                                            notify("Logged Out", "success");
+                                            if (!res.ok) {
+                                                throw new Error(
+                                                    "Something went wrong",
+                                                );
+                                            } else {
+                                                notify("Logged Out", "success");
+                                            }
+                                        } catch (e) {
+                                            notify(
+                                                "Something went wrong",
+                                                "error",
+                                            );
+                                            console.error(e);
+                                        } finally {
+                                            router.replace("/auth");
                                         }
-                                    } catch (e) {
-                                        notify("Something went wrong", "error");
-                                        console.error(e);
-                                    } finally {
-                                        router.replace("/auth");
-                                    }
-                                }}
-                            >
-                                Logout
-                            </button>
-                        </Link>
-                    </li>
+                                    }}
+                                >
+                                    Logout
+                                </button>
+                            </Link>
+                        </li>
+                    )}
+                </ul>
+            </>
+        );
+    }
+
+    if (isLoading) {
+        return <LoadingComponent />;
+    }
+
+    return (
+        <nav
+            className={`${play.className} text-xl font-bold flex lg:flex-row lg:gap-0 flex-col items-center h-fit lg:p-7 py-7 px-1 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
+        >
+            <section className="lg:block lg:w-fit w-full flex flex-row justify-between items-center mr-5">
+                <Link href="/" className="lg:m-0 ml-10 mt-2">
+                    <img src="/icon.svg" width="100" alt="Logo" />
+                </Link>
+                <RxHamburgerMenu
+                    size={35}
+                    className="lg:hidden"
+                    onClick={() => {
+                        setNavOpen((prev) => !prev);
+                    }}
+                />
+            </section>
+
+            <section className="lg:flex-row flex-col gap-5 justify-between w-full hidden lg:flex">
+                <MenuItems />
+            </section>
+            <AnimatePresence>
+                {navOpen && (
+                    <motion.section
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex lg:flex-row flex-col gap-5 justify-between w-full"
+                    >
+                        <MenuItems />
+                    </motion.section>
                 )}
-            </ul>
+            </AnimatePresence>
         </nav>
     );
 }
