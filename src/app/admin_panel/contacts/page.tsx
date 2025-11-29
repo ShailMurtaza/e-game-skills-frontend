@@ -103,7 +103,7 @@ export default function ContactsPage() {
                 {contacts.map((c) => {
                     return (
                         <div
-                            className="p-3 bg-gray-850 rounded border border-gray-800 flex flex-row justify-between"
+                            className="p-3 bg-gray-850 rounded border border-gray-800 flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-0 gap-3"
                             key={c.id}
                         >
                             <div>
@@ -117,6 +117,7 @@ export default function ContactsPage() {
                             <div className="flex gap-2">
                                 <Button
                                     label="View"
+                                    className="lg:w-fit w-full"
                                     variant="secondary"
                                     onClick={() => {
                                         setShowContactMessage(c);
@@ -125,6 +126,7 @@ export default function ContactsPage() {
                                 <Button
                                     label="Delete"
                                     variant="danger"
+                                    className="lg:w-fit w-full"
                                     onClick={() => {
                                         setContactDelete(c.id);
                                     }}
