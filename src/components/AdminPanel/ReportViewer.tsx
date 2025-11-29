@@ -26,8 +26,8 @@ export default function ReportViewer({
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="flex flex-col gap-5 w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800 overflow-y-auto max-h-screen"
             >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="md:col-span-1 flex flex-col gap-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                    <div className="lg:col-span-1 flex flex-col gap-1">
                         <h5 className="text-gray-400">
                             Reporter | User ID: {report.reporter_id}
                         </h5>
@@ -62,7 +62,7 @@ export default function ReportViewer({
                             }}
                         />
                     </div>
-                    <div className="md:col-span-1 flex flex-col gap-1">
+                    <div className="lg:col-span-1 flex flex-col gap-1">
                         <h5 className="text-gray-400">
                             Target | User ID: {report.target_id}
                         </h5>
@@ -97,13 +97,13 @@ export default function ReportViewer({
                             }}
                         />
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-1 lg:col-span-2">
                         <h5 className="text-gray-400">Reason</h5>
                         <p className="w-full mt-1 bg-gray-800 px-2 py-2 rounded">
                             {report.reason}
                         </p>
                     </div>
-                    <div className="col-span-2">
+                    <div className="col-span-1 lg:col-span-2">
                         <h5 className="text-gray-400">Description</h5>
                         <pre className="w-full mt-1 bg-gray-800 px-2 py-2 rounded overflow-y-auto max-h-[calc(80vh-90px)]">
                             {report.description}
@@ -111,10 +111,11 @@ export default function ReportViewer({
                     </div>
                 </div>
 
-                <div className="flex flex-row gap-5">
+                <div className="flex lg:flex-row flex-col lg:gap-5 gap-2">
                     <Button
                         label="Open Conversation"
                         variant="secondary"
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             window.open(
                                 `/conversation?sender_id=${report.reporter_id}&receiver_id=${report.target_id}`,
@@ -130,6 +131,7 @@ export default function ReportViewer({
                                 : "Set as Reviewed"
                         }
                         variant={report.is_reviewed ? "danger" : "primary"}
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             updateReportAction({
                                 report_id: report.id,
@@ -139,10 +141,11 @@ export default function ReportViewer({
                     />
                     <Button
                         label="close"
+                        variant="neutral"
+                        className="lg:w-fit w-full"
                         onClick={() => {
                             CloseAction();
                         }}
-                        variant="neutral"
                     />
                 </div>
             </motion.div>
