@@ -13,10 +13,10 @@ export default function Home() {
                 style={{ backgroundImage: "url('/radiant_dire.jpg')" }}
             >
                 <motion.h1
-                    className="text-5xl font-bold absolute bottom-1/12 z-0"
+                    className="font-bold absolute bottom-1/12 z-0 lg:p-0 pl-4"
                     initial={{ opacity: 0, y: 150 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 1 }}
                 >
                     Let's dive into the world of eSports
                 </motion.h1>
@@ -26,10 +26,10 @@ export default function Home() {
                 style={{ backgroundImage: "url('/stadium.jpg')" }}
             >
                 <motion.h1
-                    className="text-5xl font-bold absolute bottom-1/12 z-0"
+                    className="font-bold absolute bottom-1/12 z-0 lg:p-0 pl-4"
                     initial={{ opacity: 0, y: 150 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.4 }}
+                    viewport={{ once: true, amount: 0.4 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                     Pursue Your Dream To Become An eSports Champoin
