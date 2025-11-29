@@ -54,7 +54,7 @@ export default function UpdateUserProfile() {
 
     return (
         <section className="flex flex-col gap-5 p-5 border-b border-white rounded-t-2xl">
-            <div className="flex flex-row justify-around items-center gap-10">
+            <div className="flex lg:flex-row flex-col justify-around items-center gap-10">
                 <AvatarUploader
                     onFileSelect={setAvatarFile}
                     currentAvatar={
@@ -63,41 +63,41 @@ export default function UpdateUserProfile() {
                             : "profile.png"
                     }
                 />
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full lg:w-fit">
                     <div className="mb-2 font-bold">Enter Username</div>
                     <Input
                         name="username"
                         placeholder="Username"
                         type="text"
                         value={username}
-                        className="w-fit"
+                        className="w-full lg:w-fit"
                         onChange={(e) => {
                             setUsername(e.target.value);
                         }}
                     />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full lg:w-fit">
                     <div className="mb-2 font-bold">Enter Country</div>
                     <Input
                         name="country"
                         placeholder="Country"
                         type="text"
                         value={userCountry ?? ""}
-                        className="w-fit"
+                        className="w-full lg:w-fit"
                         onChange={(e) => {
                             setUserCountry(e.target.value);
                         }}
                     />
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full lg:w-fit">
                     <div className="mb-2 font-bold">Enter Region</div>
                     <Input
                         name="region"
                         placeholder="Region"
                         type="text"
                         value={userRegion ?? ""}
-                        className="w-fit"
+                        className="w-full lg:w-fit"
                         onChange={(e) => {
                             setUserRegion(e.target.value);
                         }}
