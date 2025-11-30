@@ -29,7 +29,7 @@ export default function Reports() {
     async function fetchReports(page: number = 1) {
         try {
             setLoading(true);
-            const searchData: Record<string, any> = {};
+            const searchData: { is_reviewed?: boolean } = {};
             if (searchReviewed !== "all")
                 searchData["is_reviewed"] = searchReviewed === "true";
             const res = await fetch(

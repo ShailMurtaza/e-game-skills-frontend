@@ -82,8 +82,8 @@ export default function Games() {
                     <GameEditor
                         key={showGameEditor}
                         game={games[showGameEditor]}
-                        setShowGameEditor={setShowGameEditor}
-                        setGame={setGame}
+                        setShowGameEditorAction={setShowGameEditor}
+                        setGameAction={setGame}
                     />
                 ) : (
                     ""

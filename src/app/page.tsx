@@ -18,7 +18,7 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut", delay: 1 }}
                 >
-                    Let's dive into the world of eSports
+                    Let&apos;s dive into the world of eSports
                 </motion.h1>
             </section>
             <section

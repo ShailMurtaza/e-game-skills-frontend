@@ -1,6 +1,6 @@
 "use client";
 import { PrimaryBtn, Attributes, DangerBtn } from "@/components/Dashboard";
-import { AttributesType } from "@/lib/Attributes";
+import { AttributesType, InformationAttributeType } from "@/lib/Attributes";
 import DeleteConfirmDialog from "@/components/DeleteConfirmDialog";
 import { useAuth } from "@/context/authContext";
 import { useUI } from "@/context/UIContext";
@@ -8,13 +8,20 @@ import { useEffect, useState } from "react";
 import { LoadingComponent } from "@/components/Loading";
 import UpdateUserProfile from "@/components/UpdateUserProfile";
 import { MdDeleteOutline } from "react-icons/md";
+import { UserGameTypeForUpdate, WinsLossType } from "@/lib/UserGames";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserDashboard() {
     const { setLoading, notify } = useUI();
-    const [AllGames, setAllGames] = useState<any[]>([]);
-    const [userGames, setUserGames] = useState<any[]>([]);
+    const [AllGames, setAllGames] = useState<
+        {
+            id: number;
+            name: string;
+            attributes: { id: number; game_id: number; name: string }[];
+        }[]
+    >([]);
+    const [userGames, setUserGames] = useState<UserGameTypeForUpdate[]>([]);
     const [selectedGame, setSelectedGame] = useState<number | null>(null);
     const [userGameDelete, setUserGameDelete] = useState<number | null>(null);
     useEffect(() => {
@@ -34,12 +41,15 @@ export default function UserDashboard() {
             .then((res) => res.json())
             .then((data) => setUserGames(data));
     }, []);
-    const [Information, setInformation] = useState<any[]>([]);
-    const [AdditionalInformation, setAdditionalInformation] =
-        useState<AttributesType>([]);
-    const [Links, setLinks] = useState<AttributesType>([]);
-    const [Wins, setWins] = useState<AttributesType>([]);
-    const [Loss, setLoss] = useState<AttributesType>([]);
+    const [Information, setInformation] = useState<InformationAttributeType[]>(
+        [],
+    );
+    const [AdditionalInformation, setAdditionalInformation] = useState<
+        AttributesType[]
+    >([]);
+    const [Links, setLinks] = useState<AttributesType[]>([]);
+    const [Wins, setWins] = useState<AttributesType[]>([]);
+    const [Loss, setLoss] = useState<AttributesType[]>([]);
 
     const { isLoading, isAuthenticated, userProfile } = useAuth();
 
@@ -51,15 +61,14 @@ export default function UserDashboard() {
             const user_selected_game = userGames.find(
                 (user_game) => user_game.game_id === selected_game.id,
             );
-            var user_links: any[] = [];
-            (user_selected_game.Links ?? []).map(
-                (link: { name: string; value: string }) => {
-                    user_links.push({ name: link.name, value: link.value });
-                },
-            );
-            var custom_attributes: any[] = [];
+            if (!user_selected_game) return;
+            const user_links: AttributesType[] = [];
+            (user_selected_game.Links ?? []).map((link: AttributesType) => {
+                user_links.push({ name: link.name, value: link.value });
+            });
+            const custom_attributes: AttributesType[] = [];
             (user_selected_game.custom_attributes ?? []).map(
-                (attr: { name: string; value: string }) => {
+                (attr: AttributesType) => {
                     custom_attributes.push({
                         name: attr.name,
                         value: attr.value,
@@ -67,47 +76,43 @@ export default function UserDashboard() {
                 },
             );
             // Separate Wins and Loss
-            var wins: any[] = [];
-            var loss: any[] = [];
-            (user_selected_game.WinsLoss ?? []).map(
-                (attr: {
-                    value: number;
-                    date: string;
-                    type: "Win" | "Loss";
-                }) => {
-                    const date = new Date(attr.date)
-                        .toISOString()
-                        .split("T")[0];
-                    if (attr.type == "Win")
-                        wins.push({
-                            name: date,
-                            value: attr.value,
-                        });
-                    else
-                        loss.push({
-                            name: date,
-                            value: attr.value,
-                        });
+            const wins: AttributesType[] = [];
+            const loss: AttributesType[] = [];
+            (user_selected_game.WinsLoss ?? []).map((attr: WinsLossType) => {
+                const date = new Date(attr.date).toISOString().split("T")[0];
+                if (attr.type == "Win")
+                    wins.push({
+                        name: date,
+                        value: attr.value.toString(),
+                    });
+                else
+                    loss.push({
+                        name: date,
+                        value: attr.value.toString(),
+                    });
+            });
+            const gameAttributes: InformationAttributeType[] = [];
+            (selected_game.attributes ?? []).map(
+                (attr: { id: number; game_id: number; name: string }) => {
+                    // Initialize with empty string
+                    let value = "";
+                    const attribute_value = (
+                        user_selected_game.attribute_values ?? []
+                    ).find(
+                        (attr_value: InformationAttributeType) =>
+                            attr_value.game_attribute_id === attr.id,
+                    );
+                    // If attribute value already exists then assign a value
+                    if (attribute_value) value = attribute_value.value;
+                    gameAttributes.push({
+                        id: attr.id,
+                        game_attribute_id: attr.id,
+                        user_game_id: attr.game_id,
+                        name: attr.name,
+                        value: value,
+                    });
                 },
             );
-            var gameAttributes: any[] = [];
-            (selected_game.attributes ?? []).map((attr: any) => {
-                var value = "";
-                const attribute_value = (
-                    user_selected_game.attribute_values ?? []
-                ).find(
-                    (attr_value: any) =>
-                        attr_value.game_attribute_id === attr.id,
-                );
-                if (attribute_value) value = attribute_value.value;
-                gameAttributes.push({
-                    id: attr.id,
-                    game_attribute_id: attr.id,
-                    user_game_id: attr.game_id,
-                    name: attr.name,
-                    value: value,
-                });
-            });
             setLinks(user_links);
             setAdditionalInformation(custom_attributes);
             setWins(wins);
@@ -116,14 +121,14 @@ export default function UserDashboard() {
         }
     }, [selectedGame]);
 
-    async function handleDeleteUserGame(game_id: any) {
+    async function handleDeleteUserGame(game_id: number) {
         setLoading(true);
         if (selectedGame == game_id) setSelectedGame(null);
         // Check if this game doesn't exist in database by checking if 'id' exists of not
         if (
             !userGames
-                .find((game) => game_id === game.game_id)
-                .hasOwnProperty("id")
+                ?.find((game) => game_id === game.game_id)
+                ?.hasOwnProperty("id")
         ) {
             // Just remove from userGames state variable
             setUserGames(
@@ -145,8 +150,12 @@ export default function UserDashboard() {
             setUserGames(
                 userGames.filter((user_game) => user_game.game_id !== game_id),
             );
-        } catch (e: any) {
-            notify(e.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
         } finally {
             setUserGameDelete(null);
             setLoading(false);
@@ -174,16 +183,16 @@ export default function UserDashboard() {
                         ...Wins.map((win) => {
                             return {
                                 date: win.name,
-                                value: win.value,
+                                value: Number(win.value),
                                 type: "Win",
-                            };
+                            } as WinsLossType;
                         }),
                         ...Loss.map((loss) => {
                             return {
                                 date: loss.name,
-                                value: loss.value,
+                                value: Number(loss.value),
                                 type: "Loss",
-                            };
+                            } as WinsLossType;
                         }),
                     ],
                 };
@@ -193,7 +202,7 @@ export default function UserDashboard() {
         });
         setUserGames(newUserGames);
         // Send PUT request to save data
-        var allData = {
+        const allData = {
             game_id: selectedGame,
             UserGameAttributeValue: Information,
             UserGameCustomAttribute: AdditionalInformation,
@@ -214,8 +223,12 @@ export default function UserDashboard() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
             notify(data.message, "success");
-        } catch (err: any) {
-            notify(err.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
         } finally {
             setLoading(false);
         }
@@ -295,7 +308,7 @@ export default function UserDashboard() {
                                                 );
                                                 setUserGames([
                                                     ...userGames,
-                                                    { game_id: new_game.id },
+                                                    { game_id: new_game!.id },
                                                 ]);
                                             }}
                                         >

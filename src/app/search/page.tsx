@@ -5,6 +5,7 @@ import { useUI } from "@/context/UIContext";
 import { FiSearch } from "react-icons/fi";
 import { SearchResult } from "@/lib/SearchResults";
 import Link from "next/link";
+import Image from "next/image";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type Attribute = {
@@ -28,7 +29,9 @@ export default function SearchPage() {
     >({});
     const [searchResults, setSearchResults] = useState<SearchResult>([]);
     const [searched, setSearched] = useState<boolean>(false);
-    const [searchedUserGames, setSearchedUserGames] = useState<any[]>([]);
+    const [searchedUserGames, setSearchedUserGames] = useState<
+        { id: number; user_games: { game: { name: string } }[] }[]
+    >([]);
 
     const [games, setGames] = useState<Game[]>([]);
 
@@ -55,8 +58,12 @@ export default function SearchPage() {
             setSearchResults(data.results);
             setSearchedUserGames(data.games);
             setSearched(true);
-        } catch (e: any) {
-            notify(e.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
         } finally {
             setLoading(false);
         }
@@ -83,8 +90,12 @@ export default function SearchPage() {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || "ERROR");
                 setGames(data);
-            } catch (e: any) {
-                notify(e.message, "error");
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : "An unexpected error occurred";
+                notify(message, "error");
             } finally {
                 setLoading(false);
             }
@@ -202,7 +213,10 @@ export default function SearchPage() {
                                 >
                                     <div className="flex items-start gap-4">
                                         {/* Avatar Placeholder */}
-                                        <img
+                                        <Image
+                                            width={100}
+                                            height={0}
+                                            alt="Avatar"
                                             className="w-16 h-16  rounded-full border border-zinc-700 transition-all"
                                             src={
                                                 player?.avatar
@@ -224,9 +238,13 @@ export default function SearchPage() {
                                                             game.id ===
                                                             player.id,
                                                     )
-                                                    .user_games.map(
+                                                    ?.user_games.map(
                                                         (
-                                                            game: any,
+                                                            game: {
+                                                                game: {
+                                                                    name: string;
+                                                                };
+                                                            },
                                                             idx: number,
                                                         ) => {
                                                             return (

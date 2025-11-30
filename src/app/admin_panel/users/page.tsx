@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { Input, PrimaryBtn } from "@/components/Dashboard";
 import Pagination from "@/components/AdminPanel/Pagination";
 import UserEditor from "@/components/AdminPanel/UserEditor";
-import { User } from "@/lib/User";
+import { User, UserSearchFilters } from "@/lib/User";
 import { useUI } from "@/context/UIContext";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -25,7 +25,7 @@ export default function Users() {
     const [showUserEditor, setShowUserEditor] = useState<number | null>(null);
     async function fetchUsers(page: number = 1) {
         setLoading(true);
-        let searchData: Record<string, any> = {};
+        const searchData: UserSearchFilters = {};
         setSearchEmail(searchEmail.trim());
         setSearchUsername(searchUsername.trim());
         if (searchEmail.length) searchData["email"] = searchEmail;

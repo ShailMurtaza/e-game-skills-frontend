@@ -1,4 +1,4 @@
-export default [
+const routes = [
     "/auth",
     "/admin_panel",
     "/team_dashboard",
@@ -6,3 +6,5 @@ export default [
     "/select_role",
     "/messages",
 ];
+
+export default routes;

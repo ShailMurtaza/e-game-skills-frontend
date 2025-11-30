@@ -3,6 +3,7 @@ import { useUI } from "@/context/UIContext";
 import { useRouter } from "next/navigation";
 import { getAuthData } from "./authClientData";
 import RoleProfilePaths from "@/lib/RoleProfilePaths";
+import { UserProfile } from "@/lib/User";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,7 +24,7 @@ export default function useSignin() {
             const loginData = await res.json();
             if (!res.ok) throw new Error(loginData.message || "Signin Failed");
 
-            const userData = await getAuthData();
+            const userData: UserProfile = await getAuthData();
 
             if (userData.role) {
                 // 3. Redirect based on role
@@ -36,11 +37,15 @@ export default function useSignin() {
                 }
             }
             return { result: true, action: null };
-        } catch (err: any) {
-            notify(err.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
             setLoading(false);
-            var action = null;
-            if (err.message.includes("Verify")) action = "verify";
+            let action: string | null = null;
+            if (message.includes("Verify")) action = "verify";
             return { result: false, action: action };
         }
     }

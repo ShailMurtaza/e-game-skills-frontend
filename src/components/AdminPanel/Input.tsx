@@ -11,7 +11,7 @@ export default function Input({
     type: string;
     value?: string;
     placeholder: string;
-    onChange: (data: any) => void;
+    onChange: (data: string) => void;
 }) {
     return (
         <label className="text-xs text-gray-400 w-full">

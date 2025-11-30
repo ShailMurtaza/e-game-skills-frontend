@@ -24,8 +24,12 @@ export default function useRecoverAccount() {
 
             notify("Password Recovered", "success");
             return true;
-        } catch (err: any) {
-            notify(err.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
             return false;
         } finally {
             setLoading(false);

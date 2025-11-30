@@ -1,7 +1,7 @@
 export type GameAttr = {
     id?: number;
     name: string;
-    game_id: number;
+    game_id?: number;
     action?: "create" | "update" | "delete";
 };
 

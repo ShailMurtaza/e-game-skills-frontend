@@ -5,7 +5,7 @@ export default function Pagination({
 }: {
     page: number;
     pages: number;
-    setPage: (data: any) => void;
+    setPage: (data: number) => void;
 }) {
     return (
         <div className="mt-6 flex items-center justify-between">

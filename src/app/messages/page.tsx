@@ -19,9 +19,9 @@ export default function Messages() {
     const { setLoading, notify } = useUI();
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [isConversationsFetched, setIsConversationsFetched] =
-        useState<Boolean>(false);
+        useState<boolean>(false);
     const [isConversationsCombined, setIsConversationsCombined] =
-        useState<Boolean>(false);
+        useState<boolean>(false);
     const {
         receivedConversations,
         setContactedUsers,
@@ -41,8 +41,12 @@ export default function Messages() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
             return data;
-        } catch (e: any) {
-            notify(e.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
             return null;
         } finally {
             setLoading(false);
@@ -57,8 +61,8 @@ export default function Messages() {
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
-            setConversations((prev) => {
-                let conversations = [
+            setConversations(() => {
+                const conversations = [
                     ...data.map((c: Conversation) => {
                         return {
                             ...c,
@@ -120,9 +124,9 @@ export default function Messages() {
             receivedConversations,
         );
         let combinedConvo: Conversation[] = [];
-        conversations.forEach((convo1: Conversation, x: number) => {
+        conversations.forEach((convo1: Conversation) => {
             let found = false;
-            receivedConversations.forEach((convo2: Conversation, y: number) => {
+            receivedConversations.forEach((convo2: Conversation) => {
                 if (convo1.id === convo2.id) {
                     combinedConvo.push({
                         ...convo1,
@@ -152,7 +156,7 @@ export default function Messages() {
 
     // Update active userConversation if allConversations updates
     useEffect(() => {
-        let conversation: Conversation | null =
+        const conversation: Conversation | null =
             allConversations.find((c) => c.id === user_id) ?? null;
         if (user_id && conversation) {
             setUserConversation(conversation);
@@ -176,7 +180,8 @@ export default function Messages() {
                                 router.push(`?user=${c.id}`);
                             }}
                             isOnline={
-                                onlineUsers.find((u) => u.id === c.id)?.online!
+                                onlineUsers.find((u) => u.id === c.id)
+                                    ?.online ?? false
                             }
                             unreadMsgs={
                                 c.id !== userConversation?.id

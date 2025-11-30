@@ -71,8 +71,12 @@ export default function Auth() {
                                     notify("Your Role Has been set", "success");
                                     router.push(RoleProfilePaths[accountType]);
                                     return true;
-                                } catch (err: any) {
-                                    notify(err.message, "error");
+                                } catch (err: unknown) {
+                                    const message =
+                                        err instanceof Error
+                                            ? err.message
+                                            : "An unexpected error occurred";
+                                    notify(message, "error");
                                     setLoading(false);
                                     return false;
                                 }

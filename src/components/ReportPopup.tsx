@@ -8,11 +8,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function ReportPopup({
     username,
     user_id,
-    setReport,
+    setReportAction,
 }: {
     username: string;
     user_id: number;
-    setReport: (data: any) => void;
+    setReportAction: (data: boolean) => void;
 }) {
     const [reason, setReason] = useState("");
     const [description, setDescription] = useState("");
@@ -36,9 +36,13 @@ export default function ReportPopup({
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
             notify(data.message);
-            setReport(false);
-        } catch (e: any) {
-            notify(e.message, "error");
+            setReportAction(false);
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
             return null;
         } finally {
             setLoading(false);
@@ -83,7 +87,7 @@ export default function ReportPopup({
                     <button
                         className="px-4 py-2 rounded-lg transition bg-zinc-700 hover:bg-zinc-600"
                         onClick={() => {
-                            setReport(false);
+                            setReportAction(false);
                         }}
                     >
                         Cancel

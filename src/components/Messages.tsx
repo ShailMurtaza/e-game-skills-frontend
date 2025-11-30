@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export function Profile({
     username,
@@ -18,12 +20,15 @@ export function Profile({
             onClick={onClick}
         >
             <div className="flex flex-row items-center gap-5">
-                <img
+                <Image
                     src={
                         avatar !== null
                             ? `${API_URL}/users/avatar/${avatar}`
                             : "/profile.png"
                     }
+                    alt="Profile"
+                    width={50}
+                    height={0}
                     className="rounded-full w-[50px] h-[50px]"
                 />
                 <div className="flex-1">

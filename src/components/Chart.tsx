@@ -21,31 +21,23 @@ ChartJS.register(
     Legend,
 );
 
-interface ChartDataPoint {
+type ChartDataPoint = {
     date: string;
-    value: string; // or number if you parse it
-}
+    value: number;
+};
 
-interface ChartProps {
-    data: ChartDataPoint[];
+type ChartProps = {
+    dataPoints: ChartDataPoint[];
     title?: string;
-}
+};
 
-export default function Chart({ data, title = "Chart" }: ChartProps) {
-    const sortedData = [...data]
-        .map((item) => ({
-            ...item,
-            value: parseFloat(item.value) || 0,
-        }))
-        .sort(
-            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
+export default function Chart({ dataPoints, title = "Chart" }: ChartProps) {
     const chartData = {
-        labels: sortedData.map((d) => d.date),
+        labels: dataPoints.map((d) => d.date),
         datasets: [
             {
                 label: title,
-                data: sortedData.map((d) => d.value),
+                data: dataPoints.map((d) => d.value),
                 borderColor: "rgb(59, 130, 246)", // blue-500
                 backgroundColor: "rgba(59, 130, 246, 0.2)",
                 tension: 0.4, // smooth lines

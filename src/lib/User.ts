@@ -6,7 +6,6 @@ export type UserProfile = {
     region?: string;
     country?: string;
     role?: "player" | "team" | "admin" | "pending";
-    region_id?: number;
     avatar?: string;
     description?: string;
 };
@@ -24,4 +23,11 @@ export type PublicUser = {
     region: string;
     avatar: string;
     description: string;
+};
+
+export type UserSearchFilters = {
+    email?: string;
+    username?: string;
+    role?: string;
+    banned?: boolean;
 };

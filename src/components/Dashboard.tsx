@@ -72,7 +72,7 @@ export function Input({
     );
 }
 
-export function Attributes({
+export function Attributes<T extends AttributesType>({
     title,
     readonly = false,
     key_input_type = "text",
@@ -84,13 +84,12 @@ export function Attributes({
 }: {
     title: string;
     readonly?: boolean;
-    default_values?: AttributesType;
     key_input_type?: string;
     value_input_type?: string;
     key_placeholder: string;
     value_placeholder: string;
-    parentAttributes: AttributesType;
-    parentSetAttributes: (data: any) => void;
+    parentAttributes: T[];
+    parentSetAttributes: React.Dispatch<React.SetStateAction<T[]>>;
 }) {
     return (
         <div className="mb-5">
@@ -113,7 +112,7 @@ export function Attributes({
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {
-                                    var newAttributes = [...parentAttributes];
+                                    const newAttributes = [...parentAttributes];
                                     newAttributes[i].name = e.target.value;
                                     parentSetAttributes(newAttributes);
                                 }}
@@ -127,7 +126,7 @@ export function Attributes({
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {
-                                    var newAttributes = [...parentAttributes];
+                                    const newAttributes = [...parentAttributes];
                                     newAttributes[i].value = e.target.value;
                                     parentSetAttributes(newAttributes);
                                 }}
@@ -135,7 +134,7 @@ export function Attributes({
                             {!readonly && (
                                 <DangerBtn
                                     onClick={() => {
-                                        var newAttributes = [
+                                        const newAttributes = [
                                             ...parentAttributes,
                                         ];
                                         newAttributes.splice(i, 1);
@@ -153,7 +152,7 @@ export function Attributes({
                         onClick={() => {
                             parentSetAttributes([
                                 ...parentAttributes,
-                                { name: "", value: "" },
+                                { name: "", value: "" } as T,
                             ]);
                         }}
                         className="w-fit p-3 font-semibold rounded-md cursor-pointer bg-emerald-700 text-white shadow hover:bg-emerald-500 transition"

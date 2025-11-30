@@ -8,6 +8,8 @@ import { useUI } from "@/context/UIContext";
 import Chart from "@/components/Chart";
 import Link from "next/link";
 import { PublicUser } from "@/lib/User";
+import { WinsLossType, UserGameSearchFormated } from "@/lib/UserGames";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function Portfolio({
@@ -18,7 +20,7 @@ export default function Portfolio({
     const { user_id } = React.use(params);
     const { setLoading, notify } = useUI();
     const [user, setUser] = useState<PublicUser | null>(null);
-    const [userGames, setUserGames] = useState<any[]>([]);
+    const [userGames, setUserGames] = useState<UserGameSearchFormated[]>([]);
     useEffect(() => {
         async function fetchUser() {
             setLoading(true);
@@ -27,8 +29,12 @@ export default function Portfolio({
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || "Failed");
                 setUser(data);
-            } catch (e: any) {
-                notify(e.message, "error");
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : "An unexpected error occurred";
+                notify(message, "error");
             } finally {
                 setLoading(false);
             }
@@ -41,28 +47,35 @@ export default function Portfolio({
                 );
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || "Failed");
-                const transformed_user_games = data.map((user_game: any) => {
-                    const { WinsLoss, ...rest } = user_game; // Remove WinsLoss
-                    var wins: { date: string; value: number }[] = [];
-                    var losses: { date: string; value: number }[] = [];
-                    WinsLoss.map((data: any) => {
-                        const date = new Date(data.date)
-                            .toISOString()
-                            .split("T")[0];
-                        if (data.type === "Win")
-                            wins.push({ date: date, value: data.value });
-                        else if (data.type === "Loss")
-                            losses.push({ date: date, value: data.value });
-                    });
-                    return {
-                        ...rest,
-                        wins: wins,
-                        losses: losses,
-                    };
-                });
+                const transformed_user_games = data.map(
+                    (user_game: { WinsLoss: WinsLossType[] }) => {
+                        const { WinsLoss, ...rest } = user_game; // Remove WinsLoss
+                        const wins: { date: string; value: number }[] = [];
+                        const losses: { date: string; value: number }[] = [];
+                        WinsLoss.map((data: WinsLossType) => {
+                            const date = new Date(data.date)
+                                .toISOString()
+                                .split("T")[0];
+                            if (data.type === "Win")
+                                wins.push({ date: date, value: data.value });
+                            else if (data.type === "Loss")
+                                losses.push({ date: date, value: data.value });
+                        });
+                        return {
+                            ...rest,
+                            wins: wins,
+                            losses: losses,
+                        };
+                    },
+                );
+
                 setUserGames(transformed_user_games);
-            } catch (e: any) {
-                notify(e.message, "error");
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : "An unexpected error occurred";
+                notify(message, "error");
             } finally {
                 setLoading(false);
             }
@@ -80,8 +93,11 @@ export default function Portfolio({
                 <section className="bg-zinc-950 rounded-2xl p-8 border border-zinc-800 shadow-xl">
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                         {/* Profile Picture Placeholder */}
-                        <img
-                            className="bg-linear-to-br from-purple-600 to-blue-600 w-32 h-32 rounded-full flex items-center justify-center text-5xl font-bold shadow-2xl"
+                        <Image
+                            width={100}
+                            height={0}
+                            alt="Avatar"
+                            className="bg-linear-to-br from-purple-600 to-blue-600 w-30 h-30 rounded-full flex items-center justify-center text-5xl font-bold shadow-2xl"
                             src={
                                 user?.avatar
                                     ? `${API_URL}/users/avatar/${user?.avatar}`
@@ -130,6 +146,7 @@ export default function Portfolio({
                         <div className="flex flex-wrap gap-3">
                             {userGames.map((user_game) => {
                                 const game = user_game.game;
+                                if (!game) return;
                                 return (
                                     <button
                                         key={game.id}
@@ -152,7 +169,7 @@ export default function Portfolio({
                 {currentGame && (
                     <section className="bg-zinc-950 rounded-2xl p-8 border border-zinc-800 shadow-xl space-y-8">
                         <h2 className="text-3xl font-bold text-center bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                            {currentGame.game.name} Stats
+                            {currentGame?.game?.name} Stats
                         </h2>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -164,8 +181,8 @@ export default function Portfolio({
                                         Core Information
                                     </h3>
                                     <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame.attribute_values.map(
-                                            (info: any, idx: number) => (
+                                        {currentGame?.attribute_values?.map(
+                                            (info, idx: number) => (
                                                 <div
                                                     key={idx}
                                                     className="flex justify-between items-center py-2 border-b border-zinc-800 last:border-0"
@@ -191,8 +208,8 @@ export default function Portfolio({
                                         Additional Information
                                     </h3>
                                     <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame.custom_attributes.map(
-                                            (info: any, idx: number) => (
+                                        {currentGame?.custom_attributes?.map(
+                                            (info, idx: number) => (
                                                 <div
                                                     key={idx}
                                                     className="flex justify-between items-center py-2 border-b border-zinc-800 last:border-0"
@@ -219,8 +236,8 @@ export default function Portfolio({
                                         External Profiles
                                     </h3>
                                     <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame.Links.map(
-                                            (link: any, idx: number) => (
+                                        {currentGame?.Links?.map(
+                                            (link, idx: number) => (
                                                 <a
                                                     key={idx}
                                                     href={link.value}
@@ -260,7 +277,7 @@ export default function Portfolio({
                                         </h3>
                                         <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800 min-h-[140px]">
                                             {currentGame.wins.map(
-                                                (win: any, idx: number) => (
+                                                (win, idx: number) => (
                                                     <div
                                                         key={idx}
                                                         className="flex justify-between text-sm"
@@ -285,7 +302,7 @@ export default function Portfolio({
                                         </h3>
                                         <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800 min-h-[140px]">
                                             {currentGame.losses.map(
-                                                (loss: any, idx: number) => (
+                                                (loss, idx: number) => (
                                                     <div
                                                         key={idx}
                                                         className="flex justify-between text-sm"
@@ -311,14 +328,14 @@ export default function Portfolio({
                                     <RiTrophyLine className="w-5 h-5" />
                                     Wins
                                 </h3>
-                                <Chart data={currentGame.wins} />
+                                <Chart dataPoints={currentGame.wins} />
                             </div>
                             <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800">
                                 <h3 className="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2 justify-center">
                                     <RiCloseLargeFill className="w-5 h-5" />
                                     Losses
                                 </h3>
-                                <Chart data={currentGame.losses} />
+                                <Chart dataPoints={currentGame.losses} />
                             </div>
                         </div>
                     </section>

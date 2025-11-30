@@ -10,7 +10,7 @@ export default function TeamDashboard() {
     useEffect(() => {
         // Set loading to false so that if previous redirect set it to true, it doesn't keep showing loading
         setLoading(false);
-    }, []);
+    }, [setLoading]);
     const { isLoading, isAuthenticated, userProfile } = useAuth();
     if (
         isLoading ||

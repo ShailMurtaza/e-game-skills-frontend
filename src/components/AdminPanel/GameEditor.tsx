@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Overlay from "@/components/Overlay";
 import { motion } from "framer-motion";
 import { Game, GameAttr } from "@/lib/Game";
 import { GameAttributes } from "./GameAttributes";
@@ -10,12 +9,12 @@ import { useUI } from "@/context/UIContext";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function GameEditor({
     game,
-    setShowGameEditor,
-    setGame,
+    setShowGameEditorAction,
+    setGameAction,
 }: {
     game: Game;
-    setShowGameEditor: (data: number | null) => void;
-    setGame: (data: Game) => void;
+    setShowGameEditorAction: (data: number | null) => void;
+    setGameAction: (data: Game) => void;
 }) {
     const { setLoading, notify } = useUI();
     const [form, setForm] = useState<Game>({ ...game });
@@ -48,7 +47,7 @@ export default function GameEditor({
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Failed");
             notify(data.message, "success");
-            setGame(data.game);
+            setGameAction(data.game);
         } catch (e: unknown) {
             const message =
                 e instanceof Error ? e.message : "An unexpected error occurred";
@@ -96,7 +95,7 @@ export default function GameEditor({
                             label="Close"
                             variant="neutral"
                             onClick={() => {
-                                setShowGameEditor(null);
+                                setShowGameEditorAction(null);
                             }}
                         />
                     </div>

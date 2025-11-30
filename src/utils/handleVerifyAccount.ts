@@ -20,8 +20,10 @@ export default function useVerifyAccount() {
 
             notify("Your account is verified", "success");
             return true;
-        } catch (err: any) {
-            notify(err.message, "error");
+        } catch (e: unknown) {
+            const message =
+                e instanceof Error ? e.message : "An unexpected error occurred";
+            notify(message, "error");
             return false;
         } finally {
             setLoading(false);

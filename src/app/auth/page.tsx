@@ -412,9 +412,9 @@ export default function Auth() {
                     </span>
                     <button
                         onClick={() => {
-                            action === "signin"
-                                ? router.push("?action=signup")
-                                : router.push("?action=signin");
+                            if (action === "signin")
+                                router.push("?action=signup");
+                            else router.push("?action=signin");
                         }}
                         className="text-indigo-400 font-medium hover:text-indigo-300 hover:underline"
                     >

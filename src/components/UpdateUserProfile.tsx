@@ -14,7 +14,6 @@ export default function UpdateUserProfile() {
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [username, setUsername] = useState<string>("");
     const [userDescription, setUserDescription] = useState<string | null>(null);
-    const [userId, setUserId] = useState<number | null>(null);
     const [userCountry, setUserCountry] = useState<string | null>(null);
     const [userRegion, setUserRegion] = useState<string | null>(null);
     const { setLoading, notify } = useUI();
@@ -24,7 +23,6 @@ export default function UpdateUserProfile() {
         setUserDescription(userProfile?.description ?? null);
         setUserCountry(userProfile?.country ?? null);
         setUserRegion(userProfile?.region ?? null);
-        setUserId(userProfile?.id ?? null);
     }, [userProfile]);
 
     const handleSaveProfile = async () => {
@@ -45,8 +43,12 @@ export default function UpdateUserProfile() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message ?? "Error");
             notify("Profile Updated");
-        } catch (err: any) {
-            notify(err.message, "error");
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "An unexpected error occurred";
+            notify(message, "error");
         } finally {
             setLoading(false);
         }

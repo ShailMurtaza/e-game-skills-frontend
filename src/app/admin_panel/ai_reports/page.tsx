@@ -1,7 +1,5 @@
 "use client";
 import Pagination from "@/components/AdminPanel/Pagination";
-import { Report } from "@/lib/Report";
-import ReportViewer from "@/components/AdminPanel/ReportViewer";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useUI } from "@/context/UIContext";
@@ -31,7 +29,7 @@ export default function Reports() {
     async function fetchReports(page: number = 1) {
         try {
             setLoading(true);
-            const searchData: Record<string, any> = {};
+            const searchData: { is_reviewed?: boolean } = {};
             if (searchReviewed !== "all")
                 searchData["is_reviewed"] = searchReviewed === "true";
             const res = await fetch(`${API_URL}/aireports?page=${page}`, {

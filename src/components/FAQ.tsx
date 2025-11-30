@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
 import { CgGames } from "react-icons/cg";
@@ -43,7 +44,7 @@ const faqs = [
     {
         question: (
             <div className="flex flex-row items-center gap-10">
-                <img src="free.webp" width="30px" />
+                <Image alt="Free" src="/free.webp" width={30} height={0} />
                 Is E Game Skills free to use?
             </div>
         ),

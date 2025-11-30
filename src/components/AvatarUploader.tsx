@@ -1,6 +1,7 @@
 // app/components/AvatarUploader.tsx
 "use client";
 
+import Image from "next/image";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaCamera as Camera } from "react-icons/fa";
@@ -14,7 +15,6 @@ export default function AvatarUploader({
     onFileSelect,
     currentAvatar,
 }: AvatarUploaderProps) {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>(currentAvatar);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -25,11 +25,10 @@ export default function AvatarUploader({
             const file = acceptedFiles[0];
             if (!file) return;
 
-            setSelectedFile(file);
             setPreview(URL.createObjectURL(file));
             onFileSelect(file);
         },
-        [selectedFile],
+        [onFileSelect],
     );
 
     const { getInputProps } = useDropzone({
@@ -51,10 +50,11 @@ export default function AvatarUploader({
         <div className="relative inline-block">
             <div className="group relative w-30 h-30">
                 {preview ? (
-                    <img
+                    <Image
                         src={preview}
                         alt="Avatar preview"
-                        className="w-full h-full rounded-full object-cover border-4 border-white shadow-lg"
+                        className="rounded-full object-cover border-4 border-white shadow-lg"
+                        fill
                     />
                 ) : (
                     <div className="flex items-center justify-center w-full h-full bg-gray-200 rounded-full">

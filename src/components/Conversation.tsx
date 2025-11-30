@@ -9,6 +9,7 @@ import ReportPopup from "./ReportPopup";
 import { UserProfile } from "@/lib/User";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import formatDate from "@/lib/FormatDate";
+import Image from "next/image";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserConversation({
@@ -69,7 +70,7 @@ export default function UserConversation({
                 <ReportPopup
                     username={conversation.username}
                     user_id={conversation.id}
-                    setReport={setReport}
+                    setReportAction={setReport}
                 />
             )}
             <div className="absolute top-0 w-full text-lg font-semibold bg-zinc-900 p-4 z-10">
@@ -82,12 +83,15 @@ export default function UserConversation({
                             <MdOutlineArrowBackIosNew size={25} />
                         </button>
                     )}
-                    <img
+                    <Image
                         src={
                             conversation.avatar !== null
                                 ? `${API_URL}/users/avatar/${conversation.avatar}`
                                 : "/profile.png"
                         }
+                        width={50}
+                        height={50}
+                        alt="Profile Img"
                         className="rounded-full w-[50px] h-[50px]"
                     />
                     <span className="lg:text-base text-sm">
@@ -99,12 +103,15 @@ export default function UserConversation({
                                 <span className="lg:text-base text-sm">
                                     {receiver.username}
                                 </span>
-                                <img
+                                <Image
                                     src={
                                         receiver.avatar !== null
                                             ? `${API_URL}/users/avatar/${receiver.avatar}`
                                             : "/profile.png"
                                     }
+                                    width={50}
+                                    height={50}
+                                    alt="Profile Img"
                                     className="rounded-full w-[50px] h-[50px]"
                                 />
                             </div>

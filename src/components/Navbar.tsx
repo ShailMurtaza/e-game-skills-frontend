@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useMessageProvider } from "@/context/messagesContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
+import Image from "next/image";
 
 const play = Play({
     subsets: ["latin"],
@@ -164,7 +165,7 @@ export default function Navbar() {
         >
             <section className="lg:block lg:w-fit w-full flex flex-row justify-between items-center mr-5">
                 <Link href="/" className="lg:m-0 ml-10 mt-2">
-                    <img src="/icon.svg" width="100" alt="Logo" />
+                    <Image src="/icon.svg" width={100} height={0} alt="Logo" />
                 </Link>
                 {navOpen ? (
                     <motion.div

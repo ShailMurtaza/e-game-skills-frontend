@@ -17,7 +17,7 @@ export function GameAttributes({
     key_input_type?: string;
     placeholder: string;
     parentAttributes: GameAttr[];
-    parentSetAttributes: (data: any) => void;
+    parentSetAttributes: (data: GameAttr[]) => void;
 }) {
     return (
         <div className="mb-5">
@@ -37,7 +37,7 @@ export function GameAttributes({
                                     value={attr.name}
                                     placeholder="Enter Attribute Name e.g., Rank, WinRate etc"
                                     onChange={(value: string) => {
-                                        let newAttributes =
+                                        const newAttributes =
                                             parentAttributes.map(
                                                 (game_attr, idx) =>
                                                     idx === i
@@ -71,10 +71,10 @@ export function GameAttributes({
                                                 parentAttributes.map(
                                                     (game_attr, idx) =>
                                                         idx === i
-                                                            ? {
+                                                            ? ({
                                                                   ...game_attr,
                                                                   action: "delete",
-                                                              }
+                                                              } as GameAttr)
                                                             : game_attr,
                                                 );
                                             parentSetAttributes(newAttributes);

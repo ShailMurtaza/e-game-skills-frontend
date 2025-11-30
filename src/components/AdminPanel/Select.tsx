@@ -9,7 +9,7 @@ export default function Select({
     label?: string;
     value?: string;
     options: SelectOptionsType;
-    onChange: (data: any) => void;
+    onChange: (data: string) => void;
 }) {
     return (
         <label className="text-xs text-gray-400">

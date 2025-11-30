@@ -191,6 +191,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         contactedUsersRef.current = contactedUsers;
     }, [contactedUsers]);
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (wsRef.current && contactedUsersRef.current.length) {

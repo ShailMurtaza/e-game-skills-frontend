@@ -27,8 +27,12 @@ export function UsersDataProvider({ children }: { children: React.ReactNode }) {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || "Failed");
                 setUsersCount(data);
-            } catch (e: any) {
-                notify(e.message, "error");
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : "An unexpected error occurred";
+                notify(message, "error");
             } finally {
                 setLoading(false);
             }
