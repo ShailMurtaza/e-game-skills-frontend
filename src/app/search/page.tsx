@@ -72,7 +72,7 @@ export default function SearchPage() {
     const handleAttributeChange = (attr_id: number, value: string) => {
         setAttributeFilters((prev) => {
             if (value === "") {
-                const { [attr_id]: _, ...rest } = prev;
+                const { [attr_id]: _removed, ...rest } = prev;
                 return rest;
             }
             return {
