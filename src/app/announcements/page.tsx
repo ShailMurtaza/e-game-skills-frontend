@@ -6,6 +6,7 @@ import { ImCross } from "react-icons/im";
 import { useUI } from "@/context/UIContext";
 import { Announcement } from "@/lib/Announcement";
 import fetchAnnouncements from "@/lib/FetchAnnouncements";
+import { Input } from "@/components/Dashboard";
 
 function DisplayAnnouncement({
     title = "",
@@ -19,7 +20,7 @@ function DisplayAnnouncement({
     return (
         <>
             <Overlay display="" />
-            <div className="fixed flex justify-center w-full z-30">
+            <div className="fixed flex justify-center w-screen left-0 z-30">
                 <motion.div
                     initial={{ opacity: 0, y: -50, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -53,6 +54,7 @@ export default function Announcements() {
         null,
     );
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+    const [filter, setFilter] = useState<string>("");
     const { setLoading, notify } = useUI();
     useEffect(() => {
         async function loadAnnouncements() {
@@ -81,23 +83,39 @@ export default function Announcements() {
             </AnimatePresence>
 
             <h1 className="text-center mb-10">Announcements</h1>
-            {announcements.map((announcement, i) => (
-                <div
-                    key={i}
-                    className="p-5 flex flex-col gap-2 cursor-pointer bg-zinc-900 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-101 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                    onClick={() => {
-                        setShowAnnouncement(i);
-                    }}
-                >
-                    <h3>{announcement.title}</h3>
-                    <div className="lg:text-base text-sm line-clamp-2">
-                        {announcement.announcement}
-                    </div>
-                    <div className="lg:text-sm text-xs">
-                        {announcement.date}
-                    </div>
-                </div>
-            ))}
+            <Input
+                name="Filter"
+                type="text"
+                value={filter}
+                placeholder="Enter text to filter ..."
+                onChange={(e) => {
+                    setFilter(e.target.value);
+                }}
+            />
+            {announcements.map((announcement, i) => {
+                if (
+                    (announcement.title + " " + announcement.announcement)
+                        .toLowerCase()
+                        .includes(filter.toLowerCase())
+                )
+                    return (
+                        <div
+                            key={i}
+                            className="p-5 flex flex-col gap-2 cursor-pointer bg-zinc-900 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-101 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                            onClick={() => {
+                                setShowAnnouncement(i);
+                            }}
+                        >
+                            <h3>{announcement.title}</h3>
+                            <div className="lg:text-base text-sm line-clamp-2">
+                                {announcement.announcement}
+                            </div>
+                            <div className="lg:text-sm text-xs w-fit text-zinc-100 bg-zinc-800 rounded-2xl py-1 px-2 shadow-white shadow-xs">
+                                {announcement.date}
+                            </div>
+                        </div>
+                    );
+            })}
         </main>
     );
 }
