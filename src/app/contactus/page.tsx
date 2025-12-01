@@ -1,40 +1,9 @@
 "use client";
 
+import { InputAuth } from "@/components/Auth";
+import { useAuth } from "@/context/authContext";
 import { useUI } from "@/context/UIContext";
-import React, { useState } from "react";
-
-function InputField({
-    name,
-    type,
-    placeholder,
-    label,
-    value,
-    onChangeAction,
-}: {
-    name: string;
-    value: string;
-    type: string;
-    placeholder: string;
-    label: string;
-    onChangeAction: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-    return (
-        <div>
-            <label className="block text-sm font-medium text-gray-300">
-                {label}
-            </label>
-            <input
-                name={name}
-                type={type}
-                value={value}
-                placeholder={placeholder}
-                onChange={onChangeAction}
-                required
-                className="mt-2 block w-full rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3"
-            />
-        </div>
-    );
-}
+import React, { useState, useEffect } from "react";
 
 function SubmitBtn({ text }: { text: string }) {
     return (
@@ -53,6 +22,13 @@ export default function Auth() {
     const [name, setName] = useState<string>("");
     const [message, setMessage] = useState<string>("");
     const { setLoading, notify } = useUI();
+    const { isAuthenticated, userProfile } = useAuth();
+    useEffect(() => {
+        if (isAuthenticated && userProfile?.email && userProfile?.username) {
+            setEmail(userProfile.email);
+            setName(userProfile.username);
+        }
+    }, [isAuthenticated, userProfile]);
     async function submitMessage() {
         setLoading(true);
         try {
@@ -94,25 +70,27 @@ export default function Auth() {
                     >
                         <h3 className="font-bold text-gray-100">Contact Us</h3>
                         <div className="flex lg:flex-row flex-col justify-center gap-5 my-5">
-                            <InputField
+                            <InputAuth
                                 name="email"
                                 type="email"
-                                placeholder="Enter you Email address"
                                 label="Email"
+                                placeholder="Enter you Email address"
                                 value={email}
-                                onChangeAction={(
+                                disabled={isAuthenticated}
+                                onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {
                                     setEmail(e.target.value);
                                 }}
                             />
-                            <InputField
+                            <InputAuth
                                 name="name"
                                 type="text"
-                                placeholder="Enter you name"
                                 label="Name"
+                                placeholder="Enter your name"
                                 value={name}
-                                onChangeAction={(
+                                disabled={isAuthenticated}
+                                onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>,
                                 ) => {
                                     setName(e.target.value);

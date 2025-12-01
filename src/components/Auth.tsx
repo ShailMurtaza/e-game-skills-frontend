@@ -7,6 +7,7 @@ export function InputAuth({
     type,
     label,
     value = "",
+    placeholder = "",
     disabled = false,
     onChange,
 }: {
@@ -14,6 +15,7 @@ export function InputAuth({
     type: string;
     label: string;
     value?: string;
+    placeholder?: string;
     disabled?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }) {
@@ -31,6 +33,7 @@ export function InputAuth({
                     value={value}
                     onChange={onChange}
                     disabled={disabled}
+                    placeholder={placeholder}
                     required
                     className="mt-2 block w-full rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3 disabled:cursor-not-allowed disabled:opacity-40"
                 />
