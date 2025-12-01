@@ -23,6 +23,7 @@ export type PublicUser = {
     region: string;
     avatar: string;
     description: string;
+    banned: boolean;
 };
 
 export type UserSearchFilters = {

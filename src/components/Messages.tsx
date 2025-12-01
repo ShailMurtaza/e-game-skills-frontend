@@ -7,12 +7,14 @@ export function Profile({
     onClick,
     isOnline,
     unreadMsgs,
+    banned = false,
 }: {
     username: string;
     avatar: string | null;
     onClick: () => void;
     isOnline: boolean;
     unreadMsgs: number;
+    banned?: boolean;
 }) {
     return (
         <div
@@ -37,7 +39,7 @@ export function Profile({
                     </h3>
                     <p
                         className={`
-                            text-sm font-medium flex items-center gap-1.5
+                            text-sm flex items-center gap-1.5
                             ${isOnline ? "text-emerald-400" : "text-zinc-500"}
                         `}
                     >
@@ -50,6 +52,14 @@ export function Profile({
                         </span>
                         {isOnline ? "Online" : "Offline"}
                     </p>
+                    {banned && (
+                        <p className="text-sm text-red-500 flex items-center gap-1.5 ">
+                            <span className="relative flex">
+                                <span className="w-2 h-2 rounded-full bg-red-600"></span>
+                            </span>
+                            Banned
+                        </p>
+                    )}
                 </div>
                 {unreadMsgs > 0 && (
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">

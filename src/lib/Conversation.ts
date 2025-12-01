@@ -11,6 +11,7 @@ export type Conversation = {
     id: number;
     username: string;
     avatar: string | null;
+    banned: boolean;
     sent_messages: Message[];
     received_messages: Message[];
 };

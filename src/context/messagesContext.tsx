@@ -33,11 +33,13 @@ type UserConvo = {
         id: number;
         username: string;
         avatar: string;
+        banned: boolean;
     };
     sender: {
         id: number;
         username: string;
         avatar: string;
+        banned: boolean;
     };
 };
 type WSMessagePayload = {
@@ -101,7 +103,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }
     const contactedUsersRef = useRef<number[]>([]);
 
-    function setNewMesssage(message: UserConvo, type: "received" | "sent") {
+    function setNewMessage(message: UserConvo, type: "received" | "sent") {
         const newMessage: Message = {
             id: message.id,
             content: message.content,
@@ -138,6 +140,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                             id: message.sender.id,
                             username: message.sender.username,
                             avatar: message.sender.avatar,
+                            banned: message.sender.banned,
                             sent_messages: [
                                 {
                                     ...newMessage,
@@ -173,6 +176,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                             id: message.receiver.id,
                             username: message.receiver.username,
                             avatar: message.receiver.avatar,
+                            banned: message.receiver.banned,
                             received_messages: [
                                 {
                                     ...newMessage,
@@ -227,7 +231,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                             getUnreadMsg();
                             if (isOpen) {
                                 const message = data.data.data;
-                                setNewMesssage(message, "received");
+                                setNewMessage(message, "received");
                             }
                             notify("New Message", "success");
                             break;
@@ -235,7 +239,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                             getUnreadMsg();
                             if (isOpen) {
                                 const message = data.data.data;
-                                setNewMesssage(message, "sent");
+                                setNewMessage(message, "sent");
                             }
                             break;
                         case "isOnline":
@@ -254,6 +258,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
                 ws.onerror = () => {
                     console.log("WebSocket error. Closing socket...");
                     ws.close();
+                    retry();
                 };
             };
         }

@@ -101,6 +101,7 @@ export default function MessagesPage() {
                             id: user_id,
                             avatar: fetchedUser.avatar,
                             username: fetchedUser.username,
+                            banned: fetchedUser.banned,
                             received_messages: [],
                             sent_messages: [],
                         };
@@ -176,6 +177,7 @@ export default function MessagesPage() {
                             key={c.id}
                             username={c.username}
                             avatar={c.avatar}
+                            banned={c.banned}
                             onClick={() => {
                                 router.push(`?user=${c.id}`);
                             }}
