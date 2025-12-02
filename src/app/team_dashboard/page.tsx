@@ -21,7 +21,7 @@ export default function TeamDashboard() {
     }
     return (
         <main className="pt-[150px] mx-10">
-            <div className="border border-white rounded-2xl bg-neutral-950">
+            <div className="border border-white  bg-gray-950">
                 <UpdateUserProfile />
             </div>
         </main>

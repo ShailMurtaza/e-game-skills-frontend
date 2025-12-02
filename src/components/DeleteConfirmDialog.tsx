@@ -17,7 +17,7 @@ export default function DeleteConfirmDialog({
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={onCancel}
-                        className="px-3 py-1 rounded bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+                        className="px-3 py-1 rounded bg-black-800 text-neutral-300 hover:bg-neutral-700"
                     >
                         Cancel
                     </button>
@@ -25,7 +25,7 @@ export default function DeleteConfirmDialog({
                         onClick={() => {
                             onDelete();
                         }}
-                        className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700"
+                        className="px-3 py-1  bg-red-600 text-white hover:bg-red-700"
                     >
                         Delete
                     </button>

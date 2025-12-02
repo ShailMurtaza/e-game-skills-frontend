@@ -44,16 +44,10 @@ export default function UserEditor({
 
     return (
         <>
-            <div className="fixed inset-0 flex justify-center items-center w-full h-full z-40 bg-black/80">
-                <motion.div
-                    initial={{ opacity: 0, y: -50, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -50, scale: 0.95 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="w-11/12 max-w-4xl p-4 bg-gray-900 rounded border border-gray-800"
-                >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <label className="text-xs text-gray-400">
+            <div className="fixed inset-0 flex justify-start items-start w-full h-full z-40 bg-black">
+                <div className="w-10/12 max-w-3xl p-6 bg-gray-900 rounded-none border border-red-500">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label className="text-sm text-blue-800">
                             Username
                             <input
                                 value={form.username}
@@ -63,20 +57,20 @@ export default function UserEditor({
                                         username: e.target.value,
                                     })
                                 }
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                className="w-full mt-2 bg-green-100 px-3 py-1 text-base outline-none"
                             />
                         </label>
-                        <label className="text-xs text-gray-400">
+                        <label className="text-sm text-red-700">
                             Email
                             <input
                                 value={form.email}
                                 onChange={(e) =>
                                     setForm({ ...form, email: e.target.value })
                                 }
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                className="w-full mt-2 bg-purple-100 px-3 py-1 text-base outline-none"
                             />
                         </label>
-                        <label className="text-xs text-gray-400">
+                        <label className="text-sm text-orange-700">
                             Role
                             <select
                                 value={form.role}
@@ -86,7 +80,7 @@ export default function UserEditor({
                                         role: e.target.value as User["role"],
                                     })
                                 }
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                className="w-full mt-2 bg-blue-100 px-3 py-1 text-base outline-none"
                             >
                                 <option value="pending">Pending</option>
                                 <option value="player">Player</option>
@@ -94,7 +88,7 @@ export default function UserEditor({
                                 <option value="admin">Admin</option>
                             </select>
                         </label>
-                        <label className="text-xs text-gray-400">
+                        <label className="text-sm text-purple-800">
                             Banned
                             <select
                                 value={String(form.banned)}
@@ -104,29 +98,29 @@ export default function UserEditor({
                                         banned: e.target.value === "true",
                                     })
                                 }
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                className="w-full mt-2 bg-pink-100 px-3 py-1 text-base outline-none"
                             >
                                 <option value="false">Un-banned</option>
                                 <option value="true">Banned</option>
                             </select>
                         </label>
-                        <label className="text-xs text-gray-400 col-span-1 md:col-span-2">
+                        <label className="text-sm text-green-800 col-span-1 md:col-span-2">
                             Notes
                             <textarea
                                 value={form?.notes || ""}
                                 onChange={(e) =>
                                     setForm({ ...form, notes: e.target.value })
                                 }
-                                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                                className="w-full mt-2 bg-orange-100 px-3 py-1 text-base outline-none"
                                 rows={3}
                             />
                         </label>
                     </div>
-                    <div className="mt-4 flex flex-row gap-2">
+                    <div className="mt-6 flex flex-row gap-3">
                         <Button
                             label="Open Portfolio"
                             variant="neutral"
-                            className="w-full"
+                            className="w-full bg-red-300 text-black"
                             onClick={() => {
                                 window.open(`/portfolio/${form.id}`, "_blank");
                             }}
@@ -134,7 +128,7 @@ export default function UserEditor({
                         <Button
                             label="Message User"
                             variant="neutral"
-                            className="w-full"
+                            className="w-full bg-red-300 text-black"
                             onClick={() => {
                                 window.open(
                                     `/messages?user=${form.id}`,
@@ -143,22 +137,23 @@ export default function UserEditor({
                             }}
                         />
                     </div>
-
-                    <div className="mt-4 flex gap-2">
+                    <div className="mt-6 flex gap-3">
                         <Button
                             label="Save"
                             variant="primary"
+                            className="bg-blue-400 text-white"
                             onClick={updateUser}
                         />
                         <Button
                             label="Close"
                             variant="neutral"
+                            className="bg-red-400 text-black"
                             onClick={() => {
                                 setShowUserEditor(null);
                             }}
                         />
                     </div>
-                </motion.div>
+                </div>
             </div>
         </>
     );

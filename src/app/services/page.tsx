@@ -46,22 +46,24 @@ const services = [
 
 export default function ServicesPage() {
     return (
-        <div className="pt-[150px] mx-10 min-h-screen bg-black text-gray-100 ">
-            <div className="max-w-5xl mx-auto">
-                <h1 className="text-4xl font-bold text-white mb-12 text-center">
+        <div className="pt-[150px] mx-3 min-h-screen bg-black text-red-700">
+            <div className="max-w-3xl mx-auto">
+                <h1 className="text-3xl font-normal text-blue-900 mb-4 text-left underline">
                     Our Services
                 </h1>
-                <div className="grid md:grid-cols-2 gap-8 select-none">
+
+                <div className="grid md:grid-cols-2 gap-3 select-text">
                     {services.map((service, index) => (
                         <Link
                             href={service.link}
                             key={index}
-                            className="bg-zinc-900 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] cursor-pointer"
+                            className="bg-green-300 p-3 rounded-sm transition-none cursor-default border-2 border-purple-700 hover:bg-pink-200"
                         >
-                            <h2 className="text-2xl font-semibold text-white mb-3">
+                            <h2 className="text-xl font-light text-black mb-1 tracking-widest">
                                 {service.title}
                             </h2>
-                            <p className="text-gray-400 text-sm leading-relaxed">
+
+                            <p className="text-gray-900 text-xs leading-snug italic">
                                 {service.description}
                             </p>
                         </Link>

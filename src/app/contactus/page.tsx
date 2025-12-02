@@ -9,7 +9,7 @@ function SubmitBtn({ text }: { text: string }) {
     return (
         <button
             type="submit"
-            className="w-full px-4 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-500 transition"
+            className="w-full px-4 py-3  bg-indigo-900 text-white"
         >
             {text}
         </button>
@@ -58,18 +58,20 @@ export default function Auth() {
         }
     }
     return (
-        <main className="pt-[150px] md:mx-10 mx-4 min-h-screen flex items-center justify-center bg-black text-gray-100">
-            <div className="w-full lg:max-w-fit bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-x-hidden">
-                <section className="flex flex-row gap-10 justify-center p-8 min-h-[520px]">
+        <main className="pt-[150px] md:mx-10 mx-4 min-h-screen flex items-center justify-center text-green-900">
+            <div className="w-full lg:max-w-fit bg-yellow-300 rounded-none overflow-x-hidden">
+                <section className="flex flex-row gap-2 justify-start p-6 min-h-[520px] bg-purple-100">
                     <form
-                        className="flex flex-col justify-between w-full"
+                        className="flex flex-col justify-start w-full gap-4"
                         onSubmit={(e) => {
                             e.preventDefault();
                             submitMessage();
                         }}
                     >
-                        <h3 className="font-bold text-gray-100">Contact Us</h3>
-                        <div className="flex lg:flex-row flex-col justify-center gap-5 my-5">
+                        <h3 className="font-normal text-red-700 text-xl">
+                            Contact Us
+                        </h3>
+                        <div className="flex lg:flex-row flex-col justify-start gap-2 my-3">
                             <InputAuth
                                 name="email"
                                 type="email"
@@ -97,14 +99,14 @@ export default function Auth() {
                                 }}
                             />
                         </div>
-                        <div className="my-5">
-                            <label className="block text-sm font-medium text-gray-300">
+                        <div className="my-3 bg-orange-100 p-2 rounded-md">
+                            <label className="block text-sm font-normal text-blue-800">
                                 Message
                             </label>
                             <textarea
                                 name="msg"
                                 placeholder="Type your message"
-                                className="w-full min-h-[200px] mt-2 block rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3"
+                                className="w-full min-h-[200px] mt-2 block rounded-none bg-white text-black placeholder-purple-700 p-2"
                                 value={message}
                                 onChange={(e) => {
                                     setMessage(e.target.value);

@@ -87,17 +87,17 @@ export default function Portfolio({
     const currentGame = userGames.find((g) => g.game_id === activeGame)!;
 
     return (
-        <main className="pt-[200px] min-h-screen bg-black text-gray-100">
-            <div className="max-w-7xl mx-auto space-y-12">
+        <main className="pt-[150px] min-h-screen bg-zinc-800 text-black font-mono">
+            <div className="max-w-3xl mx-auto space-y-6 border-4 border-red-500 p-4 bg-yellow-200">
                 {/* Section 1: User Data */}
-                <section className="bg-zinc-950 rounded-2xl p-8 border border-zinc-800 shadow-xl">
-                    <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-                        {/* Profile Picture Placeholder */}
+                <section className="bg-green-400 p-4 border-4 border-blue-500">
+                    <div className="flex flex-col items-center gap-2">
+                        {/* Profile Picture */}
                         <Image
-                            width={100}
-                            height={0}
+                            width={80}
+                            height={80}
                             alt="Avatar"
-                            className="bg-linear-to-br from-purple-600 to-blue-600 w-30 h-30 rounded-full flex items-center justify-center text-5xl font-bold shadow-2xl"
+                            className="bg-pink-500 w-20 h-20 border-2 border-black"
                             src={
                                 user?.avatar
                                     ? `${API_URL}/users/avatar/${user?.avatar}`
@@ -105,30 +105,27 @@ export default function Portfolio({
                             }
                         />
 
-                        <div className="flex-1 text-center md:text-left space-y-3">
-                            <h1 className="text-4xl font-bold bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                        <div className="text-center space-y-1">
+                            <h1 className="text-2xl font-bold text-red-700 underline">
                                 {user?.username}
                             </h1>
                             <Link
-                                href={`mailto:${encodeURIComponent(user?.email || false)}`}
+                                href={`mailto:${encodeURIComponent(user?.email || "")}`}
                                 target="_blank"
-                                className="block text-gray-300 mb-2"
+                                className="block text-blue-800 underline"
                             >
                                 {user?.email}
                             </Link>
-                            <p className="text-gray-400 max-w-2xl">
+                            <p className="text-black bg-white p-1 border-2 border-red-400">
                                 {user?.description}
                             </p>
-                            <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-gray-500">
-                                <IoLocationSharp size={15} />
-                                <span>
-                                    {user?.country} &bull; {user?.region}
-                                </span>
+                            <div className="text-sm text-purple-900">
+                                {user?.country} • {user?.region}
                             </div>
-                            <div className="mt-6">
+                            <div>
                                 <Link
                                     href={`/messages?user=${user_id}`}
-                                    className="p-4 rounded-xl transition bg-emerald-700 hover:bg-emerald-800 text-white font-semibold"
+                                    className="block bg-orange-500 text-black font-bold p-2 mt-2 border-2 border-black"
                                 >
                                     Contact Me
                                 </Link>
@@ -139,11 +136,11 @@ export default function Portfolio({
 
                 {/* Section 2: User Games */}
                 {userGames.length != 0 && (
-                    <section className="space-y-6">
-                        <h2 className="text-2xl font-semibold text-gray-200">
+                    <section className="space-y-2 border-4 border-purple-700 bg-lime-300 p-3">
+                        <h2 className="text-lg font-bold text-red-800">
                             Games I Play
                         </h2>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-1">
                             {userGames.map((user_game) => {
                                 const game = user_game.game;
                                 if (!game) return;
@@ -151,10 +148,10 @@ export default function Portfolio({
                                     <button
                                         key={game.id}
                                         onClick={() => setActiveGame(game.id)}
-                                        className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg border ${
+                                        className={`px-2 py-1 border-2 ${
                                             activeGame === game.id
-                                                ? "bg-linear-to-r from-purple-600 to-blue-600 text-white border-transparent shadow-purple-500/30"
-                                                : "bg-zinc-900 text-gray-300 border-zinc-700 hover:bg-zinc-800 hover:text-white hover:border-zinc-600 hover:shadow-xl"
+                                                ? "bg-blue-600 text-white border-black"
+                                                : "bg-yellow-500 text-red-900 border-red-600"
                                         }`}
                                     >
                                         {game.name}
@@ -167,175 +164,89 @@ export default function Portfolio({
 
                 {/* Section 3: Game Data */}
                 {currentGame && (
-                    <section className="bg-zinc-950 rounded-2xl p-8 border border-zinc-800 shadow-xl space-y-8">
-                        <h2 className="text-3xl font-bold text-center bg-linear-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    <section className="bg-pink-200 p-4 border-4 border-black space-y-4">
+                        <h2 className="text-xl font-bold text-center text-blue-900 underline">
                             {currentGame?.game?.name} Stats
                         </h2>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* Core Stats */}
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-purple-400 mb-3 flex items-center gap-2">
-                                        <RiTrophyLine className="w-5 h-5" />
-                                        Core Information
+                        <div className="grid grid-cols-1 gap-2">
+                            <div>
+                                <h3 className="text-sm font-bold text-red-700">
+                                    Core Info
+                                </h3>
+                                <div className="bg-white p-2 border-2 border-green-700">
+                                    {currentGame?.attribute_values?.map(
+                                        (info, idx: number) => (
+                                            <div
+                                                key={idx}
+                                                className="flex justify-between py-1 border-b-2 border-black"
+                                            >
+                                                <span>
+                                                    {info.game_attribute.name}
+                                                </span>
+                                                <span>{info.value}</span>
+                                            </div>
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-sm font-bold text-purple-700">
+                                    Additional Info
+                                </h3>
+                                <div className="bg-white p-2 border-2 border-blue-700">
+                                    {currentGame?.custom_attributes?.map(
+                                        (info, idx: number) => (
+                                            <div
+                                                key={idx}
+                                                className="flex justify-between py-1 border-b-2 border-black"
+                                            >
+                                                <span>{info.name}</span>
+                                                <span>{info.value}</span>
+                                            </div>
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-2">
+                                <div className="flex-1">
+                                    <h3 className="text-xs font-bold text-green-800">
+                                        Wins
                                     </h3>
-                                    <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame?.attribute_values?.map(
-                                            (info, idx: number) => (
+                                    <div className="bg-white p-1 border-2 border-black">
+                                        {currentGame.wins.map(
+                                            (win, idx: number) => (
                                                 <div
                                                     key={idx}
-                                                    className="flex justify-between items-center py-2 border-b border-zinc-800 last:border-0"
+                                                    className="flex justify-between text-xs"
                                                 >
-                                                    <span className="text-gray-400">
-                                                        {
-                                                            info.game_attribute
-                                                                .name
-                                                        }
-                                                    </span>
-                                                    <span className="font-medium text-white">
-                                                        {info.value}
-                                                    </span>
+                                                    <span>{win.date}</span>
+                                                    <span>+{win.value}</span>
                                                 </div>
                                             ),
                                         )}
                                     </div>
                                 </div>
-
-                                {/* Additional Stats */}
-                                <div>
-                                    <h3 className="text-lg font-semibold text-blue-400 mb-3">
-                                        Additional Information
+                                <div className="flex-1">
+                                    <h3 className="text-xs font-bold text-red-800">
+                                        Losses
                                     </h3>
-                                    <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame?.custom_attributes?.map(
-                                            (info, idx: number) => (
+                                    <div className="bg-white p-1 border-2 border-black">
+                                        {currentGame.losses.map(
+                                            (loss, idx: number) => (
                                                 <div
                                                     key={idx}
-                                                    className="flex justify-between items-center py-2 border-b border-zinc-800 last:border-0"
+                                                    className="flex justify-between text-xs"
                                                 >
-                                                    <span className="text-gray-400">
-                                                        {info.name}
-                                                    </span>
-                                                    <span className="font-medium text-white">
-                                                        {info.value}
-                                                    </span>
+                                                    <span>{loss.date}</span>
+                                                    <span>-{loss.value}</span>
                                                 </div>
                                             ),
                                         )}
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Links & Records */}
-                            <div className="space-y-6">
-                                {/* Links */}
-                                <div>
-                                    <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2">
-                                        <RiLink className="w-5 h-5" />
-                                        External Profiles
-                                    </h3>
-                                    <div className="bg-zinc-900 rounded-xl p-5 space-y-3 border border-zinc-800">
-                                        {currentGame?.Links?.map(
-                                            (link, idx: number) => (
-                                                <a
-                                                    key={idx}
-                                                    href={link.value}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center justify-between py-2 border-b border-zinc-800 last:border-0 group"
-                                                >
-                                                    <span className="text-gray-400 group-hover:text-white transition-colors">
-                                                        {link.name}
-                                                    </span>
-                                                    <svg
-                                                        className="w-4 h-4 text-gray-500 group-hover:text-green-400 transition-colors"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                                        />
-                                                    </svg>
-                                                </a>
-                                            ),
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Wins & Losses */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    {/* Wins */}
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2 justify-center">
-                                            <RiTrophyLine className="w-5 h-5" />
-                                            Wins
-                                        </h3>
-                                        <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800 min-h-[140px]">
-                                            {currentGame.wins.map(
-                                                (win, idx: number) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="flex justify-between text-sm"
-                                                    >
-                                                        <span className="text-gray-500">
-                                                            {win.date}
-                                                        </span>
-                                                        <span className="font-medium text-green-400">
-                                                            +{win.value}
-                                                        </span>
-                                                    </div>
-                                                ),
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Losses */}
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2 justify-center">
-                                            <RiCloseLargeFill className="w-5 h-5" />
-                                            Losses
-                                        </h3>
-                                        <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800 min-h-[140px]">
-                                            {currentGame.losses.map(
-                                                (loss, idx: number) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="flex justify-between text-sm"
-                                                    >
-                                                        <span className="text-gray-500">
-                                                            {loss.date}
-                                                        </span>
-                                                        <span className="font-medium text-red-400">
-                                                            -{loss.value}
-                                                        </span>
-                                                    </div>
-                                                ),
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Graphs */}
-                        <div className="flex flex-col gap-10">
-                            <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800">
-                                <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2 justify-center">
-                                    <RiTrophyLine className="w-5 h-5" />
-                                    Wins
-                                </h3>
-                                <Chart dataPoints={currentGame.wins} />
-                            </div>
-                            <div className="bg-zinc-900 rounded-xl p-4 space-y-2 border border-zinc-800">
-                                <h3 className="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2 justify-center">
-                                    <RiCloseLargeFill className="w-5 h-5" />
-                                    Losses
-                                </h3>
-                                <Chart dataPoints={currentGame.losses} />
                             </div>
                         </div>
                     </section>

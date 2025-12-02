@@ -135,7 +135,7 @@ export default function UserConversation({
                     <input
                         type="text"
                         placeholder="Type a message..."
-                        className="flex-1 px-4 py-2 rounded-xl outline-none bg-zinc-800 border border-zinc-700 text-zinc-100 placeholder-zinc-400 focus:ring-2 focus:ring-zinc-600 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex-1 px-4 py-2 rounded-xl outline-none bg-white text-black border border-zinc-700 placeholder-zinc-400 focus:ring-5 focus:ring-zinc-600 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-40"
                         value={msg}
                         disabled={conversation.banned}
                         onChange={(e) => {
@@ -148,7 +148,7 @@ export default function UserConversation({
                         }}
                     />
                     <button
-                        className="ml-3 transition-colors bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl disabled:cursor-not-allowed disabled:opacity-40"
+                        className="ml-3  bg-blue-900  px-4 py-2  disabled:cursor-not-allowed disabled:opacity-40"
                         onClick={() => {
                             handleSendMsg();
                         }}

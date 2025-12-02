@@ -23,9 +23,7 @@ export function InputAuth({
     const isPassword = type === "password";
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-300">
-                {label}
-            </label>
+            <label className="block text-xs text-purple-900">{label}</label>
             <div className="relative flex flex-row items-center">
                 <input
                     name={name}
@@ -35,16 +33,16 @@ export function InputAuth({
                     disabled={disabled}
                     placeholder={placeholder}
                     required
-                    className="mt-2 block w-full rounded-lg bg-gray-900 border border-gray-700 text-gray-100 placeholder-gray-500 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none p-3 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="mt-1 block w-full rounded-md bg-yellow-900 border border-pink-700 text-green-200 placeholder-red-500 p-1 disabled:cursor-not-allowed disabled:opacity-70"
                 />
                 {isPassword && (
                     <button
                         type="button"
                         onClick={() => setShow(!show)}
-                        className="absolute right-3 text-gray-400 hover:text-gray-200"
+                        className="absolute right-1 text-orange-400 hover:text-blue-200"
                         tabIndex={-1}
                     >
-                        {show ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        {show ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
                     </button>
                 )}
             </div>
@@ -65,10 +63,10 @@ export function SelectButton({
         <button
             type="button"
             onClick={onClick}
-            className={`w-full px-4 py-3 rounded-lg text-white font-semibold transition border-1 border-solid border-indigo-600 ${
+            className={`w-full px-2 py-1 rounded text-gray-200 text-sm border ${
                 selected
-                    ? "bg-indigo-600 text-white"
-                    : "bg-transparent text-gray-700 border-gray-300 hover:bg-indigo-500"
+                    ? "bg-red-400 text-black"
+                    : "bg-green-300 text-pink-900 border-blue-500 hover:bg-yellow-400"
             }`}
         >
             {label}
@@ -89,7 +87,7 @@ export function SubmitBtn({
         <button
             type={type}
             onClick={onClick}
-            className="w-full px-4 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-500 transition"
+            className="w-full px-2 py-1 rounded bg-orange-500 text-gray-900 text-sm hover:bg-pink-400"
         >
             {text}
         </button>
@@ -105,14 +103,14 @@ interface LoginButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function LoginButton({ provider, onClick }: LoginButtonProps) {
     const icons = {
-        Google: <FaGoogle className="w-10" />,
-        Discord: <FaDiscord className="w-10" />,
+        Google: <FaGoogle className="w-6 text-purple-700" />,
+        Discord: <FaDiscord className="w-6 text-green-800" />,
     };
 
     return (
         <button
             type="button"
-            className="flex items-center justify-center gap-2 w-full px-3 py-2 font-medium border border-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors"
+            className="flex items-center justify-start gap-1 w-full px-2 py-1 font-normal border border-red-600 hover:bg-blue-200 rounded text-xs"
             onClick={onClick}
         >
             {icons[provider]}

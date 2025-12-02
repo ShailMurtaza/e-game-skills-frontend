@@ -38,18 +38,20 @@ export default function RootLayout({
         return <LoadingComponent />;
     }
     return (
-        <main className="admin-page pt-[150px] lg:mx-10 mx-3 min-h-screen flex flex-col p-6 bg-black">
-            <header className="flex lg:items-center lg:justify-between flex-col lg:flex-row gap-5 mb-6 w-full">
+        <main className="admin-page pt-[150px] lg:mx-10 mx-3 min-h-screen flex flex-col p-6 bg-gray-950 text-purple-300">
+            <header className="flex lg:items-start lg:justify-start flex-col lg:flex-row gap-3 mb-4 w-full bg-yellow-400 p-2 border-2 border-red-500">
                 <div>
-                    <h3>Admin Dashboard</h3>
-                    <p className="text-sm text-gray-400">{pageTitle}</p>
+                    <h3 className="text-blue-700 font-normal text-lg">
+                        Admin Dashboard
+                    </h3>
+                    <p className="text-sm text-orange-700">{pageTitle}</p>
                 </div>
                 <AdminPanelNavbar />
             </header>
             <UsersDataProvider>
-                <section className="grid grid-1 lg:grid-cols-4 gap-6">
+                <section className="grid grid-1 lg:grid-cols-4 gap-4">
                     <Summary />
-                    <div className="lg:col-span-3 p-4 bg-gray-900/40 rounded-lg border border-gray-800">
+                    <div className="lg:col-span-3 p-4 bg-green-100/50 rounded-none border border-purple-500">
                         {children}
                     </div>
                 </section>

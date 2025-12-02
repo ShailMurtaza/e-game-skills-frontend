@@ -161,7 +161,7 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`${play.className} text-xl font-bold flex lg:flex-row lg:gap-0 flex-col items-center h-fit lg:p-7 py-7 px-1 rounded-b-3xl shadow-[0_4px_30px_rgba(131,206,239,0.7)] bg-black/70 backdrop-blur-md fixed w-full z-10`}
+            className={`${play.className} text-xl font-bold flex lg:flex-row lg:gap-0 flex-col items-center h-fit lg:p-7 py-7 px-1 rounded-b-lg shadow-[0_4px_10px_rgba(131,206,239,0.7)] bg-black/70 fixed w-full z-10`}
         >
             <section className="lg:block lg:w-fit w-full flex flex-row justify-between items-center mr-5">
                 <Link href="/" className="lg:m-0 ml-10 mt-2">
@@ -169,11 +169,6 @@ export default function Navbar() {
                 </Link>
                 {navOpen ? (
                     <motion.div
-                        key="close"
-                        initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                        exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                        transition={{ duration: 0.5 }}
                         className="lg:hidden"
                         onClick={() => setNavOpen((p) => !p)}
                     >
@@ -181,11 +176,6 @@ export default function Navbar() {
                     </motion.div>
                 ) : (
                     <motion.div
-                        key="hamburger"
-                        initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                        animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                        exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                        transition={{ duration: 0.5 }}
                         className="lg:hidden"
                         onClick={() => setNavOpen((p) => !p)}
                     >
@@ -199,12 +189,7 @@ export default function Navbar() {
             </section>
             <AnimatePresence>
                 {navOpen && (
-                    <motion.section
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
+                    <motion.section>
                         <MenuItems smallNav={true} />
                     </motion.section>
                 )}

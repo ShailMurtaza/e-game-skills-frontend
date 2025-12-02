@@ -68,17 +68,17 @@ export default function AuthPage() {
         return <LoadingComponent />;
     }
     return (
-        <main className="pt-[150px] mx-3 lg:mx-10 min-h-screen flex items-center justify-center p-6 bg-black text-gray-100">
-            <div className="relative w-full max-w-3xl bg-gray-950 rounded-2xl border border-gray-800 shadow-[0_0_20px_2px_rgba(99,102,241,0.2)] overflow-hidden">
+        <main className="pt-[150px] mx-3 lg:mx-10 min-h-screen flex items-center justify-center p-6 bg-gray-800 text-purple-900">
+            <div className="relative w-full max-w-3xl bg-yellow-300 rounded-none overflow-hidden">
                 <div
                     className={`grid grid-cols-4 relative h-[620px] md:h-[520px] w-[400%] transition-transform duration-700 ease-in-out ${translation}`}
                 >
                     {/* ---------- Recovery Section ---------- */}
-                    <section className="flex flex-row gap-10 justify-center p-8">
+                    <section className="flex flex-row gap-5 justify-start p-4 bg-green-100">
                         <div
-                            className={`flex flex-col sm:w-1/2 w-full  ${codeSent ? "justify-between" : "justify-start gap-10"}`}
+                            className={`flex flex-col sm:w-1/2 w-full  ${codeSent ? "justify-center" : "justify-start gap-4"}`}
                         >
-                            <h3 className="text-2xl font-bold text-gray-100">
+                            <h3 className="text-2xl font-normal text-red-600">
                                 Enter Email to get verfication code
                             </h3>
                             <InputAuth
@@ -152,23 +152,23 @@ export default function AuthPage() {
                                 </>
                             ) : null}
                         </div>
-                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
-                            <h2 className="text-2xl font-semibold text-white">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2 bg-blue-200">
+                            <h2 className="text-2xl font-semibold text-orange-700">
                                 Welcome Back
                             </h2>
-                            <p className="mt-2 text-sm text-gray-400">
+                            <p className="mt-2 text-sm text-black">
                                 Help us find your account.
                             </p>
                         </div>
                     </section>
 
                     {/* ---------- Verification Section ---------- */}
-                    <section className="flex flex-row gap-10 justify-center p-8">
+                    <section className="flex flex-row gap-5 justify-start p-4 bg-purple-100">
                         <form
-                            className="flex flex-col justify-start gap-10 sm:w-1/2 w-full"
+                            className="flex flex-col justify-start gap-4 sm:w-1/2 w-full"
                             onSubmit={(e) => e.preventDefault()}
                         >
-                            <h3 className="text-2xl font-bold text-gray-100">
+                            <h3 className="text-2xl font-normal text-grey-600">
                                 Enter Email to get verfication code
                             </h3>
                             <InputAuth
@@ -217,17 +217,18 @@ export default function AuthPage() {
                                 </>
                             ) : null}
                         </form>
-                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
-                            <h2 className="text-2xl font-semibold text-white">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2 bg-red-200">
+                            <h2 className="text-2xl font-semibold text-green-800">
                                 Welcome Back
                             </h2>
-                            <p className="mt-2 text-sm text-gray-400">
+                            <p className="mt-2 text-sm text-yellow-800">
                                 Verify your Account
                             </p>
                         </div>
                     </section>
+
                     {/* ---------- Login Section ---------- */}
-                    <section className="flex flex-row gap-10 justify-center p-8">
+                    <section className="flex flex-row gap-5 justify-start p-4 bg-orange-100">
                         <form
                             className="flex flex-col justify-between sm:w-1/2 w-full"
                             onSubmit={async (e) => {
@@ -245,7 +246,7 @@ export default function AuthPage() {
                                 return;
                             }}
                         >
-                            <h3 className="text-2xl font-bold text-gray-100">
+                            <h3 className="text-2xl font-normal text-blue-700">
                                 Sign in to your account
                             </h3>
 
@@ -268,18 +269,18 @@ export default function AuthPage() {
                                 }}
                             />
 
-                            <div className="flex items-center justify-between text-gray-400">
+                            <div className="flex items-center justify-between text-black">
                                 <label className="flex items-center gap-2 text-sm">
                                     <input
                                         type="checkbox"
                                         name="remember"
-                                        className="accent-indigo-600"
+                                        className="accent-red-600"
                                     />
                                     Remember me
                                 </label>
                                 <button
                                     type="button"
-                                    className="text-sm text-indigo-400 hover:text-indigo-300 hover:underline"
+                                    className="text-sm text-green-400 hover:text-red-300 hover:underline"
                                     onClick={() => {
                                         router.push("?action=recover");
                                     }}
@@ -306,18 +307,18 @@ export default function AuthPage() {
                             <SubmitBtn text="Log in" />
                         </form>
 
-                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
-                            <h2 className="text-2xl font-semibold text-white">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2 bg-pink-100">
+                            <h2 className="text-2xl font-semibold text-blue-900">
                                 Welcome Back
                             </h2>
-                            <p className="mt-2 text-sm text-gray-400">
+                            <p className="mt-2 text-sm text-green-900">
                                 Log in to continue where you left off.
                             </p>
                         </div>
                     </section>
 
                     {/* ---------- Signup Section ---------- */}
-                    <section className="flex flex-row gap-10 justify-center px-8 py-3">
+                    <section className="flex flex-row gap-5 justify-start px-4 py-3 bg-teal-100">
                         <form
                             className="flex flex-col justify-between sm:w-1/2 w-full"
                             onSubmit={async (e) => {
@@ -338,7 +339,7 @@ export default function AuthPage() {
                                 }
                             }}
                         >
-                            <h3 className="text-2xl font-bold text-gray-100">
+                            <h3 className="text-2xl font-normal text-purple-700">
                                 Create your account
                             </h3>
 
@@ -392,11 +393,11 @@ export default function AuthPage() {
                             <SubmitBtn text="Create account" />
                         </form>
 
-                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2">
-                            <h2 className="text-2xl font-semibold text-white">
+                        <div className="hidden sm:flex flex-col h-full justify-center items-center w-1/2 bg-orange-200">
+                            <h2 className="text-2xl font-semibold text-red-800">
                                 Create New Account
                             </h2>
-                            <p className="mt-2 text-sm text-gray-400">
+                            <p className="mt-2 text-sm text-blue-900">
                                 Join us — it only takes a minute
                             </p>
                         </div>
@@ -404,7 +405,7 @@ export default function AuthPage() {
                 </div>
 
                 {/* Footer switch */}
-                <div className="flex items-center justify-center gap-4 p-4 border-t border-gray-800 text-sm text-gray-400">
+                <div className="flex items-center justify-center gap-4 p-4 text-sm text-red-600">
                     <span>
                         {action === "signin"
                             ? "Don’t have an account?"
@@ -416,7 +417,7 @@ export default function AuthPage() {
                                 router.push("?action=signup");
                             else router.push("?action=signin");
                         }}
-                        className="text-indigo-400 font-medium hover:text-indigo-300 hover:underline"
+                        className="text-green-400 font-medium hover:text-pink-300 hover:underline"
                     >
                         {action === "signin" ? "Create one" : "Sign in"}
                     </button>

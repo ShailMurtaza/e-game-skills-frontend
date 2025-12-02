@@ -4,7 +4,6 @@ import { Input, PrimaryBtn } from "@/components/Dashboard";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/authContext";
 import AvatarUploader from "@/components/AvatarUploader";
-import { FaEye } from "react-icons/fa";
 import Link from "next/link";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -55,8 +54,8 @@ export default function UpdateUserProfile() {
     };
 
     return (
-        <section className="flex flex-col gap-5 p-5 border-b border-white rounded-t-2xl">
-            <div className="flex lg:flex-row flex-col justify-around items-center gap-10">
+        <section className="flex flex-col gap-8 p-4 border-4 border-red-600 rounded-t-2xl bg-black-200">
+            <div className="flex flex-col lg:flex-row justify-around items-center gap-6">
                 <AvatarUploader
                     onFileSelect={setAvatarFile}
                     currentAvatar={
@@ -65,71 +64,75 @@ export default function UpdateUserProfile() {
                             : "profile.png"
                     }
                 />
-                <div className="flex flex-col w-full lg:w-fit">
-                    <div className="mb-2 font-bold">Enter Username</div>
+
+                <div className="flex flex-col w-full bg-green-300 p-2 border-2 border-blue-700">
+                    <div className="mb-1 font-bold text-red-700">
+                        Enter Username
+                    </div>
                     <Input
                         name="username"
                         placeholder="Username"
                         type="text"
                         value={username}
-                        className="w-full lg:w-fit"
-                        onChange={(e) => {
-                            setUsername(e.target.value);
-                        }}
+                        className="w-full bg-pink-100 text-black border-2 border-purple-600 p-1"
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
-                <div className="flex flex-col w-full lg:w-fit">
-                    <div className="mb-2 font-bold">Enter Country</div>
+
+                <div className="flex flex-col w-full bg-purple-200 p-2 border-2 border-yellow-700">
+                    <div className="mb-1 font-bold text-blue-800">
+                        Enter Country
+                    </div>
                     <Input
                         name="country"
                         placeholder="Country"
                         type="text"
                         value={userCountry ?? ""}
-                        className="w-full lg:w-fit"
-                        onChange={(e) => {
-                            setUserCountry(e.target.value);
-                        }}
+                        className="w-full bg-orange-100 text-black border-2 border-red-600 p-1"
+                        onChange={(e) => setUserCountry(e.target.value)}
                     />
                 </div>
 
-                <div className="flex flex-col w-full lg:w-fit">
-                    <div className="mb-2 font-bold">Enter Region</div>
+                <div className="flex flex-col w-full bg-pink-300 p-2 border-2 border-green-700">
+                    <div className="mb-1 font-bold text-yellow-900">
+                        Enter Region
+                    </div>
                     <Input
                         name="region"
                         placeholder="Region"
                         type="text"
                         value={userRegion ?? ""}
-                        className="w-full lg:w-fit"
-                        onChange={(e) => {
-                            setUserRegion(e.target.value);
-                        }}
+                        className="w-full bg-cyan-100 text-black border-2 border-blue-600 p-1"
+                        onChange={(e) => setUserRegion(e.target.value)}
                     />
                 </div>
             </div>
-            <div>
-                <div className="mb-2 font-bold">Edit Description</div>
+
+            <div className="mt-4 bg-purple-100 p-2 border-2 border-red-700">
+                <div className="mb-1 font-bold text-green-800">
+                    Edit Description
+                </div>
                 <textarea
-                    className="w-full text-white p-4 border border-white rounded-xl outline-none"
+                    className="w-full p-3 text-black bg-yellow-300 border-2 border-blue-900 rounded-md outline-none"
                     defaultValue={userDescription ?? ""}
                     rows={4}
                     placeholder="Enter your description."
-                    onChange={(e) => {
-                        setUserDescription(e.target.value);
-                    }}
+                    onChange={(e) => setUserDescription(e.target.value)}
                 />
             </div>
-            <div className="flex flex-row gap-5">
+
+            <div className="flex flex-row gap-4 mt-4">
                 <PrimaryBtn
                     text="Save"
-                    className="w-fit"
+                    className="w-32 bg-pink-400 text-black border-2 border-red-700"
                     onClick={handleSaveProfile}
                 />
                 <Link
                     href={`/portfolio/${userProfile?.id}`}
                     target="_blank"
-                    className="flex flex-row items-center gap-3 p-3 rounded-md outline-none cursor-pointer bg-[#0b5ed7] text-gray-100 hover:bg-[#053470] transition"
+                    className="flex flex-row items-center gap-2 p-3 rounded-md outline-none cursor-pointer bg-lime-500 text-purple-900 border-2 border-blue-800"
                 >
-                    <FaEye /> Preview Portfolio
+                    Preview Portfolio
                 </Link>
             </div>
         </section>

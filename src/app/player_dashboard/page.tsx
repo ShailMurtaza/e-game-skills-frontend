@@ -242,7 +242,7 @@ export default function UserDashboard() {
         return <LoadingComponent />;
     }
     return (
-        <main className="pt-[150px] mx-5 lg:mx-10">
+        <main className="pt-[120px] mx-4 lg:mx-6 bg-[#111111] text-[#d0d0d0]">
             {userGameDelete && (
                 <DeleteConfirmDialog
                     onCancel={() => {
@@ -253,12 +253,17 @@ export default function UserDashboard() {
                     }}
                 />
             )}
-            <div className="border border-white rounded-2xl bg-neutral-950">
+
+            <div className="border border-gray-600 rounded-xl bg-[#0f0f0f]/70">
                 <UpdateUserProfile />
+
                 <section className="flex flex-col lg:flex-row">
-                    <div className="w-full lg:w-1/4 p-5 border-b lg:border-r lg:border-b-0 border-white">
-                        <h4 className="mb-5">Your Games</h4>
-                        <div className="flex flex-col gap-5">
+                    <div className="w-full lg:w-1/4 p-4 border-b lg:border-r lg:border-b-0 border-gray-700 bg-[#1a1a1a]/30">
+                        <h4 className="mb-4 text-gray-200/80 tracking-wider">
+                            Your Games
+                        </h4>
+
+                        <div className="flex flex-col gap-4">
                             {userGames.map((g) => {
                                 const game_id = g.game_id;
                                 const game = AllGames.find(
@@ -268,7 +273,7 @@ export default function UserDashboard() {
                                     return (
                                         <div
                                             key={game.id}
-                                            className="flex flex-row w-full gap-3"
+                                            className="flex flex-row w-full gap-2"
                                         >
                                             <PrimaryBtn
                                                 text={game.name}
@@ -278,20 +283,24 @@ export default function UserDashboard() {
                                                 onClick={() => {
                                                     setSelectedGame(game.id);
                                                 }}
-                                                className="w-full"
+                                                className="w-full bg-[#222]/70 hover:bg-[#333]"
                                             />
                                             <DangerBtn
                                                 onClick={() => {
                                                     setUserGameDelete(game.id);
                                                 }}
+                                                className="bg-[#440000]/60 hover:bg-[#550000]"
                                             >
-                                                <MdDeleteOutline size={20} />
+                                                <MdDeleteOutline size={18} />
                                             </DangerBtn>
                                         </div>
                                     );
                             })}
-                            <select className="p-3 font-semibold cursor-pointer rounded-md bg-black border border-emerald-700 text-white shadow hover:bg-emerald-700 transition">
-                                <option>Add New Game</option>
+
+                            <select className="p-2 font-medium cursor-pointer rounded-md bg-[#1b1b1b] border border-gray-600 text-gray-300 hover:bg-[#2a2a2a] shadow-sm">
+                                <option className="bg-[#1b1b1b]">
+                                    Add New Game
+                                </option>
                                 {AllGames.filter((game) => {
                                     return !userGames.find((user_game) => {
                                         return game.id === user_game.game_id;
@@ -300,6 +309,7 @@ export default function UserDashboard() {
                                     return (
                                         <option
                                             key={game.id}
+                                            className="bg-[#202020]"
                                             onClick={() => {
                                                 const new_game = AllGames.find(
                                                     (game_inner) =>
@@ -319,10 +329,14 @@ export default function UserDashboard() {
                             </select>
                         </div>
                     </div>
-                    <div className="lg:w-3/4 w-full p-5">
+
+                    <div className="lg:w-3/4 w-full p-4 bg-[#141414]/40 text-[#e0e0e0]/90">
                         {selectedGame ? (
                             <>
-                                <h2 className="mb-5">{selectedGameName}</h2>
+                                <h2 className="mb-4 text-gray-100/90">
+                                    {selectedGameName}
+                                </h2>
+
                                 <Attributes
                                     title="Important Information"
                                     readonly={true}
@@ -331,6 +345,7 @@ export default function UserDashboard() {
                                     parentAttributes={Information}
                                     parentSetAttributes={setInformation}
                                 />
+
                                 <Attributes
                                     title="Additional Information"
                                     key_placeholder="Enter name of attribute e.g., Rank, Rold etc"
@@ -340,6 +355,7 @@ export default function UserDashboard() {
                                         setAdditionalInformation
                                     }
                                 />
+
                                 <Attributes
                                     title="Links (For Verification)"
                                     key_placeholder="Enter name of link e.g., Tracker, Facebook etc"
@@ -347,6 +363,7 @@ export default function UserDashboard() {
                                     parentAttributes={Links}
                                     parentSetAttributes={setLinks}
                                 />
+
                                 <Attributes
                                     title="Wins"
                                     key_input_type="date"
@@ -355,6 +372,7 @@ export default function UserDashboard() {
                                     parentAttributes={Wins}
                                     parentSetAttributes={setWins}
                                 />
+
                                 <Attributes
                                     title="Loss"
                                     key_input_type="date"
@@ -363,15 +381,18 @@ export default function UserDashboard() {
                                     parentAttributes={Loss}
                                     parentSetAttributes={setLoss}
                                 />
+
                                 <PrimaryBtn
                                     text="Save"
                                     active={false}
-                                    className="w-full"
+                                    className="w-full bg-[#222]/80 hover:bg-[#333]"
                                     onClick={handleGameSave}
                                 />
                             </>
                         ) : (
-                            <h3 className="text-center">No game selected</h3>
+                            <h3 className="text-center text-gray-300/80">
+                                No game selected
+                            </h3>
                         )}
                     </div>
                 </section>

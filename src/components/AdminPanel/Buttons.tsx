@@ -20,7 +20,7 @@ export default function Button({
 }) {
     return (
         <button
-            className={`transition w-fit px-3 py-2 rounded text-sm ${styles[variant]} ${className}`}
+            className={`transition w-fit px-3 py-2 rounded text-sm ${className} `}
             onClick={onClick}
         >
             {label}

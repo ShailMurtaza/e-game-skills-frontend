@@ -203,7 +203,7 @@ export default function MessagesPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="fixed z-50 w-screen h-screen lg:w-full lg:h-full bg-black top-0 left-0 lg:relative lg:col-span-3 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+                            className="fixed z-50 w-screen h-screen lg:w-full lg:h-full bg-black top-0 left-0 lg:relative lg:col-span-3  overflow-hidden border border-red-600"
                         >
                             <UserConversation
                                 conversation={userConversation}

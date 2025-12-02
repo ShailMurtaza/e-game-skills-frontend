@@ -23,7 +23,7 @@ export default function Input({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 required
-                className="w-full mt-1 bg-gray-800 px-2 py-2 rounded text-sm outline-none"
+                className="w-full mt-1  bg-white  text-black  text-xl"
             />
         </label>
     );

@@ -72,9 +72,9 @@ export default function ConversationPage() {
         <main className="pt-[150px]">
             <h1 className="text-center mb-5">Messages</h1>
 
-            <div className="mx-5 rounded-xl h-[calc(100vh-250px)]">
+            <div className="mx-5 h-[calc(100vh-250px)]">
                 {userConversation !== null && receiver !== null && (
-                    <section className="relative h-full rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                    <section className="relative h-full overflow-hidden border border-red">
                         <UserConversation
                             conversation={userConversation}
                             receiver={receiver}

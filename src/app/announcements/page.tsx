@@ -28,10 +28,13 @@ function DisplayAnnouncement({
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="w-11/12 max-w-4xl bg-black rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.15)] overflow-hidden"
                 >
-                    <div className="flex flex-row justify-between items-center px-6 pt-6 pb-2 border-b">
-                        <h3>{title}</h3>
+                    <div className="flex flex-row justify-between items-center px-4 pt-3 pb-1 border-b border-purple-700 bg-yellow-200 text-blue-900">
+                        <h3 className="text-lg font-light tracking-wide">
+                            {title}
+                        </h3>
+
                         <button
-                            className="bg-neutral-900 hover:bg-neutral-900/50 text-sm p-3 rounded-full"
+                            className="bg-pink-300 hover:bg-red-200 text-xs p-2 rounded-none border border-blue-700"
                             onClick={() => {
                                 onClose();
                             }}
@@ -40,8 +43,10 @@ function DisplayAnnouncement({
                         </button>
                     </div>
 
-                    <div className="px-6 pb-6 pt-4 overflow-y-auto max-h-[calc(80vh-90px)]">
-                        <p className="whitespace-pre-line">{announcement}</p>
+                    <div className="px-4 pb-4 pt-2 overflow-y-auto max-h-[calc(80vh-90px)] bg-green-100 text-red-800 text-sm leading-tight">
+                        <p className="whitespace-pre-line underline decoration-dotted">
+                            {announcement}
+                        </p>
                     </div>
                 </motion.div>
             </div>
@@ -101,16 +106,20 @@ export default function Announcements() {
                     return (
                         <div
                             key={i}
-                            className="p-5 flex flex-col gap-2 cursor-pointer bg-zinc-900 rounded-2xl shadow-md transition-transform duration-300 transform hover:scale-101 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                            className="p-2 flex flex-col cursor-default bg-yellow-300 rounded-sm border border-red-700 transition-none hover:bg-green-200"
                             onClick={() => {
                                 setShowAnnouncement(i);
                             }}
                         >
-                            <h3>{announcement.title}</h3>
-                            <div className="lg:text-base text-sm line-clamp-2">
+                            <h3 className="text-[18px] font-extralight text-blue-900 italic">
+                                {announcement.title}
+                            </h3>
+
+                            <div className="text-[11px] leading-snug text-purple-800 underline decoration-dashed">
                                 {announcement.announcement}
                             </div>
-                            <div className="lg:text-sm text-xs w-fit text-zinc-100 bg-zinc-800 rounded-2xl py-1 px-2 shadow-white shadow-xs">
+
+                            <div className="text-[9px] w-fit text-orange-900 bg-pink-300 rounded-md py-[1px] px-[3px] border border-purple-500">
                                 {announcement.date}
                             </div>
                         </div>

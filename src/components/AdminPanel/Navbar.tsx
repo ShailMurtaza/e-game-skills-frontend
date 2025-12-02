@@ -12,13 +12,13 @@ export default function AdminPanelNavbar() {
         { href: "/admin_panel/contacts", label: "Contacts" },
     ];
     return (
-        <nav className="flex flex-row justify-center flex-wrap gap-2 bg-gray-900/40 p-2 rounded-md">
+        <nav className="flex flex-col justify-center flex-wrap gap-2 bg-gray-900/40 p-2 ">
             {navItems.map((item, i) => {
                 const active = pathname == item.href;
                 return (
                     <Link href={item.href} key={i}>
                         <button
-                            className={`px-3 py-2 rounded text-sm ${active ? "bg-gray-800" : "hover:bg-gray-800"}`}
+                            className={`px-3 py-2 rounded text-sm text-center `}
                         >
                             {item.label}
                         </button>
