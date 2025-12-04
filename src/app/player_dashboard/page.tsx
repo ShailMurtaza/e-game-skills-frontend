@@ -295,7 +295,6 @@ export default function UserDashboard() {
                                 onChange={(
                                     e: React.ChangeEvent<HTMLSelectElement>,
                                 ) => {
-                                    console.log(e.target.value);
                                     const new_game = AllGames.find(
                                         (game_inner) =>
                                             game_inner.id ===
