@@ -290,7 +290,23 @@ export default function UserDashboard() {
                                         </div>
                                     );
                             })}
-                            <select className="p-3 font-semibold cursor-pointer rounded-md bg-black border border-emerald-700 text-white shadow hover:bg-emerald-700 transition">
+                            <select
+                                className="p-3 font-semibold cursor-pointer rounded-md bg-black border border-emerald-700 text-white shadow hover:bg-emerald-700 transition"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLSelectElement>,
+                                ) => {
+                                    console.log(e.target.value);
+                                    const new_game = AllGames.find(
+                                        (game_inner) =>
+                                            game_inner.id ===
+                                            Number(e.target.value),
+                                    );
+                                    setUserGames([
+                                        ...userGames,
+                                        { game_id: new_game!.id },
+                                    ]);
+                                }}
+                            >
                                 <option>Add New Game</option>
                                 {AllGames.filter((game) => {
                                     return !userGames.find((user_game) => {
@@ -298,20 +314,7 @@ export default function UserDashboard() {
                                     });
                                 }).map((game) => {
                                     return (
-                                        <option
-                                            key={game.id}
-                                            onClick={() => {
-                                                const new_game = AllGames.find(
-                                                    (game_inner) =>
-                                                        game_inner.id ===
-                                                        game.id,
-                                                );
-                                                setUserGames([
-                                                    ...userGames,
-                                                    { game_id: new_game!.id },
-                                                ]);
-                                            }}
-                                        >
+                                        <option key={game.id} value={game.id}>
                                             {game.name}
                                         </option>
                                     );
