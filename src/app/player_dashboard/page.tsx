@@ -296,32 +296,30 @@ export default function UserDashboard() {
                                         </div>
                                     );
                             })}
-
-                            <select className="p-2 font-medium cursor-pointer rounded-md bg-[#1b1b1b] border border-gray-600 text-gray-300 hover:bg-[#2a2a2a] shadow-sm">
-                                <option className="bg-[#1b1b1b]">
-                                    Add New Game
-                                </option>
+                            <select
+                                className="p-3 font-semibold cursor-pointer rounded-md bg-black border border-emerald-700 text-white shadow hover:bg-emerald-700 transition"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLSelectElement>,
+                                ) => {
+                                    const new_game = AllGames.find(
+                                        (game_inner) =>
+                                            game_inner.id ===
+                                            Number(e.target.value),
+                                    );
+                                    setUserGames([
+                                        ...userGames,
+                                        { game_id: new_game!.id },
+                                    ]);
+                                }}
+                            >
+                                <option>Add New Game</option>
                                 {AllGames.filter((game) => {
                                     return !userGames.find((user_game) => {
                                         return game.id === user_game.game_id;
                                     });
                                 }).map((game) => {
                                     return (
-                                        <option
-                                            key={game.id}
-                                            className="bg-[#202020]"
-                                            onClick={() => {
-                                                const new_game = AllGames.find(
-                                                    (game_inner) =>
-                                                        game_inner.id ===
-                                                        game.id,
-                                                );
-                                                setUserGames([
-                                                    ...userGames,
-                                                    { game_id: new_game!.id },
-                                                ]);
-                                            }}
-                                        >
+                                        <option key={game.id} value={game.id}>
                                             {game.name}
                                         </option>
                                     );
