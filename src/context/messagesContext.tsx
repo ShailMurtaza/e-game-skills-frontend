@@ -9,6 +9,7 @@ import {
     useState,
 } from "react";
 import { useUI } from "./UIContext";
+import { useAuth } from "./authContext";
 
 type msgData = { toUserId: number; content: string };
 type UnreadCountType = { sender_id: number; unreadMsgs: number };
@@ -85,6 +86,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     const reconnectTimer = useRef<NodeJS.Timeout | null>(null);
     const [contactedUsers, setContactedUsers] = useState<number[]>([]);
     const [onlineUsers, setOnlineUsers] = useState<OnlineUsers[]>([]);
+    const { isAuthenticated } = useAuth();
 
     async function getUnreadMsg() {
         try {
@@ -197,6 +199,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
     }, [contactedUsers]);
 
     useEffect(() => {
+        if (!isAuthenticated) return;
         const intervalId = setInterval(() => {
             if (wsRef.current && contactedUsersRef.current.length) {
                 wsRef.current?.send(
@@ -277,7 +280,7 @@ export function MessageProvider({ children }: { children: ReactNode }) {
             if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
             clearInterval(intervalId);
         };
-    }, []);
+    }, [isAuthenticated]);
     function sendMsg(data: msgData) {
         wsRef.current?.send(
             JSON.stringify({
