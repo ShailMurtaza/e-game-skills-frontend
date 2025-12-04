@@ -61,7 +61,7 @@ export default function UpdateUserProfile() {
                     currentAvatar={
                         userProfile?.avatar
                             ? `${API_URL}/users/avatar/${userProfile.avatar}`
-                            : "profile.png"
+                            : "/profile.png"
                     }
                 />
 
