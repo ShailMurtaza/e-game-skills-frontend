@@ -70,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
             .catch(() => {
                 if (mounted) {
+                    router.replace("/auth");
                     setIsLoading(false);
                     setIsAuthenticated(false);
                     setUserProfile(null);
