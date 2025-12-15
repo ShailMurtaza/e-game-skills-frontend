@@ -41,6 +41,7 @@ export default function ConversationPage() {
                 id: data.sender.id as number,
                 avatar: data.sender.avatar as string,
                 username: data.sender.username as string,
+                banned: data.banned,
                 // Set messages to any since UserConversation component combine them anyway
                 sent_messages: messages,
                 received_messages: [],
