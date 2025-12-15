@@ -71,11 +71,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .catch(() => {
                 if (mounted) {
                     if (
+                        !pathname.startsWith("/auth") &&
                         protectedRoutes.some((route) =>
                             pathname.startsWith(route),
                         )
-                    )
+                    ) {
+                        console.log("Route is protected");
                         router.replace("/auth");
+                    }
                     setIsLoading(false);
                     setIsAuthenticated(false);
                     setUserProfile(null);
