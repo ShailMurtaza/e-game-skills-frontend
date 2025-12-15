@@ -70,7 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
             .catch(() => {
                 if (mounted) {
-                    router.replace("/auth");
+                    if (
+                        protectedRoutes.some((route) =>
+                            pathname.startsWith(route),
+                        )
+                    )
+                        router.replace("/auth");
                     setIsLoading(false);
                     setIsAuthenticated(false);
                     setUserProfile(null);
