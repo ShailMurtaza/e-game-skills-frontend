@@ -21,6 +21,8 @@ export default function ReportPopup({
     async function submitReport() {
         setLoading(true);
         try {
+            if (reason.trim().length === 0 || description.trim().length === 0)
+                throw new Error("Please Reason and Description");
             const res = await fetch(`${API_URL}/reports`, {
                 method: "POST",
                 headers: {
